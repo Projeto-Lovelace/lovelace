@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  lovelace:
+    container_name: lovelace
+    build:
+      context: .
+    networks:
+      lovelace:
+        ipv4_address: 107.50.0.5
+    volumes:
+      - ./symfony:/app/symfony:cached
+      - ./logs/symfony:/app/symfony/var/log:cached
+      - ./.:/app
+networks:
+  lovelace:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 107.50.0.0/16
+          gateway: 107.50.0.1

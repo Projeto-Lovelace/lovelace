@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <meta charset="UTF-8">
+    <title>Dore jQuery</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="font/iconsmind-s/css/iconsminds.css" />
+    <link rel="stylesheet" href="font/simple-line-icons/css/simple-line-icons.css" />
+
+    <link rel="stylesheet" href="css/vendor/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/vendor/bootstrap.rtl.only.min.css" />
+    <link rel="stylesheet" href="css/vendor/fullcalendar.min.css" />
+    <link rel="stylesheet" href="css/vendor/dataTables.bootstrap4.min.css" />
+    <link rel="stylesheet" href="css/vendor/datatables.responsive.bootstrap4.min.css" />
+    <link rel="stylesheet" href="css/vendor/select2.min.css" />
+    <link rel="stylesheet" href="css/vendor/perfect-scrollbar.css" />
+    <link rel="stylesheet" href="css/vendor/owl.carousel.min.css" />
+    <link rel="stylesheet" href="css/vendor/bootstrap-stars.css" />
+    <link rel="stylesheet" href="css/vendor/nouislider.min.css" />
+    <link rel="stylesheet" href="css/vendor/bootstrap-datepicker3.min.css" />
+    <link rel="stylesheet" href="css/vendor/component-custom-switch.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/dore.dark.green.min.css">
+    <link rel="stylesheet" href="css/main.css" />
+    {% block vendor_css %}{% endblock %}
+    <link rel="stylesheet" href="{{ asset('css/main.css') }}" />
+
+    {% block css %}{% endblock %}
+
+</head>
+
+<body
+        class="menu-default show-spinner" id="app-container">
+
+<!-- START: HEADER -->
+{% include 'base/header.html.twig' %}
+<!-- END: HEADER -->
+
+<!-- START: HEADER -->
+{% include 'base/menu.html.twig' %}
+<!-- END: HEADER -->
+
+<main>
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-12">
+
+                <h1>{% block page_title %}{% endblock %}</h1>
+                <nav aria-label="breadcrumb" class="breadcrumb-container d-none d-sm-block d-lg-inline-block">
+                    <ol class="breadcrumb pt-0">
+                        <li class="breadcrumb-item">
+                            <a href="/">Home</a>
+                        </li>
+                    </ol>
+                </nav>
+                <div class="separator mb-5"></div>
+            </div>
+
+        </div>
+
+        <!-- START: PAGE CONTENT -->
+        {% block content %}{% endblock %}
+        <!-- END: PAGE CONTENT -->
+
+    </div>
+</main>
+
+<script src="/js/vendor/jquery-3.3.1.min.js"></script>
+<script src="/js/vendor/bootstrap.bundle.min.js"></script>
+<script src="/js/vendor/perfect-scrollbar.min.js"></script>
+<script src="/js/vendor/mousetrap.min.js"></script>
+<script src="/js/dore.script.js"></script>
+{% block vendor_js %}{% endblock %}
+<script src="/js/scripts.js"></script>
+{% block js %}{% endblock %}
+
+</body>
+
+</html>
