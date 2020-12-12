@@ -17,7 +17,7 @@ class Index extends AbstractController
 
     /**
      * @return \Symfony\Component\HttpFoundation\Response
-     * @Route("/dashboard", name="dashboardDefault")
+     * @Route("/portal", name="dashboardDefault")
      */
     public function getDefaultDashboard()
     {

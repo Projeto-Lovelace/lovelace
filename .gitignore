@@ -6,3 +6,4 @@ npm-debug.log
 yarn-error.log
 vendor
 public/node_modules
+.idea/*
