@@ -1,11 +1,14 @@
 ###> symfony/webpack-encore-bundle ###
 /node_modules/
 !/public/build/
-!/public/build/*
 npm-debug.log
 yarn-error.log
 vendor
 public/node_modules
 .idea
-var/cache/*
-var/log/*
+var/cache/
+var/log/
+mongo-data/
+.vscode/
+.env
+symfony.lock

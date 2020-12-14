@@ -1,5 +1,5 @@
 <?php
-
+namespace App\DTO\Layers;
 
 use App\DTO\Main;
 
