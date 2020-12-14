@@ -1,0 +1,17 @@
+# config/packages/doctrine_mongodb.yaml
+doctrine_mongodb:
+  connections:
+    default:
+      server: "%mongodb_server%"
+      options: {}
+  default_database: lovelace
+  document_managers:
+    default:
+      auto_mapping: true
+      mappings:
+        App:
+          is_bundle: false
+          type: annotation
+          dir: '%kernel.project_dir%/src/Document'
+          prefix: 'App\Document'
+          alias: App
