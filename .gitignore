@@ -3,7 +3,7 @@
 !/public/build/
 npm-debug.log
 yarn-error.log
-vendor
+/vendor
 public/node_modules
 .idea
 var/cache/
