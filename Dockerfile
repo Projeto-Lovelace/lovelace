@@ -19,5 +19,5 @@ RUN apt update && apt install yarn -y
 
 RUN yarn install -y
 
-RUN pecl install mongodb
+#RUN pecl install mongodb
 RUN echo "extension=mongodb.so" > /usr/local/etc/php/conf.d/mongo.ini
