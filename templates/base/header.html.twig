@@ -31,9 +31,9 @@
     </div>
 
 
-    <a class="navbar-logo" href="Dashboard.Default.html">
-        <span class="logo d-none d-xs-block"></span>
-        <span class="logo-mobile d-block d-xs-none"></span>
+    <a class="navbar-logo" href="{{ path('index') }}">
+        <span class="logo d-xs-block"></span>
+        <span class="logo-mobile d-xs-none"></span>
     </a>
 
     <div class="navbar-right">
@@ -86,11 +86,11 @@
             </div>
 
             <div class="position-relative d-inline-block">
-                <button class="header-icon btn btn-empty" type="button" id="notificationButton"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="simple-icon-bell"></i>
-                    <span class="count">3</span>
-                </button>
+{#                <button class="header-icon btn btn-empty" type="button" id="notificationButton"#}
+{#                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
+{#                    <i class="simple-icon-bell"></i>#}
+{#                    <span class="count">3</span>#}
+{#                </button>#}
                 <div class="dropdown-menu dropdown-menu-right mt-3 position-absolute" id="notificationDropdown">
                     <div class="scroll">
                         <div class="d-flex flex-row mb-3 pb-3 border-bottom">
@@ -153,22 +153,22 @@
 
         </div>
 
-        <div class="user d-inline-block">
-            <button class="btn btn-empty p-0" type="button" data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false">
-                <span class="name">Sarah Kortney</span>
-                <span>
-                        <img alt="Profile Picture" src="img/profile-pic-l.jpg" />
-                    </span>
-            </button>
+{#        <div class="user d-inline-block">#}
+{#            <button class="btn btn-empty p-0" type="button" data-toggle="dropdown" aria-haspopup="true"#}
+{#                    aria-expanded="false">#}
+{#                <span class="name">Sarah Kortney</span>#}
+{#                <span>#}
+{#                        <img alt="Profile Picture" src="img/profile-pic-l.jpg" />#}
+{#                    </span>#}
+{#            </button>#}
 
-            <div class="dropdown-menu dropdown-menu-right mt-3">
-                <a class="dropdown-item" href="#">Account</a>
-                <a class="dropdown-item" href="#">Features</a>
-                <a class="dropdown-item" href="#">History</a>
-                <a class="dropdown-item" href="#">Support</a>
-                <a class="dropdown-item" href="#">Sign out</a>
-            </div>
-        </div>
+{#            <div class="dropdown-menu dropdown-menu-right mt-3">#}
+{#                <a class="dropdown-item" href="#">Account</a>#}
+{#                <a class="dropdown-item" href="#">Features</a>#}
+{#                <a class="dropdown-item" href="#">History</a>#}
+{#                <a class="dropdown-item" href="#">Support</a>#}
+{#                <a class="dropdown-item" href="#">Sign out</a>#}
+{#            </div>#}
+{#        </div>#}
     </div>
 </nav>
