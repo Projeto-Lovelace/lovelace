@@ -464,18 +464,18 @@ $.dore = function (element, options) {
       //menu-default no subpage
       if (
         $(".sub-menu ul[data-link='" + link + "']").length == 0 &&
-        (menuClickCount == 2 || calledFromResize)
+        (menuClickCount == 1 || calledFromResize)
       ) {
         if ($(window).outerWidth() >= menuHiddenBreakpoint) {
           if (isClassIncludedApp("menu-default")) {
             if (calledFromResize) {
               $("#app-container").removeClass(allMenuClassNames);
-              $("#app-container").addClass("menu-default menu-sub-hidden sub-hidden");
-              menuClickCount = 1;
-            } else {
-              $("#app-container").removeClass(allMenuClassNames);
               $("#app-container").addClass("menu-default main-hidden menu-sub-hidden sub-hidden");
               menuClickCount = 0;
+            } else {
+              $("#app-container").removeClass(allMenuClassNames);
+              $("#app-container").addClass("menu-default menu-sub-hidden sub-hidden");
+              menuClickCount = -1;
             }
             resizeCarousel();
             return;
@@ -486,18 +486,19 @@ $.dore = function (element, options) {
       //menu-sub-hidden no subpage
       if (
         $(".sub-menu ul[data-link='" + link + "']").length == 0 &&
-        (menuClickCount == 1 || calledFromResize)
+        (menuClickCount <= 0 || calledFromResize)
       ) {
+
         if ($(window).outerWidth() >= menuHiddenBreakpoint) {
           if (isClassIncludedApp("menu-sub-hidden")) {
             if (calledFromResize) {
               $("#app-container").removeClass(allMenuClassNames);
-              $("#app-container").addClass("menu-sub-hidden sub-hidden");
+              $("#app-container").addClass("menu-sub-hidden main-hidden main-hidden sub-hidden");
               menuClickCount = 0;
             } else {
               $("#app-container").removeClass(allMenuClassNames);
               $("#app-container").addClass("menu-sub-hidden main-hidden sub-hidden");
-              menuClickCount = -1;
+              menuClickCount = 1;
             }
             resizeCarousel();
             return;
@@ -526,8 +527,7 @@ $.dore = function (element, options) {
           }
         }
       }
-
-      if (clickIndex % 4 == 0) {
+      if (clickIndex % 2 == 0) {
         if (isClassIncludedApp("menu-main-hidden")) {
           nextClasses = "menu-main-hidden";
         } else if (

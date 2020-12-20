@@ -1467,17 +1467,17 @@ button {
       height: 70px; } }
 
 .logo {
-  width: 200px;
+  width: 200px; !important;
   height: 50px;
   background: url("../img/logo.svg") no-repeat;
   background-position: center center;
   margin: 0 auto; }
   @media (max-width: 767px) {
     .logo {
-      width: 80px; } }
+      width: 200px; !important; } }
 
 .logo-mobile {
-  width: 200px;
+  width: 200px; !important;
   height: 50px;
   background: url("../img/logo-mobile.svg") no-repeat;
   background-position: center center; }
