@@ -6,6 +6,8 @@ Table of Contents
 02. Theme Selector And Initializer
 */
 
+localStorage.clear();
+
 /* 01. Css Loading Util */
 function loadStyle(href, callback) {
   for (var i = 0; i < document.styleSheets.length; i++) {
