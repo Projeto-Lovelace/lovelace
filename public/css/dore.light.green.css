@@ -1467,15 +1467,22 @@ button {
       height: 70px; } }
 
 .logo {
-  width: 110px;
-  height: 35px;
-  background: url("../img/logo-mobile.svg") no-repeat;
+  width: 200px; !important;
+  height: 50px;
+  background: url("../img/logo-dark.png") no-repeat;
+  background-size: 200px;
   background-position: center center;
   margin: 0 auto; }
-  @media (max-width: 767px) {
-    .logo {
-      width: 80px; } }
-
+@media (max-width: 767px) {
+  .logo {
+    width: 150px; !important;
+    background-size: 150px;
+    background-position: center center;
+    margin: 0 auto;
+  } }
+.navbar-logo {
+  justify-content: center; !important;
+}
 .logo-mobile {
   width: 20px;
   height: 35px;

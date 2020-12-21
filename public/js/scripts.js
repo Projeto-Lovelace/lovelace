@@ -6,8 +6,6 @@ Table of Contents
 02. Theme Selector And Initializer
 */
 
-localStorage.clear();
-
 /* 01. Css Loading Util */
 function loadStyle(href, callback) {
   for (var i = 0; i < document.styleSheets.length; i++) {
@@ -44,19 +42,11 @@ function loadStyle(href, callback) {
       <div class="p-4">
         <p class="text-muted mb-2">Light Theme</p>
         <div class="d-flex flex-row justify-content-between mb-4">
-          <a href="#" data-theme="dore.light.blue.min.css" class="theme-color theme-color-blue"></a>
-          <a href="#" data-theme="dore.light.purple.min.css" class="theme-color theme-color-purple"></a>
-          <a href="#" data-theme="dore.light.green.min.css" class="theme-color theme-color-green"></a>
-          <a href="#" data-theme="dore.light.orange.min.css" class="theme-color theme-color-orange"></a>
-          <a href="#" data-theme="dore.light.red.min.css" class="theme-color theme-color-red"></a>
+          <a href="#" data-theme="dore.light.green.css" class="theme-color theme-color-green"></a>
         </div>
         <p class="text-muted mb-2">Dark Theme</p>
         <div class="d-flex flex-row justify-content-between">
-          <a href="#" data-theme="dore.dark.blue.min.css" class="theme-color theme-color-blue"></a>
-          <a href="#" data-theme="dore.dark.purple.min.css" class="theme-color theme-color-purple"></a>
-          <a href="#" data-theme="dore.dark.green.min.css" class="theme-color theme-color-green"></a>
-          <a href="#" data-theme="dore.dark.orange.min.css" class="theme-color theme-color-orange"></a>
-          <a href="#" data-theme="dore.dark.red.min.css" class="theme-color theme-color-red"></a>
+          <a href="#" data-theme="dore.dark.green.css" class="theme-color theme-color-green"></a>
         </div>
       </div>
       <div class="p-4">

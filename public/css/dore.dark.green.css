@@ -1469,13 +1469,18 @@ button {
 .logo {
   width: 200px; !important;
   height: 50px;
-  background: url("../img/logo.svg") no-repeat;
+  background: url("../img/logo.png") no-repeat;
   background-position: center center;
+  background-size: 250px;
   margin: 0 auto; }
   @media (max-width: 767px) {
     .logo {
-      width: 200px; !important; } }
-
+      width: 150px; !important;
+      height: 25px;
+      background-size: 100px;
+      background-position: center center;
+      margin: 0 auto;
+    } }
 .logo-mobile {
   width: 200px; !important;
   height: 50px;
