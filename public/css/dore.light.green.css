@@ -3580,7 +3580,7 @@ div.error {
   border: 1px solid #dd9c02; }
 
 .custom-switch.custom-switch-primary-inverse .custom-switch-input + .custom-switch-btn {
-  border: 1px solid #d7d7d7; }
+  border: 1px solid #576a3d; }
 
 .custom-switch.custom-switch-primary-inverse .custom-switch-input:checked + .custom-switch-btn {
   background: white;
@@ -3603,7 +3603,7 @@ div.error {
   border-radius: 0.1rem; }
 
 .custom-switch .custom-switch-input + .custom-switch-btn:after {
-  background: white; }
+  background: #576a3d; }
 
 .custom-switch .custom-switch-input + .custom-switch-btn {
   border-color: #d7d7d7; }
