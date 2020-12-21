@@ -1469,14 +1469,15 @@ button {
 .logo {
   width: 200px; !important;
   height: 50px;
-  background: url("../img/logo-dark.png") no-repeat;
+  background-image: url("../img/logo-dark.png");
   background-size: 200px;
   background-position: center center;
   margin: 0 auto; }
 @media (max-width: 767px) {
   .logo {
     width: 150px; !important;
-    background-size: 150px;
+    background-image: url("../img/logo-single.png") !important;
+    background-size: 100px;
     background-position: center center;
     margin: 0 auto;
   } }

@@ -1469,18 +1469,18 @@ button {
 .logo {
   width: 200px; !important;
   height: 50px;
-  background: url("../img/logo.png") no-repeat;
-  background-position: center center;
+  background-image: url("../img/logo.png");
   background-size: 200px;
+  background-position: center center;
   margin: 0 auto; }
-  @media (max-width: 767px) {
-    .logo {
-      width: 150px; !important;
-      height: 25px;
-      background-size: 100px;
-      background-position: center center;
-      margin: 0 auto;
-    } }
+@media (max-width: 767px) {
+  .logo {
+    width: 150px; !important;
+    background-image: url("../img/logo-single-dark.png") !important;
+    background-size: 100px;
+    background-position: center center;
+    margin: 0 auto;
+  } }
 .logo-mobile {
   width: 200px; !important;
   height: 50px;
