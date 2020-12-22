@@ -32,12 +32,17 @@
 </head>
 
 <!-- START: HEADER -->
-{% include 'base/header.html.twig' %}
+{% block topMenuHeader %}
+    {% include 'base/header.html.twig' %}
+{% endblock %}
 <!-- END: HEADER -->
 
 <!-- START: HEADER -->
-{% include 'base/menu.html.twig' %}
+{% block topMenu %}
+    {% include 'base/menu.html.twig' %}
+{% endblock %}
 <!-- END: HEADER -->
+
 
 <body
         class="menu-default show-spinner" id="app-container">
@@ -45,12 +50,14 @@
 <main>
     <div class="container-fluid">
 
-        <div class="row">
-            <div class="col-12">
-                <h1>{% block page_title %}{% endblock %}</h1>
-            </div>
+        {% block pageTitle %}
+            <div class="row">
+                <div class="col-12">
+                    <h1>{% block page_title %}{% endblock %}</h1>
+                </div>
 
-        </div>
+            </div>
+        {% endblock %}
 
         <!-- START: PAGE CONTENT -->
         {% block content %}{% endblock %}
