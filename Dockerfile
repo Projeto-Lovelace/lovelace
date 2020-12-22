@@ -5,9 +5,6 @@ ENV WEB_DOCUMENT_ROOT /app/public/
 WORKDIR /app
 
 COPY . .
-#
-#RUN apt update && apt install npm -y
-#RUN npm --prefix ./public install ./public
 
 RUN composer1 install
 
@@ -18,6 +15,10 @@ RUN cp .env.example .env
 RUN apt update && apt install yarn -y
 
 RUN yarn install -y
+
+RUN apt update && apt install npm -y
+RUN mkdir -p ./public/node_modules
+RUN npm --prefix ./public install
 
 #RUN pecl install mongodb
 RUN echo "extension=mongodb.so" > /usr/local/etc/php/conf.d/mongo.ini

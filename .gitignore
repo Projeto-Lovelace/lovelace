@@ -12,3 +12,4 @@ mongo-data/
 .vscode/
 .env
 symfony.lock
+node_modules

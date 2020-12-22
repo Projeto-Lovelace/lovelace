@@ -19,7 +19,7 @@
         "symfony/framework-bundle": "*",
         "symfony/http-client": "*",
         "symfony/intl": "*",
-        "symfony/mailer": "*",
+        "symfony/mailer": "5.2.*",
         "symfony/mime": "*",
         "symfony/monolog-bundle": "^3.1",
         "symfony/notifier": "*",

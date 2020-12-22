@@ -145,11 +145,12 @@ body {
   background-color: #d7d7d7; }
 
 .logo-single {
-  width: 110px;
-  height: 35px;
-  background: url("../img/logo-mobile.svg") no-repeat;
+  width: 200px;
+  height: 50px;
+  background: url("../img/logo-dark.png") no-repeat;
   background-position: center center;
-  display: inline-block;
+  background-size: 200px;
+  display: block;
   margin-bottom: 60px; }
 
 h1,
@@ -4361,7 +4362,7 @@ div.dataTables_wrapper div.dataTables_filter input {
   box-shadow: 0 1px 15px rgba(0, 0, 0, 0.04), 0 1px 6px rgba(0, 0, 0, 0.04); }
   .auth-card .image-side {
     width: 40%;
-    background: url("../img/login-balloon.jpg") no-repeat center top;
+    background: url("../img/ada.jpg") no-repeat center top;
     background-size: cover;
     padding: 80px 40px; }
     .auth-card .image-side .h3 {
