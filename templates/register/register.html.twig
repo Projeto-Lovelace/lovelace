@@ -126,6 +126,7 @@
                 data: result,
                 success: function(data)
                 {
+                    console.log(data);
                     var validation = (data[0]['validation']);
                     validation.forEach(function (item, index){
                         messageArray = (item.field).split(".");
