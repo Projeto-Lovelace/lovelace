@@ -142,6 +142,7 @@
                 },
                 error: function (data)
                 {
+                    console.log(data);
                     submitButton.removeAttribute("disabled")
                     responseText = JSON.parse(data.responseText);
                     message = JSON.parse(responseText.message);
