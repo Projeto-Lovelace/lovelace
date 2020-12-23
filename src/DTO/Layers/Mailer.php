@@ -62,10 +62,10 @@ class Mailer implements LayerInterface
             $this->mailer->send($email);
             return "email enviado para {$this->email}";
         } catch (RuntimeException $exception){
-            throw new \Exception([
+            throw new RuntimeException(json_encode([
                 "message" => $exception->getMessage(),
                 "line" => $exception->getLine()
-            ]);
+            ]));
         }
     }
 }
