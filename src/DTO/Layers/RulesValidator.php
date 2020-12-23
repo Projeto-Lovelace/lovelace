@@ -23,6 +23,7 @@ class RulesValidator implements LayerInterface
     public function exec(Main $main)
     {
         $result = [];
+        $exception = [];
         foreach (UserValidationMap::VALIDATIONS as $field => $validation){
             $fields = $this->arrayToStringRecursive($this->data)["array"];
             foreach ($fields as $key => $value){
@@ -33,9 +34,17 @@ class RulesValidator implements LayerInterface
                         $validationClass = new $validationClass($main);
                         if($validationClass->validate($value)) {
                             $validationClass->apply();
-                            $result[] = "Validation {$validation} field {$field} passed";
+                            $result[] = [
+                                "message" => "Validation {$validation} field {$field} passed",
+                                "field" => $field,
+                                "validation" => $validation
+                            ];
                         } else {
-                            $result[] = "Validation {$validation} field {$field} did not pass";
+                            $result["exception"][] = [
+                                "message" => "Validation {$validation} field {$field} did not pass",
+                                "field" => $field,
+                                "validation" => $validation
+                            ];
                         }
                     }
                 }

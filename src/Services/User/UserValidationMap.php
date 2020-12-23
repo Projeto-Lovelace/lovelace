@@ -5,6 +5,7 @@ class UserValidationMap
 {
     const VALIDATIONS = [
         "register.name" => "required",
-        "register.age" => "required"
+        "register.email" => "required",
+        "register.password" => "required"
     ];
 }

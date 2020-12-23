@@ -43,6 +43,12 @@
 <div class="context" style="margin: 0 auto !important; top: 0; bottom: 0">
     <main style="margin-right: 0; margin-left: 0">
         <div class="container">
+            <div id="success" class="alert alert-success rounded mx-auto w-90 pt-3 pb-3" style="display: none" role="alert">
+                verifique o seu email para continuar o cadastro
+            </div>
+            <div id="warning" class="alert alert-warning rounded mx-auto w-90" style="display: none" role="alert">
+                preencha todos os campos
+            </div>
             <div class="row h-100">
                 <div class="col-12 col-md-10 mx-auto my-auto">
                     <div class="card auth-card">
@@ -65,21 +71,21 @@
                             </a>
                             <h6 class="mb-4">Registrar</h6>
 
-                            <form action="{{ path('registerFinish') }}" method="post">
+                            <form action="{{ path('validateRegister') }}" id="register">
                                 <label class="form-group has-float-label mb-4">
-                                    <input name="name" class="form-control"/>
+                                    <input id="name" name="name" class="form-control"/>
                                     <span>Nome</span>
                                 </label>
                                 <label class="form-group has-float-label mb-4">
-                                    <input name="email" type="email" class="form-control"/>
+                                    <input id="email" name="email" type="email" class="form-control"/>
                                     <span>E-mail</span>
                                 </label>
                                 <label class="form-group has-float-label mb-4">
-                                    <input name="password" class="form-control" type="password" placeholder=""/>
+                                    <input id="password" name="password" class="form-control" type="password" placeholder=""/>
                                     <span>Senha</span>
                                 </label>
                                 <div class="d-flex justify-content-end align-items-center">
-                                    <button class="btn btn-primary btn-lg btn-shadow" type="submit">REGISTRAR
+                                    <button id="submitButton" class="btn btn-primary btn-lg btn-shadow" type="submit">REGISTRAR
                                     </button>
                                 </div>
                             </form>
@@ -93,6 +99,78 @@
     <script src="js/vendor/bootstrap.bundle.min.js"></script>
     <script src="js/dore.script.js"></script>
     <script src="js/scripts.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        var myForm = document.getElementById('register');
+        var warning = document.getElementById('warning');
+        var success = document.getElementById('success');
+        var submitButton = document.getElementById('submitButton');
+        myForm.addEventListener('submit', (function(e) {
+            e.preventDefault();
+            var objectForm = new FormData(myForm);
+            var url = myForm.getAttribute("action");
+
+            result = {"register" : {}};
+
+            for (var entry of objectForm.entries())
+            {
+                result["register"][entry[0]] = entry[1];
+            }
+            result = JSON.stringify(result)
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: result,
+                success: function(data)
+                {
+                    data.forEach(function (item, index){
+                        messageArray = (item.field).split(".");
+                        var field = document.getElementById(messageArray.pop())
+                        field.classList.remove('isFill')
+                        field.setAttribute("style", "")
+                        field.setAttribute("disabled", true)
+                    })
+                    warning.setAttribute("style", "display: none")
+                    submitButton.setAttribute("disabled", true)
+                    setTimeout(function() {
+                        success.setAttribute("style", "")
+                    }, 1000);
+                },
+                error: function (data)
+                {
+                    responseText = JSON.parse(data.responseText);
+                    message = JSON.parse(responseText.message);
+                    fieldsFailed = [];
+                    fieldsIsFill = [];
+                    message.forEach(function (item){
+                        messageArray = (item.field).split(".");
+                        lastMessage = messageArray.pop()
+                        fieldsFailed.push(lastMessage);
+                        var field = document.getElementById(lastMessage)
+                        field.setAttribute("style", "border-color: #ad8c1b")
+                        if(field.getAttribute('class').split(" ").indexOf("isFill") == -1){
+                            field.setAttribute("class", field.getAttribute('class') + " isFill")
+                        }
+                    })
+                    isFill = document.getElementsByClassName('isFill');
+                    isFillArray = Array.from(isFill);
+                    isFillArray.forEach(function (value){
+                        fieldsIsFill.push(value.id);
+                    })
+                    var difference = $(fieldsIsFill).not(fieldsFailed).get();
+
+                    difference.forEach(function (key, value){
+                        var field = document.getElementById(key)
+                        field.classList.remove('isFill')
+                        field.setAttribute("style", "")
+                    })
+
+                    warning.setAttribute("style", "")
+                }
+            });
+        }));
+    </script>
 </div>
 </body>
 <style>
