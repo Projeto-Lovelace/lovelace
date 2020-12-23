@@ -106,6 +106,8 @@
         var success = document.getElementById('success');
         var submitButton = document.getElementById('submitButton');
         myForm.addEventListener('submit', (function(e) {
+            submitButton.setAttribute("disabled", true)
+
             e.preventDefault();
             var objectForm = new FormData(myForm);
             var url = myForm.getAttribute("action");
@@ -124,7 +126,8 @@
                 data: result,
                 success: function(data)
                 {
-                    data.forEach(function (item, index){
+                    var validation = (data[0]['validation']);
+                    validation.forEach(function (item, index){
                         messageArray = (item.field).split(".");
                         var field = document.getElementById(messageArray.pop())
                         field.classList.remove('isFill')
@@ -139,6 +142,7 @@
                 },
                 error: function (data)
                 {
+                    submitButton.removeAttribute("disabled")
                     responseText = JSON.parse(data.responseText);
                     message = JSON.parse(responseText.message);
                     fieldsFailed = [];

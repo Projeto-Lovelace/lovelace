@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use App\DTO\Layers\Mailer;
 use App\DTO\Layers\RulesValidator;
 use App\DTO\MainBuilder;
 use Doctrine\ODM\MongoDB\DocumentManager;
@@ -8,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -25,16 +27,22 @@ class Register extends AbstractController
      * @var DocumentManager
      */
     private $documentManager;
+    /**
+     * @var MailerInterface
+     */
+    private $mailer;
 
     /**
      * Register constructor.
      * @param MainBuilder $mainBuilder
      * @param DocumentManager $documentManager
+     * @param MailerInterface $mailer
      */
-    public function __construct(MainBuilder $mainBuilder, DocumentManager $documentManager)
+    public function __construct(MainBuilder $mainBuilder, DocumentManager $documentManager, MailerInterface $mailer)
     {
         $this->mainBuilder = $mainBuilder;
         $this->documentManager = $documentManager;
+        $this->mailer = $mailer;
     }
 
     /**
@@ -71,14 +79,11 @@ class Register extends AbstractController
             $main = $this->mainBuilder->build($this->documentManager);
 
             $main->addLayer(new RulesValidator($registerData));
+            $main->addLayer(new Mailer($this->mailer, $registerData["register"]["email"], $registerData["register"]["name"]));
 
-            $result = $main->run();
+            $main->run();
 
-            if(array_key_exists("exception", $result)){
-                throw new \Exception(json_encode($result["exception"]));
-            }
-
-            return new JsonResponse($result, Response::HTTP_OK);
+            return new JsonResponse($main->getResults(), Response::HTTP_OK);
         } catch (\Exception $exception) {
             return new JsonResponse(
                 [
