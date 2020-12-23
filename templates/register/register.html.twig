@@ -49,6 +49,7 @@
             <div id="warning" class="alert alert-warning rounded mx-auto w-90" style="display: none" role="alert">
                 preencha todos os campos
             </div>
+            <div id="danger" class="alert alert-danger rounded mx-auto w-90" style="display: none" role="alert"></div>
             <div class="row h-100">
                 <div class="col-12 col-md-10 mx-auto my-auto">
                     <div class="card auth-card">
@@ -104,6 +105,7 @@
         var myForm = document.getElementById('register');
         var warning = document.getElementById('warning');
         var success = document.getElementById('success');
+        var danger = document.getElementById('danger');
         var submitButton = document.getElementById('submitButton');
         myForm.addEventListener('submit', (function(e) {
             submitButton.setAttribute("disabled", true)
@@ -126,6 +128,7 @@
                 data: result,
                 success: function(data)
                 {
+                    danger.setAttribute("style", "display: none")
                     console.log(data);
                     var validation = (data[0]['validation']);
                     validation.forEach(function (item, index){
@@ -143,36 +146,46 @@
                 },
                 error: function (data)
                 {
-                    console.log(data);
                     submitButton.removeAttribute("disabled")
-                    responseText = JSON.parse(data.responseText);
-                    message = JSON.parse(responseText.message);
-                    fieldsFailed = [];
-                    fieldsIsFill = [];
-                    message.forEach(function (item){
-                        messageArray = (item.field).split(".");
-                        lastMessage = messageArray.pop()
-                        fieldsFailed.push(lastMessage);
-                        var field = document.getElementById(lastMessage)
-                        field.setAttribute("style", "border-color: #ad8c1b")
-                        if(field.getAttribute('class').split(" ").indexOf("isFill") == -1){
-                            field.setAttribute("class", field.getAttribute('class') + " isFill")
-                        }
-                    })
-                    isFill = document.getElementsByClassName('isFill');
-                    isFillArray = Array.from(isFill);
-                    isFillArray.forEach(function (value){
-                        fieldsIsFill.push(value.id);
-                    })
-                    var difference = $(fieldsIsFill).not(fieldsFailed).get();
+                    if(data.status == 406) {
+                        danger.setAttribute("style", "display: none")
+                        console.log(data);
+                        responseText = JSON.parse(data.responseText);
+                        message = JSON.parse(responseText.message);
+                        fieldsFailed = [];
+                        fieldsIsFill = [];
+                        message.forEach(function (item) {
+                            messageArray = (item.field).split(".");
+                            lastMessage = messageArray.pop()
+                            fieldsFailed.push(lastMessage);
+                            var field = document.getElementById(lastMessage)
+                            field.setAttribute("style", "border-color: #ad8c1b")
+                            if (field.getAttribute('class').split(" ").indexOf("isFill") == -1) {
+                                field.setAttribute("class", field.getAttribute('class') + " isFill")
+                            }
+                        })
+                        isFill = document.getElementsByClassName('isFill');
+                        isFillArray = Array.from(isFill);
+                        isFillArray.forEach(function (value) {
+                            fieldsIsFill.push(value.id);
+                        })
+                        var difference = $(fieldsIsFill).not(fieldsFailed).get();
 
-                    difference.forEach(function (key, value){
-                        var field = document.getElementById(key)
-                        field.classList.remove('isFill')
-                        field.setAttribute("style", "")
-                    })
+                        difference.forEach(function (key, value) {
+                            var field = document.getElementById(key)
+                            field.classList.remove('isFill')
+                            field.setAttribute("style", "")
+                        })
 
-                    warning.setAttribute("style", "")
+                        warning.setAttribute("style", "")
+
+                    }
+                    if(data.status == 500){
+                        console.log(JSON.parse(JSON.parse(data.responseText).message).more)
+                        warning.setAttribute("style", "display: none")
+                        danger.setAttribute("style", "display: ''")
+                        danger.innerHTML = JSON.parse(JSON.parse(data.responseText).message).message;
+                    }
                 }
             });
         }));

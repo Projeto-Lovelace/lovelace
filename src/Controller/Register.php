@@ -88,9 +88,10 @@ class Register extends AbstractController
             return new JsonResponse(
                 [
                     "message" => $exception->getMessage(),
+                    "more" => $exception->getTrace(),
                     "file" => $exception->getFile(),
                     "line" => $exception->getLine()
-                ], Response::HTTP_INTERNAL_SERVER_ERROR
+                ], $exception->getCode()
             );
         }
     }

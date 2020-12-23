@@ -3,6 +3,7 @@ namespace App\DTO\Layers;
 
 use App\DTO\Main;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\RuntimeException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
@@ -63,9 +64,11 @@ class Mailer implements LayerInterface
             return "email enviado para {$this->email}";
         } catch (RuntimeException $exception){
             throw new RuntimeException(json_encode([
-                "message" => $exception->getMessage(),
-                "line" => $exception->getLine()
-            ]));
+                "message" => "Erro ao enviar e-mail",
+                "more" => $exception->getMessage(),
+                "line" => $exception->getLine(),
+                "file" => $exception->getFile()
+            ]), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

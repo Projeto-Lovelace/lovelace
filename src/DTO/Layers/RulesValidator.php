@@ -4,6 +4,7 @@ namespace App\DTO\Layers;
 use App\DTO\Main;
 use App\Services\User\UserValidationMap;
 use App\DTO\Layers\LayerInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 class RulesValidator implements LayerInterface
 {
@@ -50,7 +51,7 @@ class RulesValidator implements LayerInterface
             }
         }
         if(array_key_exists("exception", $result["validation"])){
-            throw new \Exception(json_encode($result["validation"]["exception"]));
+            throw new \Exception(json_encode($result["validation"]["exception"]), Response::HTTP_NOT_ACCEPTABLE);
         }
 
         return $result;
