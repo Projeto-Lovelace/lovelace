@@ -13,6 +13,8 @@ class Main
      */
     private $documentManager;
 
+    private $results;
+
     /**
      * Main constructor.
      * @param DocumentManager $documentManager
@@ -50,8 +52,25 @@ class Main
         foreach ($this->layers as $layer){
             $response = $layer->exec($this);
             if($response){
-                return $response;
+                $this->addResults($response);
             }
         }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getResults()
+    {
+        return $this->results;
+    }
+
+    /**
+     * @param mixed $results
+     */
+    public function addResults($results): self
+    {
+        $this->results[] = $results;
+        return $this;
     }
 }
