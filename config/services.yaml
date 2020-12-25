@@ -5,6 +5,7 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     mongodb_server: '%env(string:MONGO_HOST)%'
+    mail_api_key: '%env(string:MAIL_API_KEY)%'
 services:
     # default configuration for services in *this* file
     _defaults:

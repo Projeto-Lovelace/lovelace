@@ -2,12 +2,9 @@
 namespace App\DTO\Layers;
 
 use App\DTO\Main;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\Exception\RuntimeException;
+use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email as EmailSender;
 
 class Mailer implements LayerInterface
 {
@@ -41,34 +38,64 @@ class Mailer implements LayerInterface
      */
     public function exec(Main $main)
     {
-        try {
-            $email = (new EmailSender())
-                ->from('hborgesdasilva9294@gmail.com')
-                ->to($this->email)
-                //->cc('cc@example.com')
-                //->bcc('bcc@example.com')
-                //->replyTo('fabien@example.com')
-                //->priority(Email::PRIORITY_HIGH)
-                ->subject('Projeto Lovelace!')
-                ->text("Em construçao")
-                ->html("
-                        <h1>Ola {$this->name}</h1>
-                        <h3 style='margin-bottom: 50px'>Informamos que o cadastro esta processo de contruçao.</h3>
-                        <p style='margin-bottom: 25px'>Tente novamente mais tarde</p>                    
-                        <p style='color: darkgreen'>Atenciosamente,</p>
-                        <p style='color: darkgreen'>Equipe Lovelace</p>
-                        <a style='color: #0a2a45' href='http://projetolovelace.com'>projetolovelace.com</a>
-                    ");
+        $message = preg_replace( "/|  |\n/", "", "<div style='text-align: center'>
+            <h1>Ola {$this->name}</h1>
+            <h3 style='margin-bottom: 50px'>Informamos que o cadastro esta processo de construçao.</h3>
+            <h3 style='margin-bottom: 25px'>Tente novamente mais tarde</h3>
+            <a style='color: #0a2a45' href='http://projetolovelace.com'>projetolovelace.com</a></div>
+            <h4 style='color: darkgreen'>Atenciosamente</h4>
+            <h4 style='color: darkgreen'>Equipe Lovelace</h4>");
 
-            $this->mailer->send($email);
-            return "email enviado para {$this->email}";
-        } catch (RuntimeException $exception){
-            throw new RuntimeException(json_encode([
-                "message" => "Erro ao enviar e-mail",
-                "more" => $exception->getMessage(),
-                "line" => $exception->getLine(),
-                "file" => $exception->getFile()
-            ]), Response::HTTP_INTERNAL_SERVER_ERROR);
+        $postFields = "{
+                \"personalizations\": [
+                    {
+                        \"to\": [
+                            {
+                                \"email\": \"hborgesdasilva9294@gmail.com\"
+                            }
+                        ],
+                        \"subject\": \"Registro Lovelace\"
+                    }
+                ],
+                \"from\": {
+                    \"email\": \"{$this->email}\"
+                },
+                \"content\": [
+                    {
+                        \"type\": \"text/html\",
+                        \"value\": \"{$message}\"
+                    }
+                ]
+            }";
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, [
+            CURLOPT_URL => "https://rapidprod-sendgrid-v1.p.rapidapi.com/mail/send",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => $postFields,
+            CURLOPT_HTTPHEADER => [
+                "content-type: application/json",
+                "x-rapidapi-host: {$_SERVER['MAIL_HOST']}",
+                "x-rapidapi-key: {$_SERVER['MAIL_API_KEY']}"
+            ],
+        ]);
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+            throw new \Exception("Erro ao enviar email: " . $err);
+        } else {
+            return "Email enviado para {$this->email}";
         }
     }
 }

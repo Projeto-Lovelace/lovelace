@@ -76,7 +76,7 @@ class Register extends AbstractController
                 throw new \Exception("Register field doesn't exist");
             }
 
-            $main = $this->mainBuilder->build($this->documentManager);
+            $main = $this->mainBuilder->build($this->documentManager, $this->container);
 
             $main->addLayer(new RulesValidator($registerData));
             $main->addLayer(new Mailer($this->mailer, $registerData["register"]["email"], $registerData["register"]["name"]));

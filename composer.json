@@ -33,7 +33,8 @@
         "symfony/validator": "*",
         "symfony/web-link": "*",
         "symfony/webpack-encore-bundle": "^1.8",
-        "symfony/yaml": "*"
+        "symfony/yaml": "*",
+        "ext-http": "*"
     },
     "require-dev": {
         "symfony/debug-pack": "*",
