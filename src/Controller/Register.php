@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use App\DTO\Email as EmailObject;
 use App\DTO\Layers\Mailer;
 use App\DTO\Layers\RulesValidator;
 use App\DTO\MainBuilder;
@@ -76,10 +77,22 @@ class Register extends AbstractController
                 throw new \Exception("Register field doesn't exist");
             }
 
-            $main = $this->mainBuilder->build($this->documentManager, $this->container);
+            $message = "<div style='text-align: center'><h1>Ola {$registerData["register"]["name"]}</h1>
+            <h3 style='margin-bottom: 50px'>Informamos que o cadastro esta processo de construçao.</h3>
+            <h3 style='margin-bottom: 25px'>Tente novamente mais tarde</h3>
+            <a style='color: #0a2a45' href='http://projetolovelace.com'>projetolovelace.com</a></div>
+            <h4 style='color: darkgreen'>Atenciosamente</h4>
+            <h4 style='color: darkgreen'>Equipe Lovelace</h4>";
+
+            $email = new EmailObject();
+            $email->setEmailAddress($registerData["register"]["email"])
+                ->setMessage($message)
+                ->setTitle("Registro Lovelace");
+
+            $main = $this->mainBuilder->build($this->documentManager);
 
             $main->addLayer(new RulesValidator($registerData));
-            $main->addLayer(new Mailer($this->mailer, $registerData["register"]["email"], $registerData["register"]["name"]));
+            $main->addLayer(new Mailer($this->mailer, $email));
 
             $main->run();
 
@@ -91,7 +104,7 @@ class Register extends AbstractController
                     "more" => $exception->getTrace(),
                     "file" => $exception->getFile(),
                     "line" => $exception->getLine()
-                ], $exception->getCode()
+                ], $exception->getCode() ?: 500
             );
         }
     }
