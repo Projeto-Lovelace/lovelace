@@ -1,6 +1,7 @@
 <?php
 namespace App\DTO;
 
+use App\Document\User;
 use App\DTO\Layers\LayerInterface;
 use Doctrine\ODM\MongoDB\DocumentManager;
 
@@ -14,6 +15,21 @@ class Main
     private $documentManager;
 
     private $results;
+
+    /**
+     * @var string
+     */
+    private $inputValues = "";
+
+    /**
+     * @var User
+     */
+    private $user;
+
+    /**
+     * @var
+     */
+    private $loginLinkDetails;
 
     /**
      * Main constructor.
@@ -71,6 +87,55 @@ class Main
     public function addResults($results): self
     {
         $this->results[] = $results;
+        return $this;
+    }
+
+    /**
+     * @param array $data
+     * @return $this
+     */
+    public function setInputValues(array $data)
+    {
+        $this->inputValues = $data;
+        return $this;
+    }
+
+    public function getInputValues()
+    {
+        return $this->inputValues;
+    }
+
+    /**
+     * @param User $user
+     */
+    public function setUser(User $user)
+    {
+        $this->user = $user;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLoginLinkDetails()
+    {
+        return $this->loginLinkDetails;
+    }
+
+    /**
+     * @param mixed $loginLinkDetails
+     * @return Main
+     */
+    public function setLoginLinkDetails($loginLinkDetails)
+    {
+        $this->loginLinkDetails = $loginLinkDetails;
         return $this;
     }
 }

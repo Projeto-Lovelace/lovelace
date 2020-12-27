@@ -93,9 +93,6 @@
     "doctrine/sql-formatter": {
         "version": "1.1.1"
     },
-    "egulias/email-validator": {
-        "version": "2.1.24"
-    },
     "jean85/pretty-package-versions": {
         "version": "1.5.1"
     },
@@ -286,18 +283,6 @@
     },
     "symfony/intl": {
         "version": "v5.2.0"
-    },
-    "symfony/mailer": {
-        "version": "4.3",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "4.3",
-            "ref": "15658c2a0176cda2e7dba66276a2030b52bd81b2"
-        },
-        "files": [
-            "config/packages/mailer.yaml"
-        ]
     },
     "symfony/maker-bundle": {
         "version": "1.0",

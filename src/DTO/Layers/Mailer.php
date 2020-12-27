@@ -3,16 +3,9 @@ namespace App\DTO\Layers;
 
 use App\DTO\Email;
 use App\DTO\Main;
-use Symfony\Component\Dotenv\Dotenv;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Symfony\Component\Mailer\MailerInterface;
 
 class Mailer implements LayerInterface
 {
-    /**
-     * @var MailerInterface
-     */
-    private $mailer;
     /**
      * @var Email $email
      */
@@ -20,22 +13,27 @@ class Mailer implements LayerInterface
 
     /**
      * Mailer constructor.
-     * @param MailerInterface $mailer
      * @param Email $email
      */
-    public function __construct(MailerInterface $mailer, Email $email)
+    public function __construct(Email $email)
     {
-        $this->mailer = $mailer;
         $this->email = $email;
     }
 
     /**
      * @param Main $main
      * @return string
-     * @throws TransportExceptionInterface
      */
     public function exec(Main $main)
     {
+        $message = "<div style='text-align: center'><h1>Ola {$main->getUser()->getName()}</h1>
+            <h3 style='margin-bottom: 50px'>Para confirmar o seu cadastro clique no link abaixo</h3>
+            <a style='color: #0a2a45' href='{$main->getLoginLinkDetails()}'>CONFIRMAR</a></div>
+            <h4 style='color: darkgreen'>Atenciosamente</h4>
+            <h4 style='color: darkgreen'>Equipe Lovelace</h4>";
+
+        $this->email->setMessage($message);
+
         $postFields = "{
                 \"personalizations\": [
                     {
@@ -58,6 +56,10 @@ class Mailer implements LayerInterface
                     }
                 ]
             }";
+
+//        if($_SERVER["APP_ENV"] != "prod"){
+//            return $this->email->getMessage();
+//        }
 
         $curl = curl_init();
 
@@ -83,8 +85,8 @@ class Mailer implements LayerInterface
 
         curl_close($curl);
 
-        if ($err) {
-            throw new \Exception("Erro ao enviar email: " . $err);
+        if ($err || $response != "") {
+            throw new \Exception("Erro ao enviar email: " . $err ?: $response);
         } else {
             return "Email enviado para {$this->email->getEmailAddress()}";
         }

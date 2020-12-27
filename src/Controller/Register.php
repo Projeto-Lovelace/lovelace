@@ -1,17 +1,20 @@
 <?php
 namespace App\Controller;
 
+use App\Document\User;
 use App\DTO\Email as EmailObject;
+use App\DTO\Layers\LoginLinkGenerator;
 use App\DTO\Layers\Mailer;
 use App\DTO\Layers\RulesValidator;
 use App\DTO\MainBuilder;
+use App\DTO\Layers\Register as RegisterLayer;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\LoginLink\LoginLinkHandlerInterface;
 
 /**
  * Class Register
@@ -29,21 +32,21 @@ class Register extends AbstractController
      */
     private $documentManager;
     /**
-     * @var MailerInterface
+     * @var LoginLinkHandlerInterface
      */
-    private $mailer;
+    private $loginLinkHandler;
 
     /**
      * Register constructor.
      * @param MainBuilder $mainBuilder
      * @param DocumentManager $documentManager
-     * @param MailerInterface $mailer
+     * @param LoginLinkHandlerInterface $loginLinkHandler
      */
-    public function __construct(MainBuilder $mainBuilder, DocumentManager $documentManager, MailerInterface $mailer)
+    public function __construct(MainBuilder $mainBuilder, DocumentManager $documentManager, LoginLinkHandlerInterface $loginLinkHandler)
     {
         $this->mainBuilder = $mainBuilder;
         $this->documentManager = $documentManager;
-        $this->mailer = $mailer;
+        $this->loginLinkHandler = $loginLinkHandler;
     }
 
     /**
@@ -77,22 +80,16 @@ class Register extends AbstractController
                 throw new \Exception("Register field doesn't exist");
             }
 
-            $message = "<div style='text-align: center'><h1>Ola {$registerData["register"]["name"]}</h1>
-            <h3 style='margin-bottom: 50px'>Informamos que o cadastro esta processo de construçao.</h3>
-            <h3 style='margin-bottom: 25px'>Tente novamente mais tarde</h3>
-            <a style='color: #0a2a45' href='http://projetolovelace.com'>projetolovelace.com</a></div>
-            <h4 style='color: darkgreen'>Atenciosamente</h4>
-            <h4 style='color: darkgreen'>Equipe Lovelace</h4>";
-
             $email = new EmailObject();
             $email->setEmailAddress($registerData["register"]["email"])
-                ->setMessage($message)
                 ->setTitle("Registro Lovelace");
 
             $main = $this->mainBuilder->build($this->documentManager);
 
             $main->addLayer(new RulesValidator($registerData));
-            $main->addLayer(new Mailer($this->mailer, $email));
+            $main->addLayer(new RegisterLayer(new User(), $this->loginLinkHandler));
+            $main->addLayer(new LoginLinkGenerator($this->loginLinkHandler));
+            $main->addLayer(new Mailer($email));
 
             $main->run();
 
@@ -106,6 +103,32 @@ class Register extends AbstractController
                     "line" => $exception->getLine()
                 ], $exception->getCode() ?: 500
             );
+        }
+    }
+
+    /**
+     * @Route("/check", name="register_check")
+     * @param Request $request
+     */
+    public function registerCheck(Request $request)
+    {
+        if($request->getMethod() == "GET") {
+            $expires = $request->query->get('expires');
+            $username = $request->query->get('user');
+            $hash = $request->query->get('hash');
+
+            $user = $this->documentManager->getRepository(User::class)->findOneBy(['email' => $username]);
+
+
+            // and render a template with the button
+            return $this->render('security/processLogin.html.twig', [
+                'expires' => $expires,
+                'username' => $username,
+                'hash' => $hash,
+                'user' => $user
+            ]);
+        } elseif($request->getMethod() == "POST") {
+            dump("teste");die;
         }
     }
 }

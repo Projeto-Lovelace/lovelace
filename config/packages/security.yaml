@@ -1,15 +1,36 @@
 security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    enable_authenticator_manager: true
+
     providers:
-        users_in_memory: { memory: null }
+        app_user_provider:
+          mongodb:
+                class: App\Document\User
+                property: email
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            anonymous: true
-            lazy: true
-            provider: users_in_memory
+            pattern:  ^
+            anonymous: false
+            access_denied_handler: App\Security\AccessDeniedHandler
+            entry_point: App\Security\AuthenticationEntryPoint
+            form_login:
+                check_path: /login/validate
+                login_path: /login
+                default_target_path: /portal
+            logout:
+                path:   /logout
+                target: /
+            guard:
+                authenticators:
+                    - App\Security\UserAuthenticator
+            login_link:
+                check_route: register_check
+                default_target_path: /portal
+                check_post_only: true
+                signature_properties: [ 'email', 'password' ]
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
@@ -20,5 +41,5 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
+         - { path: ^/portal, roles: ROLE_USER }
         # - { path: ^/profile, roles: ROLE_USER }

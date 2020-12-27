@@ -53,7 +53,7 @@ class RulesValidator implements LayerInterface
         if(array_key_exists("exception", $result["validation"])){
             throw new \Exception(json_encode($result["validation"]["exception"]), Response::HTTP_NOT_ACCEPTABLE);
         }
-
+        $main->setInputValues($this->data);
         return $result;
     }
 

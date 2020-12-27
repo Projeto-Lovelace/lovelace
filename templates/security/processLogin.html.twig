@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Lovelace Register</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="/font/iconsmind-s/css/iconsminds.css"/>
+    <link rel="stylesheet" href="/font/simple-line-icons/css/simple-line-icons.css"/>
+
+    <link rel="stylesheet" href="/css/vendor/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/vendor/bootstrap.rtl.only.min.css"/>
+    <link rel="stylesheet" href="/css/vendor/bootstrap-float-label.min.css"/>
+    <link rel="stylesheet" href="/css/main.css"/>
+    <link rel="icon" href="/img/logo-single.png">
+    <link rel="stylesheet" href="/node_modules/@fortawesome/fontawesome-free/css/all.css">
+</head>
+<body>
+<link rel="stylesheet" href="/css/animatedBackground.css"/>
+<div class="area">
+    <ul class="circles">
+        <li>PHP</li>
+        <li>SQL</li>
+        <li>Java</li>
+        <li>JavaScript</li>
+        <li>Soft Skills</li>
+        <li>Scrum</li>
+        <li>Agile</li>
+        <li>Mysql</li>
+        <li>MongoDB</li>
+        <li>Lovelace</li>
+        <li>Python</li>
+        <li>PHP</li>
+        <li>Docker</li>
+        <li>Logica de programaçao</li>
+        <li>Linux</li>
+        <li class="fas fa-code"></li>
+        <li class="fab fa-connectdevelop"></li>
+        <li class="fas fa-code"></li>
+    </ul>
+</div>
+
+<div class="context" style="margin: 0 auto !important; top: 0; bottom: 0">
+    <main style="margin-right: 0; margin-left: 0">
+        <div class="container">
+            <div id="success" class="alert alert-success rounded mx-auto w-90 pt-3 pb-3" style="display: none" role="alert">
+                verifique o seu email para continuar o cadastro
+            </div>
+            <div id="warning" class="alert alert-warning rounded mx-auto w-90" style="display: none" role="alert">
+                preencha todos os campos
+            </div>
+            <div id="danger" class="alert alert-danger rounded mx-auto w-90" style="display: none" role="alert"></div>
+            {% for message in app.flashes('danger') %}
+                <div class="alert alert-danger rounded mx-auto w-90">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            <div class="row h-100">
+                <div class="col-12 col-md-10 mx-auto my-auto">
+                    <div class="card auth-card">
+                        <div class="position-relative image-side position-relative d-flex flex-column justify-content-end">
+                            <div class="text-side">
+                                <p class="h2 font-side">BEM VINDO(A)</p>
+                                <p class="h2 font-side">AO PROJETO LOVELACE</p>
+                            </div>
+                        </div>
+                        <div class="form-side">
+                            <a href={{ path('index') }}>
+                                <span class="logo-single"></span>
+                            </a>
+                            <h6 class="mb-4">Ola, {{ user.name }}. Clique no botao abaixo para confirmar o email</h6>
+
+                            <form action="{{ path('register_check') }}" method="POST">
+                                <input type="hidden" name="expires" value="{{ expires }}">
+                                <input type="hidden" name="user" value="{{ username }}">
+                                <input type="hidden" name="hash" value="{{ hash }}">
+
+                                <button class="btn btn-lg btn-primary" type="submit">
+                                    Confirmar email
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="/js/vendor/jquery-3.3.1.min.js"></script>
+    <script src="/js/vendor/bootstrap.bundle.min.js"></script>
+    <script src="/js/dore.script.js"></script>
+    <script src="/js/scripts.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</div>
+</body>
+<style>
+    @media (max-width: 767px) {
+        main {
+            margin: 20px auto !important;
+        }
+    }
+</style>
+</html>
