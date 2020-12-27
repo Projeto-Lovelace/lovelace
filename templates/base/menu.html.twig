@@ -2,11 +2,31 @@
     <div class="main-menu">
         <div class="scroll">
             <ul class="list-unstyled">
-                <li>
-                    <a href={{ path('register') }}>
-                        <i class="simple-icon-user-follow"></i> Registrar
-                    </a>
-                </li>
+                {% if not (app.user) %}
+                    <li>
+                        <a href={{ path('register') }}>
+                            <i class="simple-icon-user-follow"></i> Registrar
+                        </a>
+                    </li>
+                    <li>
+                        <a href={{ path('app_login') }}>
+                            <i class="simple-icon-login"></i> Login
+                        </a>
+                    </li>
+                {% endif %}
+
+                {% if (app.user) %}
+                    <li>
+                        <a href="/logout">
+                            <i class="simple-icon-logout"></i> Logout
+                        </a>
+                    </li>
+                    <li>
+                        <a style="text-align: center !important;" href={{ path('register_address') }}>
+                            <i class="simple-icon-location-pin"></i> Cadastro de endereço
+                        </a>
+                    </li>
+                {% endif %}
             </ul>
         </div>
         <div class="position-absolute w-100 mb-3 mx-4" style="bottom: 0">
