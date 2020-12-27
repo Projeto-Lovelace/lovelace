@@ -1,10 +1,12 @@
 <?php
 namespace App\Controller;
 
+use App\Document\Address;
 use App\Document\User;
 use App\DTO\Email as EmailObject;
 use App\DTO\Layers\LoginLinkGenerator;
 use App\DTO\Layers\Mailer;
+use App\DTO\Layers\RegisterAddress;
 use App\DTO\Layers\RulesValidator;
 use App\DTO\MainBuilder;
 use App\DTO\Layers\Register as RegisterLayer;
@@ -13,8 +15,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\LoginLink\LoginLinkHandlerInterface;
+use function PHPUnit\Framework\stringContains;
 
 /**
  * Class Register
@@ -35,18 +39,24 @@ class Register extends AbstractController
      * @var LoginLinkHandlerInterface
      */
     private $loginLinkHandler;
+    /**
+     * @var SessionInterface
+     */
+    private $session;
 
     /**
      * Register constructor.
      * @param MainBuilder $mainBuilder
      * @param DocumentManager $documentManager
      * @param LoginLinkHandlerInterface $loginLinkHandler
+     * @param SessionInterface $session
      */
-    public function __construct(MainBuilder $mainBuilder, DocumentManager $documentManager, LoginLinkHandlerInterface $loginLinkHandler)
+    public function __construct(MainBuilder $mainBuilder, DocumentManager $documentManager, LoginLinkHandlerInterface $loginLinkHandler, SessionInterface $session)
     {
         $this->mainBuilder = $mainBuilder;
         $this->documentManager = $documentManager;
         $this->loginLinkHandler = $loginLinkHandler;
+        $this->session = $session;
     }
 
     /**
@@ -129,15 +139,45 @@ class Register extends AbstractController
     }
 
     /**
-     * @Route("/address", name="register_address")
+     * @Route("/address", name="register_address", methods={"GET", "POST"})
      * @param Request $request
      */
     public function registerAddress(Request $request)
     {
+        $redirectUrl = $request->headers->get("referer");
+        if($redirectUrl && str_contains($redirectUrl, "/register/check")){
+            $this->session->getFlashBag()->add('success', "{$this->getUser()->getName()}, obrigado por confirmar o email. Por favor preencha os seus dados de endereço");
+        }
         if($request->getMethod() == "POST"){
-            $main = $this->mainBuilder->build($this->documentManager);
+            try {
+                $registerData = json_decode($request->getContent(), true);
+                $main = $this->mainBuilder->build($this->documentManager);
+
+                $main->addLayer(new RulesValidator($registerData));
+                $main->addLayer(new RegisterAddress($registerData, $this->getUser()));
+                $main->run();
+                return new JsonResponse($main->getResults(), Response::HTTP_OK);
+            } catch (\Exception $exception) {
+                return new JsonResponse(
+                    [
+                        "message" => $exception->getMessage(),
+                        "more" => $exception->getTrace(),
+                        "file" => $exception->getFile(),
+                        "line" => $exception->getLine()
+                    ], $exception->getCode() ?: 500
+                );
+            }
         } else if($request->getMethod() == "GET"){
             return $this->render('register/registerForm.html.twig');
         }
+    }
+
+    /**
+     * @Route("/find/address", name="find_address")
+     */
+    public function findAddress()
+    {
+        $address = $this->documentManager->getRepository(Address::class)->findOneBy(["user" => $this->getUser()->getId()]);
+        return new JsonResponse($address, Response::HTTP_OK);
     }
 }

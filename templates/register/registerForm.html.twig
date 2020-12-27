@@ -3,26 +3,207 @@
 {% block title %}Registro Lovelace{% endblock %}
 
 {% block content %}
-    <h3>Olá {{ app.user.name }}</h3>
+
     <div class="container-fluid">
-        <form>
-            <label class="form-group has-float-label mb-4" for="cep">
-                <span>CEP</span>
-                <input type="text" name="cep" id="cep" class="form-control" required autofocus>
-            </label>
-        </form>
+        <div class="row app-row p-0">
+            <div class="col-12 survey-app">
+                <div class="mb-2">
+                    <h1>Cadastro de endereço</h1>
+                </div>
+                <ul class="nav nav-tabs separator-tabs ml-0 mb-5" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="edit" data-toggle="tab" role="tab"
+                           aria-controls="first" aria-selected="true">EDITAR</a>
+                    </li>
+                </ul>
+                {% for message in app.flashes('danger') %}
+                    <div class="alert alert-danger rounded mx-auto w-90">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+                <div class="tab-content mb-4">
+                    <div id="success" class="alert alert-success rounded mx-auto w-100 pt-3 pb-3" style="display: none" role="alert">
+                        Endereço salvo com sucesso
+                    </div>
+                    <div id="warning" class="alert alert-warning rounded mx-auto w-100 pt-3 pb-3" style="display: none" role="alert">
+                    </div>
+                    {% for message in app.flashes('success') %}
+                        <div id="success" class="alert alert-success rounded mx-auto w-100 pt-3 pb-3" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                    <div class="tab-pane show active" id="first" role="tabpanel" aria-labelledby="first-tab">
+                        <div class="row">
+                            <div class="card pt-3 mb-2 w-100 col-lg-5 col-10 p-0 m-auto ml-md-0">
+                                <div class="card-body pt-2">
+                                    <form action="{{ path('register_address') }}" id="registerAddressForm" class="form-group d-flex flex-column">
+                                        <label class="form-group has-float-label mb-4" for="cep">
+                                            <span>CEP</span>
+                                            <input type="text" name="cep" id="cep" class="form-control"
+                                                   autofocus>
+                                        </label>
+                                        <label class="form-group has-float-label mb-4" for="street">
+                                            <span>Logradouro</span>
+                                            <input type="text" name="street" id="street"
+                                                   class="form-control"
+                                                   autofocus>
+                                        </label>
+                                        <label class="form-group has-float-label mb-4" for="number">
+                                            <span>Número</span>
+                                            <input type="text" name="number" id="number"
+                                                   class="form-control"
+                                                   autofocus>
+                                        </label>
+                                        <label class="form-group has-float-label mb-4" for="complement">
+                                            <span>Complemento</span>
+                                            <input type="text" name="complement" id="complement"
+                                                   class="form-control"
+                                                   autofocus>
+                                        </label>
+                                        <label class="form-group has-float-label mb-4" for="city">
+                                            <span>Cidade</span>
+                                            <input type="text" name="city" id="city"
+                                                   class="form-control"
+                                                   autofocus>
+                                        </label>
+                                        <label class="form-group has-float-label mb-4" for="state">
+                                            <span>UF</span>
+                                            <input type="text" name="state" id="state" class="form-control" autofocus>
+                                        </label>
+                                        <div class="d-flex justify-content-end align-items-center">
+                                            <button id="submitButton" class="btn btn-primary btn-lg btn-shadow" type="submit">SALVAR
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <script type="text/javascript">
-        url = "http://google.com"
+
+        var myForm = document.getElementById('registerAddressForm');
+        var urlForm = myForm.getAttribute("action");
+        var success = document.getElementById("success");
+        var warning = document.getElementById('warning');
+
+        window.onload = findAdress
+
+        function findAdress(){
+            $.ajax({
+                type: "POST",
+                url: "/register/find/address",
+                success: function (data) {
+                    JSON.stringify(data)
+                    for(var item in data){
+                        input = document.getElementById(item)
+                        if(input) {
+                            input.value = data[item];
+                        }
+                    }
+                }
+            })
+        }
+        myForm.addEventListener('submit', function (event){
+            var result = {"address" : {}}
+            event.preventDefault()
+            var objectForm = new FormData(myForm);
+            for (var entry of objectForm.entries())
+            {
+                result["address"][entry[0]] = entry[1];
+            }
+            result = JSON.stringify(result)
+            $.ajax({
+                type: "POST",
+                url: urlForm,
+                data: result,
+                success: function (data) {
+                    var validation = (data[0]['validation']);
+                    validation.forEach(function (item, index){
+                        messageArray = (item.field).split(".");
+                        var field = document.getElementById(messageArray.pop())
+                        field.classList.remove('isFill')
+                        field.setAttribute("style", "")
+                        field.setAttribute("disabled", true)
+                    })
+                    warning.setAttribute("style", "display: none")
+                    success.setAttribute("style", "")
+                },
+                error: function (data) {
+                    responseText = JSON.parse(data.responseText);
+                    message = JSON.parse(responseText.message);
+                    fieldsFailed = [];
+                    fieldsIsFill = [];
+                    message.forEach(function (item) {
+                        messageArray = (item.field).split(".");
+                        lastMessage = messageArray.pop();
+                        console.log(lastMessage);
+                        fieldsFailed.push(lastMessage);
+                        var field = document.getElementById(lastMessage)
+                        field.setAttribute("style", "border-color: #ad8c1b")
+                        if (field.getAttribute('class').split(" ").indexOf("isFill") == -1) {
+                            field.setAttribute("class", field.getAttribute('class') + " isFill")
+                        }
+                    })
+                    isFill = document.getElementsByClassName('isFill');
+                    isFillArray = Array.from(isFill);
+                    isFillArray.forEach(function (value) {
+                        fieldsIsFill.push(value.id);
+                    })
+                    var difference = $(fieldsIsFill).not(fieldsFailed).get();
+
+                    difference.forEach(function (key, value) {
+                        var field = document.getElementById(key)
+                        field.classList.remove('isFill')
+                        field.setAttribute("style", "")
+                    })
+                    var warningFields = "";
+                    var warningText = "";
+                    translateToMessage = {
+                        "cep": "cep",
+                        "street" : "logradouro",
+                        "city" : "cidade",
+                        "state" : "UF"
+                    }
+
+                    if(fieldsFailed.length > 1) {
+                        fieldsFailed.forEach(function (item) {
+                            warningFields = warningFields + ", " + translateToMessage[item];
+                        })
+                        warningFields = warningFields.replace(/,(?=[^,]*$)/, ' e')
+                        warningText = "Os campos " + warningFields.substring(1) + " são obrigatários"
+                        warning.innerText = warningText
+                    } else {
+                        warning.innerText = "O campo " + translateToMessage[fieldsFailed[0]] + " e obrigatorio"
+                    }
+                    warning.setAttribute("style", "")
+                }
+            })
+        })
+
         cep = document.getElementById("cep")
-        cep.addEventListener('input', function (e) {
+        street = document.getElementById("street")
+        city = document.getElementById("city")
+        state = document.getElementById("state")
+        cep.addEventListener('blur', function () {
             value = cep.value;
+            url = "http://viacep.com.br/ws/" + value.toString() + "/json/"
             $.ajax({
                 type: "GET",
                 url: url,
-                dataType : "jsonp",
-                success: function (data){
-                    console.log(data)
+                dataType: "jsonp",
+                success: function (data) {
+                    street.value = data.logradouro
+                    city.value = data.localidade
+                    state.value = data.uf
+                },
+                error: function () {
+                    street.value = ""
+                    city.value = ""
+                    state.value = ""
                 }
             })
         })

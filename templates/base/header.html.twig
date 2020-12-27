@@ -1,39 +1,39 @@
 <nav class="navbar fixed-top">
     <div class="d-flex align-items-center navbar-left">
-{#        <a href="#" class="menu-button d-none d-md-block">#}
-{#            <svg class="main" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 9 17">#}
-{#                <rect x="0.48" y="0.5" width="7" height="1" />#}
-{#                <rect x="0.48" y="7.5" width="7" height="1" />#}
-{#                <rect x="0.48" y="15.5" width="7" height="1" />#}
-{#            </svg>#}
-{#            <svg class="sub" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 17">#}
-{#                <rect x="1.56" y="0.5" width="16" height="1" />#}
-{#                <rect x="1.56" y="7.5" width="16" height="1" />#}
-{#                <rect x="1.56" y="15.5" width="16" height="1" />#}
-{#            </svg>#}
-{#        </a>#}
+        {# <a href="#" class="menu-button d-none d-md-block"> #}
+        {# <svg class="main" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 9 17"> #}
+        {# <rect x="0.48" y="0.5" width="7" height="1" /> #}
+        {# <rect x="0.48" y="7.5" width="7" height="1" /> #}
+        {# <rect x="0.48" y="15.5" width="7" height="1" /> #}
+        {# </svg> #}
+        {# <svg class="sub" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 17"> #}
+        {# <rect x="1.56" y="0.5" width="16" height="1" /> #}
+        {# <rect x="1.56" y="7.5" width="16" height="1" /> #}
+        {# <rect x="1.56" y="15.5" width="16" height="1" /> #}
+        {# </svg> #}
+        {# </a> #}
 
         <a href="#" class="menu-button-mobile d-xs-block d-sm-block d-md-none">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 17">
-                <rect x="0.5" y="0.5" width="25" height="1" />
-                <rect x="0.5" y="7.5" width="25" height="1" />
-                <rect x="0.5" y="15.5" width="25" height="1" />
+                <rect x="0.5" y="0.5" width="25" height="1"/>
+                <rect x="0.5" y="7.5" width="25" height="1"/>
+                <rect x="0.5" y="15.5" width="25" height="1"/>
             </svg>
         </a>
 
-{#        <div class="search" data-search-path="Pages.Search.html?q=">#}
-{#            <input placeholder="Search...">#}
-{#            <span class="search-icon">#}
-{#                    <i class="simple-icon-magnifier"></i>#}
-{#                </span>#}
-{#        </div>#}
+        {# <div class="search" data-search-path="Pages.Search.html?q="> #}
+        {# <input placeholder="Search..."> #}
+        {# <span class="search-icon"> #}
+        {# <i class="simple-icon-magnifier"></i> #}
+        {# </span> #}
+        {# </div> #}
 
     </div>
 
 
     <a class="navbar-logo" href="{{ path('index') }}">
         <span class="logo d-block"></span>
-{#        <span class="logo-mobile d-xs-none"></span>#}
+        {# <span class="logo-mobile d-xs-none"></span> #}
     </a>
 
     <div class="navbar-right">
@@ -51,39 +51,49 @@
                         aria-haspopup="true" aria-expanded="false">
                     <i class="simple-icon-grid"></i>
                 </button>
-                <div class="dropdown-menu dropdown-menu-right mt-3 h-auto position-absolute" id="iconMenuDropdown">
-                    {% if (app.user) %}
-                    <a href="#" class="icon-menu-item">
-                        <i class="iconsminds-equalizer d-block"></i>
-                        <span>Configurações</span>
-                    </a>
-                    {% endif %}
+                <div class="dropdown-menu dropdown-menu-right mt-3 w-auto h-auto position-absolute"
+                     id="iconMenuDropdown">
+                    <div class="d-flex justify-content-start">
+                        {% if (app.user) %}
+                            <a href="{{ path('register_address') }}"
+                               class="icon-menu-item mb-auto mt-0 p-0 d-flex flex-column">
+                                <i class="simple-icon-location-pin"></i>
+                                <span class="p-0">Cadastro de endereço</span>
+                            </a>
+                            <a href="/logout"
+                               class="icon-menu-item mb-auto mt-0 p-0 d-flex flex-column">
+                                <i class="simple-icon-logout d-block"></i>
+                                <span class="p-0">Logout</span>
+                            </a>
+                        {% endif %}
 
-                    {% if not (app.user) %}
-                    <a href="{{ path('app_login') }}" class="icon-menu-item">
-                        <i class="iconsminds-male-female d-block"></i>
-                        <span>Login</span>
-                    </a>
-                    <a href="{{ path('register') }}" class="icon-menu-item">
-                        <i class="simple-icon-user-follow d-block"></i>
-                        <span>Registrar</span>
-                    </a>
-                    {% endif %}
+                        {% if not (app.user) %}
+                            <a href="{{ path('app_login') }}" class="icon-menu-item icon-menu-item
+                            mb-auto mt-0 p-0 d-flex flex-column">
+                                <i class="simple-icon-login d-block"></i>
+                                <span>Login</span>
+                            </a>
+                            <a href="{{ path('register') }}" class="icon-menu-item mb-auto mt-0 p-0 d-flex flex-column">
+                                <i class="simple-icon-user-follow d-block"></i>
+                                <span>Registrar</span>
+                            </a>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
 
             <div class="position-relative d-inline-block">
-{#                <button class="header-icon btn btn-empty" type="button" id="notificationButton"#}
-{#                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
-{#                    <i class="simple-icon-bell"></i>#}
-{#                    <span class="count">3</span>#}
-{#                </button>#}
+                {# <button class="header-icon btn btn-empty" type="button" id="notificationButton" #}
+                {# data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> #}
+                {# <i class="simple-icon-bell"></i> #}
+                {# <span class="count">3</span> #}
+                {# </button> #}
                 <div class="dropdown-menu dropdown-menu-right mt-3 position-absolute" id="notificationDropdown">
                     <div class="scroll">
                         <div class="d-flex flex-row mb-3 pb-3 border-bottom">
                             <a href="#">
-                                <img src="img/profile-pic-l-2.jpg" alt="Notification Image"
-                                     class="img-thumbnail list-thumbnail xsmall border-0 rounded-circle" />
+                                <img src="/img/profile-pic-l-2.jpg" alt="Notification Image"
+                                     class="img-thumbnail list-thumbnail xsmall border-0 rounded-circle"/>
                             </a>
                             <div class="pl-3">
                                 <a href="#">
@@ -94,8 +104,8 @@
                         </div>
                         <div class="d-flex flex-row mb-3 pb-3 border-bottom">
                             <a href="#">
-                                <img src="img/notification-thumb.jpg" alt="Notification Image"
-                                     class="img-thumbnail list-thumbnail xsmall border-0 rounded-circle" />
+                                <img src="/img/notification-thumb.jpg" alt="Notification Image"
+                                     class="img-thumbnail list-thumbnail xsmall border-0 rounded-circle"/>
                             </a>
                             <div class="pl-3">
                                 <a href="#">
@@ -106,8 +116,8 @@
                         </div>
                         <div class="d-flex flex-row mb-3 pb-3 border-bottom">
                             <a href="#">
-                                <img src="img/notification-thumb-2.jpg" alt="Notification Image"
-                                     class="img-thumbnail list-thumbnail xsmall border-0 rounded-circle" />
+                                <img src="/img/notification-thumb-2.jpg" alt="Notification Image"
+                                     class="img-thumbnail list-thumbnail xsmall border-0 rounded-circle"/>
                             </a>
                             <div class="pl-3">
                                 <a href="#">
@@ -118,8 +128,8 @@
                         </div>
                         <div class="d-flex flex-row mb-3 pb-3 ">
                             <a href="#">
-                                <img src="img/notification-thumb-3.jpg" alt="Notification Image"
-                                     class="img-thumbnail list-thumbnail xsmall border-0 rounded-circle" />
+                                <img src="/img/notification-thumb-3.jpg" alt="Notification Image"
+                                     class="img-thumbnail list-thumbnail xsmall border-0 rounded-circle"/>
                             </a>
                             <div class="pl-3">
                                 <a href="#">
@@ -140,22 +150,22 @@
 
         </div>
 
-{#        <div class="user d-inline-block">#}
-{#            <button class="btn btn-empty p-0" type="button" data-toggle="dropdown" aria-haspopup="true"#}
-{#                    aria-expanded="false">#}
-{#                <span class="name">Sarah Kortney</span>#}
-{#                <span>#}
-{#                        <img alt="Profile Picture" src="img/profile-pic-l.jpg" />#}
-{#                    </span>#}
-{#            </button>#}
+        {# <div class="user d-inline-block"> #}
+        {# <button class="btn btn-empty p-0" type="button" data-toggle="dropdown" aria-haspopup="true" #}
+        {# aria-expanded="false"> #}
+        {# <span class="name">Sarah Kortney</span> #}
+        {# <span> #}
+        {# <img alt="Profile Picture" src="/img/profile-pic-l.jpg" /> #}
+        {# </span> #}
+        {# </button> #}
 
-{#            <div class="dropdown-menu dropdown-menu-right mt-3">#}
-{#                <a class="dropdown-item" href="#">Account</a>#}
-{#                <a class="dropdown-item" href="#">Features</a>#}
-{#                <a class="dropdown-item" href="#">History</a>#}
-{#                <a class="dropdown-item" href="#">Support</a>#}
-{#                <a class="dropdown-item" href="#">Sign out</a>#}
-{#            </div>#}
-{#        </div>#}
+        {# <div class="dropdown-menu dropdown-menu-right mt-3"> #}
+        {# <a class="dropdown-item" href="#">Account</a> #}
+        {# <a class="dropdown-item" href="#">Features</a> #}
+        {# <a class="dropdown-item" href="#">History</a> #}
+        {# <a class="dropdown-item" href="#">Support</a> #}
+        {# <a class="dropdown-item" href="#">Sign out</a> #}
+        {# </div> #}
+        {# </div> #}
     </div>
 </nav>

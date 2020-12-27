@@ -48,7 +48,6 @@ body.show-spinner::after {
     }
 }
 
-
 @keyframes spin {
     to {
         transform: rotate(360deg);
