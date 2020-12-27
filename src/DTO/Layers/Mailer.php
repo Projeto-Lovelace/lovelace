@@ -57,9 +57,9 @@ class Mailer implements LayerInterface
                 ]
             }";
 
-//        if($_SERVER["APP_ENV"] != "prod"){
-//            return $this->email->getMessage();
-//        }
+        if($_SERVER["APP_ENV"] != "prod"){
+            return $this->email->getMessage();
+        }
 
         $curl = curl_init();
 

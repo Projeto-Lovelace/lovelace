@@ -31,6 +31,8 @@ security:
                 default_target_path: /portal
                 check_post_only: true
                 signature_properties: [ 'email', 'password' ]
+                success_handler: App\Security\AccessLinkSuccess
+#                max_uses: 1
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication

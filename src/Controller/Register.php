@@ -112,23 +112,19 @@ class Register extends AbstractController
      */
     public function registerCheck(Request $request)
     {
-        if($request->getMethod() == "GET") {
-            $expires = $request->query->get('expires');
-            $username = $request->query->get('user');
-            $hash = $request->query->get('hash');
+        $expires = $request->query->get('expires');
+        $username = $request->query->get('user');
+        $hash = $request->query->get('hash');
 
-            $user = $this->documentManager->getRepository(User::class)->findOneBy(['email' => $username]);
+        $user = $this->documentManager->getRepository(User::class)->findOneBy(['email' => $username]);
 
 
-            // and render a template with the button
-            return $this->render('security/processLogin.html.twig', [
-                'expires' => $expires,
-                'username' => $username,
-                'hash' => $hash,
-                'user' => $user
-            ]);
-        } elseif($request->getMethod() == "POST") {
-            dump("teste");die;
-        }
+        // and render a template with the button
+        return $this->render('security/processLogin.html.twig', [
+            'expires' => $expires,
+            'username' => $username,
+            'hash' => $hash,
+            'user' => $user
+        ]);
     }
 }
