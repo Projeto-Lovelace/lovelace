@@ -127,4 +127,17 @@ class Register extends AbstractController
             'user' => $user
         ]);
     }
+
+    /**
+     * @Route("/address", name="register_address")
+     * @param Request $request
+     */
+    public function registerAddress(Request $request)
+    {
+        if($request->getMethod() == "POST"){
+            $main = $this->mainBuilder->build($this->documentManager);
+        } else if($request->getMethod() == "GET"){
+            return $this->render('register/registerForm.html.twig');
+        }
+    }
 }

@@ -1,0 +1,30 @@
+{% extends 'base/template.html.twig' %}
+
+{% block title %}Registro Lovelace{% endblock %}
+
+{% block content %}
+    <h3>Olá {{ app.user.name }}</h3>
+    <div class="container-fluid">
+        <form>
+            <label class="form-group has-float-label mb-4" for="cep">
+                <span>CEP</span>
+                <input type="text" name="cep" id="cep" class="form-control" required autofocus>
+            </label>
+        </form>
+    </div>
+    <script type="text/javascript">
+        url = "http://google.com"
+        cep = document.getElementById("cep")
+        cep.addEventListener('input', function (e) {
+            value = cep.value;
+            $.ajax({
+                type: "GET",
+                url: url,
+                dataType : "jsonp",
+                success: function (data){
+                    console.log(data)
+                }
+            })
+        })
+    </script>
+{% endblock %}
