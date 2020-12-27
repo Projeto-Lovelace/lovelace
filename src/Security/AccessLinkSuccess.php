@@ -34,6 +34,6 @@ class AccessLinkSuccess implements AuthenticationSuccessHandlerInterface
         $user->setEmailValidated(true);
         $this->documentManager->persist($user);
         $this->documentManager->flush();
-        return new RedirectResponse("/portal");
+        return new RedirectResponse("/register/address");
     }
 }
