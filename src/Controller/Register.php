@@ -94,6 +94,10 @@ class Register extends AbstractController
             $email->setEmailAddress($registerData["register"]["email"])
                 ->setTitle("Registro Lovelace");
 
+            $user = $this->documentManager->getRepository(User::class)->findOneBy(["email" => $email->getEmailAddress()]);
+            if($user){
+                throw new \Exception("Email ja cadastrado", Response::HTTP_CONFLICT);
+            }
             $main = $this->mainBuilder->build($this->documentManager);
 
             $main->addLayer(new RulesValidator($registerData));

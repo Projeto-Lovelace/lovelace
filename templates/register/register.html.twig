@@ -128,7 +128,6 @@
                 success: function(data)
                 {
                     danger.setAttribute("style", "display: none")
-                    console.log(data);
                     var validation = (data[0]['validation']);
                     validation.forEach(function (item, index){
                         messageArray = (item.field).split(".");
@@ -146,6 +145,11 @@
                 error: function (data)
                 {
                     submitButton.removeAttribute("disabled")
+                    if(data.status == 409) {
+                        warning.setAttribute("style", "display: none")
+                        danger.setAttribute("style", "display: ''")
+                        danger.innerHTML = JSON.parse(data.responseText).message;
+                    }
                     if(data.status == 406) {
                         danger.setAttribute("style", "display: none")
                         console.log(data);
@@ -180,7 +184,6 @@
 
                     }
                     if(data.status == 500){
-                        console.log(JSON.parse(JSON.parse(data.responseText).message).more)
                         warning.setAttribute("style", "display: none")
                         danger.setAttribute("style", "display: ''")
                         danger.innerHTML = JSON.parse(JSON.parse(data.responseText).message).message;

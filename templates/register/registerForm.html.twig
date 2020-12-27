@@ -89,6 +89,7 @@
         var urlForm = myForm.getAttribute("action");
         var success = document.getElementById("success");
         var warning = document.getElementById('warning');
+        var submitButton = document.getElementById('submitButton');
 
         window.onload = findAdress
 
@@ -130,6 +131,7 @@
                         field.setAttribute("disabled", true)
                     })
                     warning.setAttribute("style", "display: none")
+                    submitButton.setAttribute("disabled", true)
                     success.setAttribute("style", "")
                 },
                 error: function (data) {
