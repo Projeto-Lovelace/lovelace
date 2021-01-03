@@ -34,9 +34,8 @@ class NotInDatabase implements ServicesValidationInterface
             $objectFound = $repository->findOneBy([end($fieldArray) => $data]);
             if(!$objectFound) {
                 return true;
-            } else {
-                throw new \Exception(end($fieldArray) . " exists", 409);
             }
+            return false;
         } catch (\Exception $exception) {
             throw new \Exception($exception->getMessage(), $exception->getCode() ?: 500);
         }

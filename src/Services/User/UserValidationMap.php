@@ -12,4 +12,10 @@ class UserValidationMap
         "address.city" => "required",
         "address.state" => "required"
     ];
+
+    const MESSAGES = [
+        "user.email" => [
+            "NotInDatabase" => "Email ja cadastrado"
+        ],
+    ];
 }
