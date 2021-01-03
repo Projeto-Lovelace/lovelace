@@ -113,11 +113,11 @@
             var objectForm = new FormData(myForm);
             var url = myForm.getAttribute("action");
 
-            result = {"register" : {}};
+            result = {"user" : {}};
 
             for (var entry of objectForm.entries())
             {
-                result["register"][entry[0]] = entry[1];
+                result["user"][entry[0]] = entry[1];
             }
             result = JSON.stringify(result)
 
@@ -148,7 +148,12 @@
                     if(data.status == 409) {
                         warning.setAttribute("style", "display: none")
                         danger.setAttribute("style", "display: ''")
-                        danger.innerHTML = JSON.parse(data.responseText).message;
+                        message = JSON.parse(data.responseText).message;
+                        if(message == "email exists") {
+                            danger.innerHTML = "Email ja cadastrado"
+                        } else {
+                            danger.innerHTML = message;
+                        }
                     }
                     if(data.status == 406) {
                         danger.setAttribute("style", "display: none")

@@ -26,30 +26,16 @@ class RulesValidator implements LayerInterface
         $result = [];
         foreach (UserValidationMap::VALIDATIONS as $field => $validation){
             $fields = $this->arrayToStringRecursive($this->data)["array"];
-            foreach ($fields as $key => $value){
-                if($field == $key){
-                    $validation = str_replace('_', '', ucwords($validation, '\_'));
-                    $validationClass = 'App\\Services\\Validations\\'.$validation;
-                    if(class_exists($validationClass)) {
-                        $validationClass = new $validationClass($main);
-                        if($validationClass->validate($value)) {
-                            $validationClass->apply();
-                            $result["validation"][] = [
-                                "message" => "Validation {$validation} field {$field} passed",
-                                "field" => $field,
-                                "validation" => $validation
-                            ];
-                        } else {
-                            $result["validation"]["exception"][] = [
-                                "message" => "Validation {$validation} field {$field} did not pass",
-                                "field" => $field,
-                                "validation" => $validation
-                            ];
-                        }
-                    }
+
+            if(is_string($validation)) {
+                $result[] = $this->executeValidation($fields, $field, $validation, $main);
+            } else if(is_array($validation)) {
+                foreach ($validation as $validationItem) {
+                    $result[] = $this->executeValidation($fields, $field, $validationItem, $main);
                 }
             }
         }
+        $result = array_filter($result);
         if(isset($result["validation"]) && array_key_exists("exception", $result["validation"])){
             throw new \Exception(json_encode($result["validation"]["exception"]), Response::HTTP_NOT_ACCEPTABLE);
         }
@@ -96,6 +82,42 @@ class RulesValidator implements LayerInterface
             if($field !== "") {
                 $values = explode(":", $field);
                 $result[$values[0]] = $values[1];
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * @param $fields
+     * @param array $validation
+     * @param Main $main
+     * @param array $result
+     * @return array
+     */
+    public function executeValidation($fields, $field, $validation, Main $main): array
+    {
+        $result = [];
+        foreach ($fields as $key => $value) {
+            if ($field == $key) {
+                $validation = str_replace('_', '', ucwords($validation, '\_'));
+                $validationClass = 'App\\Services\\Validations\\' . $validation;
+                if (class_exists($validationClass)) {
+                    $validationClass = new $validationClass($main);
+                    if ($validationClass->validate($value, $field)) {
+                        $validationClass->apply();
+                        $result["validation"][] = [
+                            "message" => "Validation {$validation} field {$field} passed",
+                            "field" => $field,
+                            "validation" => $validation
+                        ];
+                    } else {
+                        $result["validation"]["exception"][] = [
+                            "message" => "Validation {$validation} field {$field} did not pass",
+                            "field" => $field,
+                            "validation" => $validation
+                        ];
+                    }
+                }
             }
         }
         return $result;

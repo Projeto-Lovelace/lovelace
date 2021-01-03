@@ -32,7 +32,7 @@ class Register implements \App\DTO\Layers\LayerInterface
 
     public function exec(Main $main)
     {
-        $registerData = $main->getInputValues()["register"] ?: [];
+        $registerData = $main->getInputValues()["user"] ?: [];
         $this->user->setName($registerData["name"])
             ->setEmail($registerData["email"])
             ->setPassword(md5($registerData["password"]))
