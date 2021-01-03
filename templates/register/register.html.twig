@@ -150,7 +150,7 @@
                         danger.setAttribute("style", "display: ''")
                         message = JSON.parse(data.responseText).message;
                         if(message == "email exists") {
-                            danger.innerHTML = "Email ja cadastrado"
+                            danger.innerHTML = "Email já cadastrado"
                         } else {
                             danger.innerHTML = message;
                         }
