@@ -20,7 +20,7 @@ class Required implements ServicesValidationInterface
         $this->main = $main;
     }
 
-    public function validate($data)
+    public function validate($data, $field)
     {
         try {
             if(!empty($data)) {

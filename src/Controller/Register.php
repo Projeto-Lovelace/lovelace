@@ -86,18 +86,14 @@ class Register extends AbstractController
         try {
             $registerData = json_decode($request->getContent(), true);
 
-            if(!isset($registerData["register"])){
-                throw new \Exception("Register field doesn't exist");
+            if(!isset($registerData["user"])){
+                throw new \Exception("User field doesn't exist");
             }
 
             $email = new EmailObject();
-            $email->setEmailAddress($registerData["register"]["email"])
+            $email->setEmailAddress($registerData["user"]["email"])
                 ->setTitle("Registro Lovelace");
 
-            $user = $this->documentManager->getRepository(User::class)->findOneBy(["email" => $email->getEmailAddress()]);
-            if($user){
-                throw new \Exception("Email ja cadastrado", Response::HTTP_CONFLICT);
-            }
             $main = $this->mainBuilder->build($this->documentManager);
 
             $main->addLayer(new RulesValidator($registerData));

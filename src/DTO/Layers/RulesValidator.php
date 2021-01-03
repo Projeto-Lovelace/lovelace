@@ -1,9 +1,11 @@
 <?php
+
 namespace App\DTO\Layers;
 
+use App\Document\User;
+use App\DTO\Layers\LayerInterface;
 use App\DTO\Main;
 use App\Services\User\UserValidationMap;
-use App\DTO\Layers\LayerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 class RulesValidator implements LayerInterface
@@ -12,6 +14,13 @@ class RulesValidator implements LayerInterface
      * @var array
      */
     private $data;
+
+    /**
+     * @var array
+     */
+    private $validation = [];
+
+    private $validatedFields = [];
 
     /**
      * @param array $data
@@ -23,38 +32,38 @@ class RulesValidator implements LayerInterface
 
     public function exec(Main $main)
     {
-        $result = [];
-        foreach (UserValidationMap::VALIDATIONS as $field => $validation){
+        foreach (UserValidationMap::VALIDATIONS as $field => $validation) {
             $fields = $this->arrayToStringRecursive($this->data)["array"];
-            foreach ($fields as $key => $value){
-                if($field == $key){
-                    $validation = str_replace('_', '', ucwords($validation, '\_'));
-                    $validationClass = 'App\\Services\\Validations\\'.$validation;
-                    if(class_exists($validationClass)) {
-                        $validationClass = new $validationClass($main);
-                        if($validationClass->validate($value)) {
-                            $validationClass->apply();
-                            $result["validation"][] = [
-                                "message" => "Validation {$validation} field {$field} passed",
-                                "field" => $field,
-                                "validation" => $validation
-                            ];
-                        } else {
-                            $result["validation"]["exception"][] = [
-                                "message" => "Validation {$validation} field {$field} did not pass",
-                                "field" => $field,
-                                "validation" => $validation
-                            ];
-                        }
+            foreach ($fields as $key => $value) {
+                if (is_string($validation)) {
+                    $this->executeValidation($key, $value, $field, $main, $validation);
+                }
+                if (is_array($validation)) {
+                    foreach ($validation as $validationItem) {
+                        $this->executeValidation($key, $value, $field, $main, $validationItem);
                     }
                 }
             }
+
         }
-        if(isset($result["validation"]) && array_key_exists("exception", $result["validation"])){
-            throw new \Exception(json_encode($result["validation"]["exception"]), Response::HTTP_NOT_ACCEPTABLE);
+        if (isset($this->validation["validation"]) && array_key_exists("exception", $this->validation["validation"])) {
+            $message = [];
+            foreach ($this->validation["validation"]["exception"] as $exception) {
+                $field = $exception["field"];
+                $validation = $exception["validation"];
+                if (isset(UserValidationMap::MESSAGES[$field][$validation])) {
+                    $message["text"][] = UserValidationMap::MESSAGES[$field][$validation];
+                    $message["field"][] = $field;
+                }
+            }
+            $message = array_filter($message);
+            if ($message) {
+                $this->validation["validation"]["exception"][] = ["messages" => $message];
+            }
+            throw new \Exception(json_encode($this->validation["validation"]["exception"]), Response::HTTP_NOT_ACCEPTABLE);
         }
         $main->setInputValues($this->data);
-        return $result;
+        return $this->validation;
     }
 
     public function arrayToStringRecursive($array, $delimeter = '.', $parents = array(), $recursive = false, $arrayValues = array())
@@ -92,12 +101,40 @@ class RulesValidator implements LayerInterface
     {
         $fields = explode(PHP_EOL, $fields);
         $result = [];
-        foreach ($fields as $field){
-            if($field !== "") {
+        foreach ($fields as $field) {
+            if ($field !== "") {
                 $values = explode(":", $field);
                 $result[$values[0]] = $values[1];
             }
         }
         return $result;
+    }
+
+    private function executeValidation($key, $value, $field, Main $main, $validation)
+    {
+        if ($field == $key) {
+            $validation = str_replace('_', '', ucwords($validation, '\_'));
+            $validationClass = 'App\\Services\\Validations\\' . $validation;
+            if (class_exists($validationClass)) {
+                $validationClass = new $validationClass($main);
+                if ($validationClass->validate($value, $field)) {
+                    $validationClass->apply();
+                    $this->validation["validation"][] = [
+                        "message" => "Validation {$validation} field {$field} passed",
+                        "field" => $field,
+                        "validation" => $validation
+                    ];
+                } else {
+                    if(!in_array($field, $this->validatedFields)) {
+                        $this->validation["validation"]["exception"][] = [
+                            "message" => "Validation {$validation} field {$field} did not pass",
+                            "field" => $field,
+                            "validation" => $validation
+                        ];
+                    }
+                    $this->validatedFields[] = $field;
+                }
+            }
+        }
     }
 }

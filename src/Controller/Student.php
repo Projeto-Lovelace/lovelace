@@ -42,7 +42,7 @@ class Student extends AbstractController
         try {
             $registerData = json_decode($request->getContent(), true);
 
-            if(!isset($registerData["register"])){
+            if(!isset($registerData["user"])){
                 throw new \Exception("Register doesn't exist");
             }
 
