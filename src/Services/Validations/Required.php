@@ -4,7 +4,7 @@ namespace App\Services\Validations;
 use App\DTO\Main;
 use App\Services\ServicesValidationInterface;
 
-class Required implements ServicesValidationInterface
+class Required implements 
 {
     /**
      * @var Main

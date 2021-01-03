@@ -50,6 +50,8 @@ class Student extends AbstractController
 
             $main->addLayer(new RulesValidator($registerData));
 
+            $main->setInputValues($registerData)
+
             $result = $main->run();
 
             return new JsonResponse($result, Response::HTTP_OK);
