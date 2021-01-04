@@ -60,4 +60,27 @@ body.show-spinner::after {
     }
 }
 
+.social-header-image{
+    max-height: 450px !important;
+    height: 450px !important;
+    content:url("../img/lovelace-header.png");
+}
+@media (max-width: 767px) {
+    .social-header-image {
+        height: 250px !important;
+        content:url("../img/lovelace-header-mobile.png");
+    }
+}
+.card{
+    transition: max-height 0.5s linear !important;
+}
+
+.toggle {
+    position: absolute;
+    width: 100%;
+    padding: 0.5em;
+    text-align: center;
+    bottom: 0% !important;
+    background: #003739;
+}
 

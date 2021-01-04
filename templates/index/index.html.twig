@@ -3,25 +3,267 @@
 {% block title %}Lovelace{% endblock %}
 
 {% block content %}
-    <style>
-        .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-        .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-    </style>
-    <div class="example-wrapper">
-    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="mb-2">
+                    <h1>Projeto Lovelace</h1>
+                </div>
+                <ul class="nav nav-tabs separator-tabs ml-0 mb-5" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="first-tab" data-toggle="tab" href="#first" role="tab"
+                           aria-controls="first" aria-selected="true">INICIO</a>
+                    </li>
 
-    <div class="col-xl-12 col-lg-12 mb-4">
-        <p style="font-size: 50px" class="mb-5">
-            Quem somos
-        </p>
-        <div class="card h-100">
-            <div class="card-body">
-                <p style="font-size: large">
-                    Somos um grupo de profissionais da área de Tecnologia da Informação que decidiram dedicar-se
-                    ao trabalho voluntário, levando conhecimento para pessoas em situação de vulnerabilidade social
-                    e que possuem uma grande vontade de aprender e evoluir nessa área.
-                </p>
+                    <li class="nav-item">
+                        <a class="nav-link" id="second-tab" data-toggle="tab" href="#second" role="tab"
+                           aria-controls="second" aria-selected="false">VOLUNTÁRIOS</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane show active" id="first" role="tabpanel" aria-labelledby="first-tab">
+                        <div class="row">
+                            <div class="col-12 mb-5">
+                                <img class="social-header card-img social-header-image"/>
+                            </div>
+                            <div class="col-12 col-lg-5 col-xl-4 col-left">
+                                <img alt="Profile" id="ada-profile" src="/img/profile-ada.jpg"
+                                     class="img-thumbnail card-img social-profile-img">
+                                <div class="card mb-4" style="overflow: hidden; max-height: 400px;" id="about-ada">
+                                    <div class="card-body" id="card-body">
+                                        <div class="text-center pt-4">
+                                            <p class="list-item-heading pt-2">Ada Lovelace</p>
+                                        </div>
+                                        <p id="part-1" class="mb-3">
+                                            Há quase 2 séculos, sob os preconceitos e conceitos do séculos XIX,
+                                            nascia “a mãe da programação”, Ada Augusta Bryon King, a condessa de
+                                            Lovelace,
+                                            a habilidosa matemática que se tornou a primeira programadora da história.
+                                            A história dela serve como inspiração para o nosso projeto.
+                                        </p>
+                                        <p id="part-2" class="mb-3 d-inline-block">
+                                            Que a participação feminina na área de ciências e tecnologia ainda é um
+                                            pouco tímida,
+                                            isso é incontestável, mas um fato histórico curioso que pode motivar as
+                                            estudantes
+                                            e futuras estudantes de computação é que o primeiro programa de computador
+                                            da história foi escrito por uma mulher.
+                                        </p>
+
+                                        <p class="mb-3">
+                                            Ada Augusta Byron King, a condessa de Lovelace, assumiu esse titulo após
+                                            se
+                                            casar aos vinte anos, ficando mais conhecida como Ada Lovelace. Ela era
+                                            filha de um poeta inglês Lord Byron e Anne Isabelle, conhecida como
+                                            Annabella. Apesar da fama de seu pai, Annabella não queria que Ada fosse
+                                            poeta e procurou ensinar a sua filha matemática e música.
+                                        </p>
+                                        <p class="mb-3">
+                                            Ada era uma das poucas pessoas do mundo a entender o funcionamento da
+                                            maquina programada a cartões perfurados, e em 1843, ela criou um
+                                            algoritmo
+                                            que calcula a sequência de Bernoulli, uma dada sequência de números
+                                            racionais, o algoritmo teria funcionado se a máquina de Babbage tivesse
+                                            realmente sido construída, mas o projeto somente foi concluído em 2002,
+                                            pelo
+                                            Museu da História do Computador, em Londres.
+                                        </p>
+                                        <p class="mb-3">
+                                            Mas o que poucos sabem é que essa não foi a maior contribuição de Ada,
+                                            historiadores acreditam que sua maior contribuição foi enxergar o
+                                            computador
+                                            mecânico além de uma simples calculadora avançada; Ada acreditava que
+                                            era
+                                            possível fazer outras operações além de cálculos matemáticos, então,
+                                            inventou o conceito de sub-rotina, uma sequência de instruções que pode
+                                            ser
+                                            usada várias vezes; loop, uma instrução que permite a repetição de uma
+                                            sequência de cartões perfurados; e do salto condicional, que permite
+                                            saltar algum cartão caso uma condição seja satisfeita.
+                                        </p>
+                                        <p class="mb-3">
+                                            Na década de 70 o departamento de defesa norte-americano criou a
+                                            linguagem
+                                            de programação Ada, em homenagem a Ada Lovelace, a linguagem
+                                            originada de pascal era usada em missões criticas, como por exemplo, em
+                                            softwares de aviação.
+                                        </p>
+                                        <p class="mb-3">
+                                            Ada faleceu em Londres no dia 27 de Novembro de 1852, aos 36 anos, de
+                                            câncer
+                                            de útero, os projetos de Babbage foram redescobertos 100 anos depois,
+                                            juntamente com as notas da Condessa de Lovelace, que ficou mundialmente
+                                            conhecida.
+                                        </p>
+
+                                        <p class="text-muted text-small mb-2">Fonte</p>
+                                        <p class="mb-3">UFCG, Historias da programação</p>
+                                    </div>
+                                    <div class="toggle">
+                                        <a style="cursor: pointer; text-decoration: none; color: white" class="h6"
+                                           id="toggle">ver mais</a>
+                                    </div>
+                                </div>
+                                <div class="card mb-4 d-lg-block">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><span>Quem somos</span></h5>
+                                        <div class="d-flex flex-column mb-4 justify-content-between">
+                                            <div class="w-100">
+                                                <img src="/img/woman-coding.jpg" class="w-100"
+                                                     style="border-radius: 0.75em">
+                                            </div>
+                                            <div class="pt-4">
+                                                <p>
+                                                    Somos um grupo de profissionais da área de Tecnologia da Informação
+                                                    que
+                                                    decidiram dedicar-se ao trabalho voluntário, levando conhecimento
+                                                    para
+                                                    pessoas
+                                                    em situação de vulnerabilidade social e que possuem uma grande
+                                                    vontade
+                                                    de
+                                                    aprender e evoluir nessa área.
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-lg-7 col-xl-8 col-right">
+                                <div class="card mb-4">
+                                    <div class="card-body">
+                                        <h3 class="mb-3">
+                                            Sobre o projeto
+                                        </h3>
+                                        <div class="w-100 d-block d-md-none">
+                                            <img src="/img/child-computer-1.jpg" class="w-100"
+                                                 style="border-radius: 0.75em">
+                                        </div>
+                                        <div class="mt-5">
+                                            <div class="d-flex flex-row mb-4 justify-content-between">
+                                                <div class="mr-5">
+                                                    <p class="h6">
+                                                        O projeto Lovelace é um projeto sem fins lucrativos
+                                                    </p>
+                                                    <p class="h6">
+                                                        O objetivo do projeto é levar o conhecimento de tecnologia da
+                                                        informação para pessoas em situação de vulnerabilidade social e
+                                                        que tenham muita vontade de aprender e evoluir nessa área.
+                                                    </p>
+                                                    <h3 class="mt-5 mb-3">
+                                                        O que será ensinado no curso?
+                                                    </h3>
+                                                    <p>
+                                                        Durante o curso vamos ensinar desde temas mais básicos como
+                                                        lógica de programação, linguagem de programação , até temas mais
+                                                        complexos como por exemplo microsserviços, criação de apis,
+                                                        segurança da informação, bancos relacionais e não relacionais,
+                                                        testes unitários de testes de integração.
+                                                    </p>
+                                                    <h3 class="mt-5 mb-3">
+                                                        Quanto custa ?
+                                                        <i style="font-size: 35px" class="iconsminds-dollar"></i>
+                                                    </h3>
+                                                    <p>
+                                                        R$0,00
+                                                    </p>
+                                                    <p>
+                                                        Desde que esteja em situação de vulnerabilidade social e ter
+                                                        determinação e vontade de aprender.
+                                                    </p>
+                                                </div>
+                                                <div class="w-80 d-none d-md-block">
+                                                    <img src="/img/child-computer-1.jpg" class="w-100"
+                                                         style="border-radius: 0.75em">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="second" role="tabpanel" aria-labelledby="second-tab">
+                        <div class="row">
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div class="card d-flex flex-row mb-4">
+                                    <a class="d-flex" href="#">
+                                        <img alt="Profile" src="/img/people/henrique.jpg"
+                                             class="img-thumbnail border-0 rounded-circle m-4 list-thumbnail align-self-center">
+                                    </a>
+                                    <div class=" d-flex flex-grow-1 min-width-zero">
+                                        <div
+                                                class="card-body pl-0 align-self-center d-flex flex-column flex-lg-row justify-content-between min-width-zero">
+                                            <div class="min-width-zero">
+                                                <p class="list-item-heading mb-1 truncate">Henrique Borges</p>
+                                                <p class="mb-2 text-muted text-small">Analista e desenvolvedor de sistemas Sênior</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div class="card d-flex flex-row mb-4">
+                                    <a class="d-flex" href="#">
+                                        <img alt="Profile" src="/img/people/ale.jpeg"
+                                             class="img-thumbnail border-0 rounded-circle m-4 list-thumbnail align-self-center">
+                                    </a>
+                                    <div class=" d-flex flex-grow-1 min-width-zero">
+                                        <div
+                                                class="card-body pl-0 align-self-center d-flex flex-column flex-lg-row justify-content-between min-width-zero">
+                                            <div class="min-width-zero">
+                                                <p class="list-item-heading mb-1 truncate">Alexandre Augusto</p>
+                                                <p class="mb-2 text-muted text-small">Analista e desenvolvedor de sistemas Sênior</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div class="card d-flex flex-row mb-4">
+                                    <a class="d-flex" href="#">
+                                        <img alt="Profile" src="/img/people/rodrigo.jpeg"
+                                             class="img-thumbnail border-0 rounded-circle m-4 list-thumbnail align-self-center">
+                                    </a>
+                                    <div class=" d-flex flex-grow-1 min-width-zero">
+                                        <div
+                                                class="card-body pl-0 align-self-center d-flex flex-column flex-lg-row justify-content-between min-width-zero">
+                                            <div class="min-width-zero">
+                                                <p class="list-item-heading mb-1 truncate">Rodrigo Toledo</p>
+                                                <p class="mb-2 text-muted text-small">Engenheiro de sistemas</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
     </div>
+    <script>
+        aboutAda = document.getElementById("about-ada")
+        buttonToggle = document.getElementById("toggle")
+        buttonToggle.addEventListener('click', function () {
+            if (aboutAda.style.maxHeight != "100%") {
+                console.log(buttonToggle)
+                aboutAda.style.maxHeight = "100%"
+                buttonToggle.innerHTML = "ver menos"
+                buttonToggle.setAttribute("href", "#ada-profile")
+            } else {
+                aboutAda.style.maxHeight = "400px"
+                buttonToggle.innerHTML = "ver mais"
+                setTimeout(function () {
+                    buttonToggle.removeAttribute("href")
+                }, 1000);
+            }
+        })
+    </script>
 {% endblock %}
