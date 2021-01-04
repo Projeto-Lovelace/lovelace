@@ -44,7 +44,10 @@
     <main style="margin-right: 0; margin-left: 0">
         <div class="container">
             <div id="success" class="alert alert-success rounded mx-auto w-90 pt-3 pb-3" style="display: none" role="alert">
-                verifique o seu email para continuar o cadastro
+                <div class="d-flex flex-column">
+                    <span id="messageSuccess" class="mb-2 font-weight-bold h4">verifique o seu email para continuar o cadastro</span>
+                    <span class="h6"> se nao recebeu o email, <a onclick="resubmit()" style="cursor: pointer" class="font-weight-bold">clique aqui</a></span>
+                </div>
             </div>
             <div id="warning" class="alert alert-warning rounded mx-auto w-90" style="display: none" role="alert">
                 preencha todos os campos
@@ -81,11 +84,13 @@
                                     <span>E-mail</span>
                                 </label>
                                 <label class="form-group has-float-label mb-4">
-                                    <input id="password" name="password" class="form-control" type="password" placeholder=""/>
+                                    <input id="password" name="password" class="form-control" type="password"
+                                           placeholder=""/>
                                     <span>Senha</span>
                                 </label>
                                 <div class="d-flex justify-content-end align-items-center">
-                                    <button id="submitButton" class="btn btn-primary btn-lg btn-shadow" type="submit">REGISTRAR
+                                    <button id="submitButton" class="btn btn-primary btn-lg btn-shadow" type="submit">
+                                        REGISTRAR
                                     </button>
                                 </div>
                             </form>
@@ -105,23 +110,58 @@
         var warning = document.getElementById('warning');
         var success = document.getElementById('success');
         var danger = document.getElementById('danger');
+        var messageSuccess = document.getElementById("messageSuccess");
         var submitButton = document.getElementById('submitButton');
-        function toggleDanger(message){
+
+        function topFunction() {
+            document.body.scrollTop = 0; // For Safari
+            document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        }
+
+        function toggleDanger(message) {
             warning.setAttribute("style", "display: none")
             danger.setAttribute("style", "display: ''")
             danger.innerHTML = message;
         }
-        myForm.addEventListener('submit', (function(e) {
+
+        function disableFields(validation) {
+            validation.forEach(function (item, index) {
+                messageArray = (item.field).split(".");
+                var field = document.getElementById(messageArray.pop())
+                field.classList.remove('isFill')
+                field.setAttribute("style", "")
+                field.setAttribute("readonly", true)
+            })
+        }
+
+        function resubmit() {
+            var emailValue = document.getElementById("email").value;
+            var emailField = {"email" : emailValue };
+            $.ajax({
+                type: "POST",
+                url: "/email/resend",
+                data: JSON.stringify(emailField),
+                success: function (data) {
+                    topFunction();
+                    danger.setAttribute("style", "display: none")
+                    warning.setAttribute("style", "display: none")
+                    messageSuccess.innerHTML = data.message;
+                    success.setAttribute("style", "")
+                    console.log(data.message);
+                }
+            });
+        }
+
+        myForm.addEventListener('submit', (function (e) {
             submitButton.setAttribute("disabled", true)
 
             e.preventDefault();
             var objectForm = new FormData(myForm);
             var url = myForm.getAttribute("action");
 
-            result = {"user" : {}};
+            result = {"user": {}};
 
-            for (var entry of objectForm.entries())
-            {
+            for (var entry of objectForm.entries()) {
                 result["user"][entry[0]] = entry[1];
             }
             result = JSON.stringify(result)
@@ -130,31 +170,25 @@
                 type: "POST",
                 url: url,
                 data: result,
-                success: function(data)
-                {
+                success: function (data) {
+                    topFunction();
                     danger.setAttribute("style", "display: none")
                     var validation = (data[0]['validation']);
-                    validation.forEach(function (item, index){
-                        messageArray = (item.field).split(".");
-                        var field = document.getElementById(messageArray.pop())
-                        field.classList.remove('isFill')
-                        field.setAttribute("style", "")
-                        field.setAttribute("disabled", true)
-                    })
+                    disableFields(validation);
                     warning.setAttribute("style", "display: none")
                     submitButton.setAttribute("disabled", true)
-                    setTimeout(function() {
+                    setTimeout(function () {
                         success.setAttribute("style", "")
                     }, 1000);
                 },
-                error: function (data)
-                {
+                error: function (data) {
+                    topFunction();
                     submitButton.removeAttribute("disabled")
-                    if(data.status == 409) {
+                    if (data.status == 409) {
                         warning.setAttribute("style", "display: none")
                         danger.setAttribute("style", "display: ''")
                         message = JSON.parse(data.responseText).message;
-                        if(message == "email exists") {
+                        if (message == "email exists") {
                             danger.innerHTML = "Email já cadastrado"
                         } else {
                             danger.innerHTML = message;
@@ -162,14 +196,16 @@
                     }
                     responseText = JSON.parse(data.responseText);
                     message = JSON.parse(responseText.message);
-                    messagesFilter = message.filter(function(value){return value["messages"]})
-                    if(data.status == 406 && messagesFilter.length == 0) {
+                    messagesFilter = message.filter(function (value) {
+                        return value["messages"]
+                    })
+                    if (data.status == 406 && messagesFilter.length == 0) {
                         console.log(messagesFilter)
                         danger.setAttribute("style", "display: none")
                         fieldsFailed = [];
                         fieldsIsFill = [];
                         message.forEach(function (item) {
-                            if(item["message"] != null) {
+                            if (item["message"] != null) {
                                 messageArray = (item.field).split(".");
                                 lastMessage = messageArray.pop()
                                 fieldsFailed.push(lastMessage);
@@ -204,7 +240,7 @@
                             }
                         });
                     }
-                    if(data.status == 500){
+                    if (data.status == 500) {
                         warning.setAttribute("style", "display: none")
                         danger.setAttribute("style", "display: ''")
                         danger.innerHTML = JSON.parse(JSON.parse(data.responseText).message).message;

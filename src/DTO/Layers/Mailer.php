@@ -13,9 +13,9 @@ class Mailer implements LayerInterface
 
     /**
      * Mailer constructor.
-     * @param Email $email
+     * @param Email|null $email
      */
-    public function __construct(Email $email)
+    public function __construct(Email $email = null)
     {
         $this->email = $email;
     }
@@ -26,13 +26,30 @@ class Mailer implements LayerInterface
      */
     public function exec(Main $main)
     {
-        $message = "<div style='text-align: center'><h1>Ola {$main->getUser()->getName()}</h1>
+        $results = $main->getResults();
+
+        $emailFind = array_filter($results, function ($value){
+           if(key($value) == "email"){
+               return $value;
+           }
+        });
+        $email = empty($emailFind) ? null : array_shift($emailFind)["email"];
+
+        if(empty($this->email)){
+            $this->email = $email;
+        }
+
+        if(empty($email)) {
+            $message = "<div style='text-align: center'><h1>Ola {$main->getUser()->getName()}</h1>
             <h3 style='margin-bottom: 50px'>Para confirmar o seu cadastro clique no link abaixo</h3>
             <a style='color: #0a2a45' href='{$main->getLoginLinkDetails()}'>CONFIRMAR</a></div>
             <h4 style='color: darkgreen'>Atenciosamente</h4>
             <h4 style='color: darkgreen'>Equipe Lovelace</h4>";
 
-        $this->email->setMessage($message);
+            $this->email->setMessage($message);
+        } else {
+            $message = $email->getMessage();
+        }
 
         $postFields = "{
                 \"personalizations\": [
