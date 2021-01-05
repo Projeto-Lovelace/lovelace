@@ -2,9 +2,9 @@
 
 namespace App\Security;
 
+use App\Services\Messages\ExceptionMessages;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -79,7 +79,7 @@ class UserAuthenticator extends AbstractFormLoginAuthenticator
         // If there are no credentials to check, you can just return true
         if($credentials["email"] == $user->getUsername() && md5($credentials["password"]) == $user->getPassword()){
             if(!$user->isEmailValidated()){
-                throw new CustomUserMessageAuthenticationException("Email não confirmado");
+                throw new CustomUserMessageAuthenticationException((new ExceptionMessages())->getEmailNotValidatedMessage());
             }
             return true;
         } else {
@@ -99,7 +99,7 @@ class UserAuthenticator extends AbstractFormLoginAuthenticator
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
-        if($exception->getMessageKey() == "Invalid credentials.") {
+        if ($exception->getMessageKey() == "Invalid credentials.") {
             return parent::onAuthenticationFailure($request, $exception);
         }
         return parent::onAuthenticationFailure($request, $exception);

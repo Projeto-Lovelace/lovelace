@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Services\Messages\ExceptionMessages;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -42,7 +43,8 @@ class SecurityController extends AbstractController
             $lastUsername = $authenticationUtils->getLastUsername();
 
             if($error){
-                $this->session->getFlashBag()->add('danger', $error->getMessageKey());
+                $errorMessage = (new ExceptionMessages())->translate($error->getMessageKey());
+                $this->session->getFlashBag()->add('danger', $errorMessage);
             }
 
             return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);

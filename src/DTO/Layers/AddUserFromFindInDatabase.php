@@ -10,15 +10,24 @@ class AddUserFromFindInDatabase implements LayerInterface
 {
     public function exec(Main $main)
     {
-        $findInDatabase = array_map(function ($result){
-            if(key($result) == "findDocument"){
-                return $result;
+        try {
+            $findInDatabase = array_map(function ($result) {
+                if (key($result) == "findDocument") {
+                    return $result;
+                }
+            }, $main->getResults());
+
+            $findInDatabase = array_shift($findInDatabase);
+
+            $user = $findInDatabase["findDocument"];
+
+            if($user) {
+                $main->setUser($user);
+            } else {
+                throw new \Exception("Usuário não encontrado");
             }
-        }, $main->getResults());
-
-        $findInDatabase = array_shift($findInDatabase);
-
-        $user = $findInDatabase["findDocument"];
-        $main->setUser($user);
+        } catch (\Exception $exception) {
+            throw new \Exception($exception->getMessage());
+        }
     }
 }
