@@ -4,6 +4,7 @@
 **Pré requisitos:**
 
 >  Docker [instalar](https://www.docker.com/get-started)
+
 >  Docker compose [instalar](https://docs.docker.com/compose/install/)
 
 **Como configurar**
