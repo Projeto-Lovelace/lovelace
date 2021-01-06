@@ -10,11 +10,13 @@
 **Como configurar**
 
 Na pasta do projeto abra o terminal e digite
-
-    $ docker-compose up --build -d
-
+```shell
+$ docker-compose up --build -d/
+```
 **Como subir**
 
 Com o projeto já configurado, quando precisar subir digite apenas
 
-    $ docker-compose up -d
+```shell
+$ docker-compose up -d
+```
