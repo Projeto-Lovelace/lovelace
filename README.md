@@ -11,7 +11,7 @@
 
 Na pasta do projeto abra o terminal e digite
 ```shell
-$ docker-compose up --build -d/
+$ docker-compose up --build -d
 ```
 **Como subir**
 
