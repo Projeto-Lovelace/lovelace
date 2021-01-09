@@ -4,8 +4,8 @@ namespace App\Services\User;
 class UserValidationMap
 {
     const VALIDATIONS = [
-        "register.name" => "required",
-        "register.email" => ["required","inDatase"],
+        "register.name" => "required",  
+        "user.email" => ["required", "notInDatabase"],
         "register.password" => "required",
         "address.cep" => "required",
         "address.street" => "required",
