@@ -38,6 +38,12 @@ class User implements UserInterface
      * @MongoDB\Field(type="boolean")
      */
     protected $emailValidated;
+
+    /**
+     * @MongoDB\Field(type="string")
+     */
+    protected $photoPath;
+
     /**
      * @return mixed
      */
@@ -146,5 +152,23 @@ class User implements UserInterface
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPhotoPath()
+    {
+        return $this->photoPath;
+    }
+
+    /**
+     * @param string $photoPath
+     * @return User
+     */
+    public function setPhotoPath(string $photoPath): self
+    {
+        $this->photoPath = $photoPath;
+        return $this;
     }
 }
