@@ -63,7 +63,7 @@ class Email extends AbstractController
             if (isset($input->email)) {
                 $main = $this->mainBuilder->build($this->documentManager);
 
-                $main->addLayer(new FindInDatabase("User", "email", $input->email, "findOneBy"));
+                $main->addLayer(new FindInDatabase("User", "findOneBy","email", $input->email));
                 $main->addLayer(new AddUserFromFindInDatabase());
                 $main->addLayer(new LoginLinkGenerator($this->loginLinkHandler));
                 $main->addLayer(new CreateRegisterEmailMessage());

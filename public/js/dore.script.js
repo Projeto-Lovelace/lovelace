@@ -2986,13 +2986,13 @@ $.dore = function (element, options) {
         bLengthChange: false,
         destroy: true,
         info: false,
-        sDom: '<"row view-filter"<"col-sm-12"<"float-left"l><"float-right"f><"clearfix">>>t<"row view-pager"<"col-sm-12"<"text-center"ip>>>',
-        pageLength: 10,
+        sDom: '<"row view-filter"<"col-sm-12"<"float-left"l><"float-right"f><"clearfix">>>t<"row view-pager"<"col-sm-12 pager"<"text-center"ip>>>',
+        pageLength: 5,
         columns: [
-          { data: "Name" },
-          { data: "Sales" },
-          { data: "Stock" },
-          { data: "Category" }
+          { data: "Foto" },
+          { data: "Nome" },
+          { data: "Email" },
+          { data: "Email verificado" }
         ],
         language: {
           paginate: {
@@ -3009,7 +3009,7 @@ $.dore = function (element, options) {
             .addClass("next");
           $(".dataTables_wrapper .pagination").addClass("pagination-sm");
           var api = $(this).dataTable().api();
-          $("#pageCountDatatable span").html("Displaying " + parseInt(api.page.info().start + 1) + "-" + api.page.info().end + " of " + api.page.info().recordsTotal + " items");
+          $("#pageCountDatatable span").html("Mostrando " + parseInt(api.page.info().start + 1) + "-" + api.page.info().end + " de " + api.page.info().recordsTotal + " itens");
         }
       });
 

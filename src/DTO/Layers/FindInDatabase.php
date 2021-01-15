@@ -4,6 +4,7 @@
 namespace App\DTO\Layers;
 
 
+use App\Document\User;
 use App\DTO\Main;
 
 class FindInDatabase implements LayerInterface
@@ -32,7 +33,7 @@ class FindInDatabase implements LayerInterface
      * @param string $value
      * @param string $findType
      */
-    public function __construct(string $documentName, string $field, string $value, string $findType)
+    public function __construct(string $documentName, string $findType = "", string $field = "", string $value = "")
     {
         $this->documentName = $documentName;
         $this->field = $field;
@@ -44,7 +45,12 @@ class FindInDatabase implements LayerInterface
     {
         $documentName = "App\\Document\\{$this->documentName}";
         $repository = $main->getDocumentManager()->getRepository($documentName);
-        $findDocument = $repository->{$this->findType}([$this->field => $this->value]);
+        if($this->findType == ""){
+            $findDocument = $repository->findAll();
+        } else {
+            $findDocument = $repository->{$this->findType}([$this->field => $this->value]);
+        }
+
         $main->addResults(["findDocument" => $findDocument]);
     }
 }

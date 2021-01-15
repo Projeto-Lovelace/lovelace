@@ -1477,7 +1477,7 @@ button {
 @media (max-width: 767px) {
   .logo {
     width: 150px; !important;
-    background-image: url("../img/logo-single-dark.png") !important;
+    background: url("../img/logo-single-dark.png") no-repeat;
     background-size: 100px;
     background-position: center center;
     margin: 0 auto;

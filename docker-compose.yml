@@ -12,6 +12,8 @@ services:
       - ./symfony:/app/symfony:cached
       - ./logs/symfony:/app/symfony/var/log:cached
       - ./.:/app
+    ports:
+      - 8080:80
   mongo:
     image: mongo
     networks:
@@ -21,6 +23,8 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_ROOT_USER}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD}
       - MONGO_INITDB_DATABASE=project
+    ports:
+      - 8881:27017
   mongo-express:
     image: mongo-express
     networks:
