@@ -32,14 +32,18 @@ class Register implements \App\DTO\Layers\LayerInterface
 
     public function exec(Main $main)
     {
-        $registerData = $main->getInputValues()["user"] ?: [];
-        $this->user->setName($registerData["name"])
-            ->setEmail($registerData["email"])
-            ->setPassword(md5($registerData["password"]))
-            ->setEmailValidated(false)
-            ->setRoles("ROLE_USER");
-        $main->getDocumentManager()->persist($this->user);
-        $main->getDocumentManager()->flush();
-        $main->setUser($this->user);
+        try {
+            $registerData = $main->getInputValues()["user"] ?: [];
+            $this->user->setName($registerData["name"])
+                ->setEmail($registerData["email"])
+                ->setPassword(md5($registerData["password"]))
+                ->setEmailValidated(false)
+                ->setRoles("ROLE_USER");
+            $main->getDocumentManager()->persist($this->user);
+            $main->getDocumentManager()->flush();
+            $main->setUser($this->user);
+        } catch (\Exception $exception) {
+            throw new \Exception($exception);
+        }
     }
 }
