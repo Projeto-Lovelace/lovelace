@@ -13,7 +13,6 @@ security:
             security: false
         main:
             pattern:  ^
-            anonymous: false
             access_denied_handler: App\Security\AccessDeniedHandler
             entry_point: App\Security\AuthenticationEntryPoint
             form_login:
