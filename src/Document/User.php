@@ -1,6 +1,7 @@
 <?php
 namespace App\Document;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+use MongoDB\BSON\ObjectId;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -10,7 +11,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class User implements UserInterface
 {
     /**
-     * @MongoDB\Id
+     * @MongoDB\Id(strategy="NONE")
      */
     protected $id;
 
@@ -146,6 +147,12 @@ class User implements UserInterface
         return $this;
     }
 
+    public function setId($id): self
+    {
+        $this->id = $id;
+        return $this;
+    }
+
     /**
      * @return mixed
      */
@@ -166,7 +173,7 @@ class User implements UserInterface
      * @param string $photoPath
      * @return User
      */
-    public function setPhotoPath(string $photoPath): self
+    public function setPhotoPath($photoPath): self
     {
         $this->photoPath = $photoPath;
         return $this;

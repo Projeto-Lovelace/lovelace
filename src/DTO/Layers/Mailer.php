@@ -75,6 +75,7 @@ class Mailer implements LayerInterface
             }";
 
         if($_SERVER["APP_ENV"] != "prod"){
+            dump($main->getLoginLinkDetails());die;
             return $this->email->getMessage();
         }
 

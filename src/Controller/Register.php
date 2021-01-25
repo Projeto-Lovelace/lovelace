@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use App\Document\Address;
@@ -11,6 +12,7 @@ use App\DTO\Layers\RulesValidator;
 use App\DTO\MainBuilder;
 use App\DTO\Layers\Register as RegisterLayer;
 use Doctrine\ODM\MongoDB\DocumentManager;
+use MongoDB\BSON\ObjectId;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -86,7 +88,7 @@ class Register extends AbstractController
         try {
             $registerData = json_decode($request->getContent(), true);
 
-            if(!isset($registerData["user"])){
+            if (!isset($registerData["user"])) {
                 throw new \Exception("User field doesn't exist");
             }
 
@@ -145,10 +147,10 @@ class Register extends AbstractController
     public function registerAddress(Request $request)
     {
         $redirectUrl = $request->headers->get("referer");
-        if($redirectUrl && str_contains($redirectUrl, "/register/check")){
+        if ($redirectUrl && str_contains($redirectUrl, "/register/check")) {
             $this->session->getFlashBag()->add('success', "{$this->getUser()->getName()}, obrigado por confirmar o email. Por favor preencha os seus dados de endereço");
         }
-        if($request->getMethod() == "POST"){
+        if ($request->getMethod() == "POST") {
             try {
                 $registerData = json_decode($request->getContent(), true);
                 $main = $this->mainBuilder->build($this->documentManager);
@@ -167,7 +169,7 @@ class Register extends AbstractController
                     ], $exception->getCode() ?: 500
                 );
             }
-        } else if($request->getMethod() == "GET"){
+        } else if ($request->getMethod() == "GET") {
             return $this->render('register/registerForm.html.twig');
         }
     }
