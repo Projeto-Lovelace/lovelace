@@ -36,6 +36,7 @@ class Volunteers extends AbstractController
     {
         $volunteersRepository = $this->documentManager->getRepository(Volunteer::class);
         $volunteers = $volunteersRepository->findAll();
-        return $this->render("admin/volunteers.html.twig", ["volunteers" => $volunteers]);
+        $count = sizeof($volunteers);
+        return $this->render("admin/volunteers.html.twig", ["volunteers" => $volunteers, "count" => $count]);
     }
 }
