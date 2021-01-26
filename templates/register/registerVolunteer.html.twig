@@ -6,7 +6,7 @@
 
     <div class="container-fluid">
         <div class="row app-row p-0">
-            <div class="col-12 survey-app">
+            <div class="col-12 survey-app d-flex flex-column">
                 <div class="mb-lg-5 mb-2">
                     <h1 class="text-center w-100">Inscrição de voluntários</h1>
                 </div>
@@ -29,20 +29,20 @@
                         {{ message }}
                     </div>
                 {% endfor %}
-                <div class="d-flex">
+                <div class="d-flex justify-content-center">
                     <div class="row align-items-center justify-content-center w-100">
                         <div class="card pt-3 mb-2 w-100 col-lg-8 col-10 p-0">
                             <div class="card-body pt-2">
                                 <form action="{{ path('register_volunteer') }}" id="register" class="form-group d-flex flex-column">
                                     <label class="form-group has-float-label mb-4" for="name" id="firstLabel">
                                         <span>Nome completo</span>
-                                        <input type="text" name="name" onfocusout="validateFullName()" required
+                                        <input type="text" name="name" onblur="validateFullName()" required
                                                id="name" class="form-control"
                                                autofocus>
                                     </label>
                                     <label class="form-group has-float-label mb-4" for="specialty" hidden>
                                         <span>Especialidade</span>
-                                        <input type="text" onchange="validate(this)" required name="specialty"
+                                        <input type="text" onkeyup="validate(this)" required name="specialty"
                                                id="specialty"
                                                class="form-control"
                                                autofocus>
@@ -50,14 +50,14 @@
 
                                     <label class="form-group has-float-label mb-4" for="email" hidden>
                                         <span>Email</span>
-                                        <input type="text" onchange="validate(this)" required name="email" id="email"
+                                        <input type="text" onkeyup="validate(this)" required name="email" id="email"
                                                class="form-control"
                                                autofocus>
                                     </label>
 
                                     <label class="form-group has-float-label mb-4" for="phone" hidden>
                                         <span>Celular</span>
-                                        <input type="text" onchange="validate(this)" required name="phone" id="phone"
+                                        <input type="text" onkeyup="validate(this)" required name="phone" id="phone"
                                                class="form-control"
                                                autofocus>
                                     </label>
@@ -65,7 +65,7 @@
 
                                     <label class="form-group has-float-label mb-4" for="extra" hidden>
                                         <span>Informaçoes extras *</span>
-                                        <textarea type="text" onfocusout="validate(this)" name="extra" id="extra"
+                                        <textarea type="text" onkeyup="validate(this)" name="extra" id="extra"
                                                   class="form-control"
                                                   autofocus></textarea>
                                     </label>
