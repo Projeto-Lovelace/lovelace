@@ -1,0 +1,165 @@
+{% extends 'base/template.html.twig' %}
+
+{% block title %}Registro Lovelace{% endblock %}
+
+{% block content %}
+
+    <div class="container-fluid">
+        <div class="row app-row p-0">
+            <div class="col-12 survey-app">
+                <div class="mb-lg-5 mb-2">
+                    <h1 class="text-center w-100">Inscrição de voluntários</h1>
+                </div>
+                {% for message in app.flashes('danger') %}
+                    <div class="alert alert-danger rounded mx-auto w-90">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+                <div id="success" class="alert alert-success rounded mx-auto w-90 pt-3 pb-3" style="display: none" role="alert">
+                    <div class="d-flex flex-column">
+                        <span id="messageSuccess" class="mb-2 font-weight-bold h4">Inscrição enviada com sucesso</span>
+                    </div>
+                </div>
+                <div id="warning" class="alert alert-warning rounded mx-auto w-90" style="display: none" role="alert">
+                    preencha todos os campos
+                </div>
+                <div id="danger" class="alert alert-danger rounded mx-auto w-90" style="display: none" role="alert"></div>
+                {% for message in app.flashes('success') %}
+                    <div id="success" class="alert alert-success rounded mx-auto w-100 pt-3 pb-3" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+                <div class="d-flex">
+                    <div class="row align-items-center justify-content-center w-100">
+                        <div class="card pt-3 mb-2 w-100 col-lg-8 col-10 p-0">
+                            <div class="card-body pt-2">
+                                <form action="{{ path('register_volunteer') }}" id="register" class="form-group d-flex flex-column">
+                                    <label class="form-group has-float-label mb-4" for="name" id="firstLabel">
+                                        <span>Nome completo</span>
+                                        <input type="text" name="name" onfocusout="validateFullName()" required
+                                               id="name" class="form-control"
+                                               autofocus>
+                                    </label>
+                                    <label class="form-group has-float-label mb-4" for="specialty" hidden>
+                                        <span>Especialidade</span>
+                                        <input type="text" onchange="validate(this)" required name="specialty"
+                                               id="specialty"
+                                               class="form-control"
+                                               autofocus>
+                                    </label>
+
+                                    <label class="form-group has-float-label mb-4" for="email" hidden>
+                                        <span>Email</span>
+                                        <input type="text" onchange="validate(this)" required name="email" id="email"
+                                               class="form-control"
+                                               autofocus>
+                                    </label>
+
+                                    <label class="form-group has-float-label mb-4" for="phone" hidden>
+                                        <span>Celular</span>
+                                        <input type="text" onchange="validate(this)" required name="phone" id="phone"
+                                               class="form-control"
+                                               autofocus>
+                                    </label>
+
+
+                                    <label class="form-group has-float-label mb-4" for="extra" hidden>
+                                        <span>Informaçoes extras *</span>
+                                        <textarea type="text" onfocusout="validate(this)" name="extra" id="extra"
+                                                  class="form-control"
+                                                  autofocus></textarea>
+                                    </label>
+
+                                    <div class="d-flex justify-content-end align-items-center">
+                                        <button hidden id="submitButton" class="btn btn-primary btn-lg btn-shadow"
+                                                type="submit">ENVIAR
+                                        </button>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+
+        function validateFullName() {
+            var regName = /^([\w]{3,})+\s+([\w\s]{3,})+$/i;
+            var name = document.getElementById('name').value;
+            if (!regName.test(name)) {
+                document.getElementById('name').focus();
+                alert("Nome inválido")
+                return false;
+            } else {
+                validate(document.getElementById('name'))
+                return true;
+            }
+        }
+
+        function validate(element) {
+            var parent = element.parentElement
+            var sibling = parent.nextSibling, i = 1;
+            while (sibling) {
+                if (sibling.nodeName == "LABEL") {
+                    if (parent.childNodes[3].value != "" && parent.childNodes[3].hasAttribute("required")) {
+                        sibling.removeAttribute("hidden")
+                    }
+                    break
+                } else if (sibling.nodeName == "DIV") {
+                    sibling.childNodes[1].removeAttribute("hidden")
+                }
+                sibling = sibling.nextSibling;
+                i++;
+            }
+        }
+
+        function topFunction() {
+            document.body.scrollTop = 0; // For Safari
+            document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        }
+
+        var myForm = document.getElementById('register');
+        var warning = document.getElementById('warning');
+        var success = document.getElementById('success');
+        var danger = document.getElementById('danger');
+        var messageSuccess = document.getElementById("messageSuccess");
+        var submitButton = document.getElementById('submitButton');
+
+        myForm.addEventListener('submit', (function (e) {
+            e.preventDefault();
+            var objectForm = new FormData(myForm);
+            var url = myForm.getAttribute("action");
+
+            result = {"volunteer": {}};
+
+            for (var entry of objectForm.entries()) {
+                result["volunteer"][entry[0]] = entry[1];
+            }
+            result = JSON.stringify(result)
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: result,
+                success: function (data) {
+                    topFunction();
+                    danger.setAttribute("style", "display: none")
+                    warning.setAttribute("style", "display: none")
+                    submitButton.setAttribute("disabled", true)
+                    setTimeout(function () {
+                        success.setAttribute("style", "")
+                    }, 1000);
+                },
+                error: function (data) {
+                    topFunction();
+                    submitButton.removeAttribute("disabled")
+
+                }
+            })
+        }));
+
+    </script>
+{% endblock %}

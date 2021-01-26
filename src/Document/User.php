@@ -1,7 +1,6 @@
 <?php
 namespace App\Document;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
-use MongoDB\BSON\ObjectId;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**

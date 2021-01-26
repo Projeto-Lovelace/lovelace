@@ -8,6 +8,7 @@ use App\DTO\Email as EmailObject;
 use App\DTO\Layers\LoginLinkGenerator;
 use App\DTO\Layers\Mailer;
 use App\DTO\Layers\RegisterAddress;
+use App\DTO\Layers\RegisterVolunteer;
 use App\DTO\Layers\RulesValidator;
 use App\DTO\MainBuilder;
 use App\DTO\Layers\Register as RegisterLayer;
@@ -20,6 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\LoginLink\LoginLinkHandlerInterface;
+use Symfony\Component\Serializer\Encoder\JsonEncode;
 use function PHPUnit\Framework\stringContains;
 
 /**
@@ -181,5 +183,37 @@ class Register extends AbstractController
     {
         $address = $this->documentManager->getRepository(Address::class)->findOneBy(["user" => $this->getUser()->getId()]);
         return new JsonResponse($address, Response::HTTP_OK);
+    }
+
+    /**
+     * @Route("/volunteer", name="register_volunteer")
+     * @param Request $request
+     */
+    public function registerVolunteer(Request $request)
+    {
+        try {
+            if ($request->getMethod() == "POST") {
+
+                $registerData = json_decode($request->getContent(), true);
+
+                $main = $this->mainBuilder->build($this->documentManager);
+                $main->addLayer(new RulesValidator($registerData));
+                $main->addLayer(new RegisterVolunteer());
+
+                $main->run();
+
+                return new JsonResponse("ok", Response::HTTP_OK);
+            }
+            return $this->render("register/registerVolunteer.html.twig");
+        } catch (\Exception $exception) {
+            return new JsonResponse(
+                [
+                    "message" => $exception->getMessage(),
+                    "more" => $exception->getTrace(),
+                    "file" => $exception->getFile(),
+                    "line" => $exception->getLine()
+                ], $exception->getCode() ?: 500
+            );
+        }
     }
 }

@@ -10,7 +10,7 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 class Address implements \JsonSerializable
 {
     /**
-     * @MongoDB\Id
+     * @MongoDB\Id(strategy="NONE")
      */
     private $id;
 
