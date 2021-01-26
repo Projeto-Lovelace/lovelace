@@ -36,7 +36,7 @@
                                 <form action="{{ path('register_volunteer') }}" id="register" class="form-group d-flex flex-column">
                                     <label class="form-group has-float-label mb-4" for="name" id="firstLabel">
                                         <span>Nome completo</span>
-                                        <input type="text" name="name" onblur="validateFullName()" required
+                                        <input type="text" name="name" onkeyup="validateFullName()" required
                                                id="name" class="form-control"
                                                autofocus>
                                     </label>
@@ -91,7 +91,8 @@
             var name = document.getElementById('name').value;
             if (!regName.test(name)) {
                 document.getElementById('name').focus();
-                alert("Nome inválido")
+                var validationElement = document.getElementById('name');
+                validate(validationElement, false)
                 return false;
             } else {
                 validate(document.getElementById('name'))
@@ -99,14 +100,18 @@
             }
         }
 
-        function validate(element) {
+        function validate(element, valid = true) {
             var parent = element.parentElement
             var sibling = parent.nextSibling, i = 1;
             while (sibling) {
                 if (sibling.nodeName == "LABEL") {
-                    if (parent.childNodes[3].value != "" && parent.childNodes[3].hasAttribute("required")) {
+
+                    if (parent.childNodes[3].value != "" && parent.childNodes[3].hasAttribute("required") && valid == true) {
                         sibling.removeAttribute("hidden")
+                    } else {
+                        sibling.setAttribute("hidden", true)
                     }
+
                     break
                 } else if (sibling.nodeName == "DIV") {
                     sibling.childNodes[1].removeAttribute("hidden")
