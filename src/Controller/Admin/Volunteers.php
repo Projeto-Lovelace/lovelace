@@ -49,8 +49,14 @@ class Volunteers extends AbstractController
         $main = $this->mainBuilder->build($this->documentManager);
         $main->addLayer(new FormatVolunteersPhone($volunteers));
 
+        $message = "Olá, você se inscreveu na vaga para voluntários no projeto Lovelace. Podemos marcar uma conversa ? Qual a sua disponibilidade ?";
+        $whatsappMessage = str_replace(' ', '%20', $message);
+
         $main->run();
 
-        return $this->render("admin/volunteers.html.twig", ["volunteers" => $main->getResults()[0]["volunteers"], "count" => $count]);
+        return $this->render("admin/volunteers.html.twig", ["volunteers" => $main->getResults()[0]["volunteers"],
+            "count" => $count,
+            "whatsappMessage" => $whatsappMessage]
+        );
     }
 }
