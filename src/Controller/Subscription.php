@@ -3,10 +3,12 @@
 
 namespace App\Controller;
 
+use App\Document\Volunteer;
 use App\DTO\Layers\RegisterVolunteer;
 use App\DTO\Layers\RulesValidator;
 use App\DTO\MainBuilder;
 use Doctrine\ODM\MongoDB\DocumentManager;
+use MongoDB\BSON\ObjectId;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -68,4 +70,23 @@ class Subscription extends AbstractController
         }
     }
 
+    /**
+     * @Route("/voluntario/contacted", name="volunteer_contacted", methods={"POST"})
+     * @param Request $request
+     */
+    public function volunteerContacted(Request $request)
+    {
+        $data = json_decode($request->getContent(), true);
+
+        $volunteerRepository = $this->documentManager->getRepository(Volunteer::class);
+        $id = $data["contacted"]["volunteer"];
+        /** @var Volunteer $volunteer */
+        $volunteer = $volunteerRepository->find($id);
+        $volunteer->setContacted($data["contacted"]["checked"]);
+
+        $this->documentManager->persist($volunteer);
+        $this->documentManager->flush();
+
+        return new Response("ok", Response::HTTP_OK);
+    }
 }

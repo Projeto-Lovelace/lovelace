@@ -4,6 +4,7 @@
 namespace App\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+use Doctrine\ODM;
 
 /**
  * Class Volunteer
@@ -12,10 +13,11 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 class Volunteer implements \JsonSerializable
 {
     /**
-     * @MongoDB\Id
+     * @MongoDB\Id(name="_id")
      */
     private $id;
 
+    private $idString;
     /**
      * @MongoDB\Field(type="string")
      */
@@ -40,6 +42,11 @@ class Volunteer implements \JsonSerializable
      * @MongoDB\Field(type="string")
      */
     private $extra;
+
+    /**
+     * @MongoDB\Field(type="boolean")
+     */
+    private $contacted;
 
     /**
      * @return mixed
@@ -152,5 +159,23 @@ class Volunteer implements \JsonSerializable
     public function jsonSerialize()
     {
         return get_object_vars($this);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getContacted()
+    {
+        return $this->contacted;
+    }
+
+    /**
+     * @param mixed $contacted
+     * @return Volunteer
+     */
+    public function setContacted($contacted): self
+    {
+        $this->contacted = $contacted;
+        return $this;
     }
 }
