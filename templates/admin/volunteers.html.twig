@@ -1,0 +1,118 @@
+{% extends 'base/template.html.twig' %}
+
+{% block title %}Lovelace{% endblock %}
+
+{% block vendor_css %}
+    <link rel="stylesheet" href="/font/iconsmind-s/css/iconsminds.css"/>
+    <link rel="stylesheet" href="/font/simple-line-icons/css/simple-line-icons.css"/>
+    <link rel="stylesheet" href="/css/vendor/dataTables.bootstrap4.min.css"/>
+    <link rel="stylesheet" href="/css/vendor/datatables.responsive.bootstrap4.min.css"/>
+    <link rel="stylesheet" href="/css/vendor/perfect-scrollbar.css"/>
+    <link rel="stylesheet" href="/css/vendor/component-custom-switch.min.css"/>
+    <link rel="stylesheet" href="/css/main.css"/>
+{% endblock %}
+
+{% block content %}
+        <div class="row">
+            <div class="col-12">
+                <div class="mb-3">
+                    <h1>Usuários</h1>
+                </div>
+                <div class="mb-2">
+                    <a class="btn pt-0 pl-0 d-inline-block d-md-none" data-toggle="collapse" href="#displayOptions"
+                       role="button" aria-expanded="true" aria-controls="displayOptions">
+                        Display Options
+                        <i class="simple-icon-arrow-down align-middle"></i>
+                    </a>
+                    <div class="collapse dont-collapse-sm" id="displayOptions">
+                        <div class="d-block d-md-inline-block">
+                            <div class="search-sm d-inline-block float-md-left mr-1 mb-1 align-top">
+                                <input class="form-control" placeholder="Buscar" id="searchDatatable">
+                            </div>
+                        </div>
+                        <div class="float-md-right dropdown-as-select" id="pageCountDatatable">
+                            <span class="text-muted text-small"></span>
+                            <button class="btn btn-outline-dark btn-xs dropdown-toggle" type="button"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                5
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a class="dropdown-item" href="#">5</a>
+                                <a class="dropdown-item active" href="#">10</a>
+                                <a class="dropdown-item" href="#">20</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="separator mb-5"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 mb-4 data-table-rows data-tables-hide-filter">
+                <table class="data-table responsive nowrap"
+                       data-order="[[ 2, &quot;asc&quot; ]]">
+                    <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Telefone</th>
+                        <th>Especialidade</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for volunteer in volunteers %}
+                        <tr>
+                            <td class="p-3">
+                                <a href="{{ path('editUserData', {'userId': volunteer.id}) }}">
+                                    <p class="list-item-heading">{{ volunteer.name }}</p>
+                                </a>
+                            </td>
+                            <td class="p-3">
+                                <p class="text-muted">{{ volunteer.email }}</p>
+                            </td>
+                            <td class="p-3">
+                                <p class="text-muted">{{ volunteer.phone }}</p>
+                            </td>
+                            <td class="p-3">
+                                <p class="text-muted">{{ volunteer.specialty }}</p>
+                            </td>
+                            <td class="p-3">
+                                <p class="text-muted">{{ volunteer.extra }}</p>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+{% endblock %}
+
+{% block js %}
+    <script src="/js/vendor/datatables.min.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            $('#escalation').DataTable();
+        });
+
+        function searchUser() {
+            var input, filter, fullUserList, usernameTag, usernameIndexText, i, txtValue;
+            input = document.getElementById("myInput");
+            filter = input.value.toUpperCase();
+            fullUserList = document.getElementById("usersList");
+            usernameTag = fullUserList.getElementsByClassName("username");
+            for (i = 0; i < usernameTag.length; i++) {
+                usernameIndexText = usernameTag[i]
+                txtValue = usernameIndexText.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tab = document.getElementById(usernameIndexText.innerText)
+                    tab.style.display = "";
+                } else {
+                    tab = document.getElementById(usernameIndexText.innerText)
+                    tab.style.display = "none";
+                }
+            }
+        }
+    </script>
+{% endblock %}
