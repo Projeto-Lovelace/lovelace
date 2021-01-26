@@ -38,24 +38,25 @@
                     <th>Email</th>
                     <th>Telefone</th>
                     <th>Especialidade</th>
+                    <th>Extra</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for volunteer in volunteers %}
                     <tr>
-                        <td class="p-3">
+                        <td class="p-2 border">
                             <p class="list-item-heading">{{ volunteer.name }}</p>
                         </td>
-                        <td class="p-3">
+                        <td class="p-2 border">
                             <p class="text-muted">{{ volunteer.email }}</p>
                         </td>
-                        <td class="p-3">
+                        <td class="p-2 border">
                             <p class="text-muted">{{ volunteer.phone }}</p>
                         </td>
-                        <td class="p-3">
+                        <td class="p-2 border">
                             <p class="text-muted">{{ volunteer.specialty }}</p>
                         </td>
-                        <td class="p-3">
+                        <td class="p-2 border">
                             <p class="text-muted">{{ volunteer.extra }}</p>
                         </td>
                     </tr>
