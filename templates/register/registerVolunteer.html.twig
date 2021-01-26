@@ -19,6 +19,7 @@
                      role="alert">
                     <div class="d-flex flex-column">
                         <span id="messageSuccess" class="mb-2 font-weight-bold h4">Inscrição enviada com sucesso</span>
+                        <span class="mb-2 font-weight-bold h5">Em breve entraremos em contato</span>
                     </div>
                 </div>
                 <div id="warning" class="alert alert-warning rounded mx-auto w-90" style="display: none" role="alert">
@@ -38,7 +39,7 @@
                                 <form action="{{ path('register_volunteer') }}" id="register"
                                       class="form-group d-flex flex-column">
                                     <label class="form-group has-float-label mb-4" for="name" id="firstLabel">
-                                        <span>Nome completo</span>
+                                        <span>Qual o seu nome completo ?</span>
                                         <input type="text" name="name" onkeyup="validateFullName()"
                                                onfocus="validate(this)"
                                                required
@@ -46,7 +47,7 @@
                                                autofocus>
                                     </label>
                                     <label class="form-group has-float-label mb-4" for="specialty" hidden>
-                                        <span>Especialidade</span>
+                                        <span>Em qual area de tecnologia da informação voce mais se destaca ?</span>
                                         <input type="text" onkeyup="validate(this)" required name="specialty"
                                                onfocus="validate(this)"
                                                id="specialty"
@@ -55,7 +56,7 @@
                                     </label>
 
                                     <label class="form-group has-float-label mb-4" for="email" hidden>
-                                        <span>Email</span>
+                                        <span>Qual o seu email ?</span>
                                         <input type="email" onkeyup="validate(this)" required name="email" id="email"
                                                onfocus="validate(this)"
                                                class="form-control"
@@ -63,7 +64,7 @@
                                     </label>
 
                                     <label class="form-group has-float-label mb-4" for="phone" hidden>
-                                        <span>Celular</span>
+                                        <span>Qual seu numero de celular ?</span>
                                         <input type="text" minlength="11" maxlength="11" onkeyup="validate(this)"
                                                onfocus="validate(this)"
                                                required name="phone" id="phone"
@@ -73,7 +74,7 @@
 
 
                                     <label class="form-group has-float-label mb-4" for="extra" hidden>
-                                        <span>Informaçoes extras *</span>
+                                        <span>Gostaria de acrescentar mais informações *</span>
                                         <textarea type="text" onkeyup="validate(this)" onfocus="validate(this)"
                                                   name="extra" id="extra"
                                                   class="form-control"
