@@ -15,7 +15,8 @@
                         {{ message }}
                     </div>
                 {% endfor %}
-                <div id="success" class="alert alert-success rounded mx-auto w-90 pt-3 pb-3" style="display: none" role="alert">
+                <div id="success" class="alert alert-success rounded mx-auto w-90 pt-3 pb-3" style="display: none"
+                     role="alert">
                     <div class="d-flex flex-column">
                         <span id="messageSuccess" class="mb-2 font-weight-bold h4">Inscrição enviada com sucesso</span>
                     </div>
@@ -23,7 +24,8 @@
                 <div id="warning" class="alert alert-warning rounded mx-auto w-90" style="display: none" role="alert">
                     preencha todos os campos
                 </div>
-                <div id="danger" class="alert alert-danger rounded mx-auto w-90" style="display: none" role="alert"></div>
+                <div id="danger" class="alert alert-danger rounded mx-auto w-90" style="display: none"
+                     role="alert"></div>
                 {% for message in app.flashes('success') %}
                     <div id="success" class="alert alert-success rounded mx-auto w-100 pt-3 pb-3" role="alert">
                         {{ message }}
@@ -33,16 +35,20 @@
                     <div class="row align-items-center justify-content-center w-100">
                         <div class="card pt-3 mb-2 w-100 col-lg-8 col-10 p-0">
                             <div class="card-body pt-2">
-                                <form action="{{ path('register_volunteer') }}" id="register" class="form-group d-flex flex-column">
+                                <form action="{{ path('register_volunteer') }}" id="register"
+                                      class="form-group d-flex flex-column">
                                     <label class="form-group has-float-label mb-4" for="name" id="firstLabel">
                                         <span>Nome completo</span>
-                                        <input type="text" name="name" onkeyup="validateFullName()" required
+                                        <input type="text" name="name" onkeyup="validateFullName()"
+                                               onfocus="validate(this)"
+                                               required
                                                id="name" class="form-control"
                                                autofocus>
                                     </label>
                                     <label class="form-group has-float-label mb-4" for="specialty" hidden>
                                         <span>Especialidade</span>
                                         <input type="text" onkeyup="validate(this)" required name="specialty"
+                                               onfocus="validate(this)"
                                                id="specialty"
                                                class="form-control"
                                                autofocus>
@@ -50,14 +56,17 @@
 
                                     <label class="form-group has-float-label mb-4" for="email" hidden>
                                         <span>Email</span>
-                                        <input type="text" onkeyup="validate(this)" required name="email" id="email"
+                                        <input type="email" onkeyup="validate(this)" required name="email" id="email"
+                                               onfocus="validate(this)"
                                                class="form-control"
                                                autofocus>
                                     </label>
 
                                     <label class="form-group has-float-label mb-4" for="phone" hidden>
                                         <span>Celular</span>
-                                        <input type="text" onkeyup="validate(this)" required name="phone" id="phone"
+                                        <input type="text" minlength="11" maxlength="11" onkeyup="validate(this)"
+                                               onfocus="validate(this)"
+                                               required name="phone" id="phone"
                                                class="form-control"
                                                autofocus>
                                     </label>
@@ -65,7 +74,8 @@
 
                                     <label class="form-group has-float-label mb-4" for="extra" hidden>
                                         <span>Informaçoes extras *</span>
-                                        <textarea type="text" onkeyup="validate(this)" name="extra" id="extra"
+                                        <textarea type="text" onkeyup="validate(this)" onfocus="validate(this)"
+                                                  name="extra" id="extra"
                                                   class="form-control"
                                                   autofocus></textarea>
                                     </label>
@@ -89,35 +99,41 @@
         function validateFullName() {
             var regName = /^([\w]{3,})+\s+([\w\s]{3,})+$/i;
             var name = document.getElementById('name').value;
+            var validationElement = document.getElementById('name');
             if (!regName.test(name)) {
                 document.getElementById('name').focus();
-                var validationElement = document.getElementById('name');
-                validate(validationElement, false)
+                validationElement.setCustomValidity("Invalid field.");
+                validate(validationElement)
                 return false;
             } else {
+                validationElement.setCustomValidity("");
                 validate(document.getElementById('name'))
                 return true;
             }
         }
 
-        function validate(element, valid = true) {
+        function validate(element) {
             var parent = element.parentElement
             var sibling = parent.nextSibling, i = 1;
             while (sibling) {
                 if (sibling.nodeName == "LABEL") {
-
-                    if (parent.childNodes[3].value != "" && parent.childNodes[3].hasAttribute("required") && valid == true) {
+                    if (parent.childNodes[3].checkValidity()) {
                         sibling.removeAttribute("hidden")
+                        break
                     } else {
                         sibling.setAttribute("hidden", true)
                     }
-
-                    break
-                } else if (sibling.nodeName == "DIV") {
-                    sibling.childNodes[1].removeAttribute("hidden")
                 }
                 sibling = sibling.nextSibling;
                 i++;
+
+                if (sibling.nodeName == "DIV") {
+                    if (parent.childNodes[3].checkValidity()) {
+                        sibling.childNodes[1].removeAttribute("hidden")
+                    } else {
+                        sibling.childNodes[1].setAttribute("hidden", true)
+                    }
+                }
             }
         }
 
