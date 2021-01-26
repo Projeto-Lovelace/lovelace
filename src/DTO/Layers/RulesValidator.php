@@ -5,7 +5,7 @@ namespace App\DTO\Layers;
 use App\Document\User;
 use App\DTO\Layers\LayerInterface;
 use App\DTO\Main;
-use App\Services\User\UserValidationMap;
+use App\Services\Map\ValidationMap;
 use Symfony\Component\HttpFoundation\Response;
 
 class RulesValidator implements LayerInterface
@@ -32,7 +32,7 @@ class RulesValidator implements LayerInterface
 
     public function exec(Main $main)
     {
-        foreach (UserValidationMap::VALIDATIONS as $field => $validation) {
+        foreach (ValidationMap::VALIDATIONS as $field => $validation) {
             $fields = $this->arrayToStringRecursive($this->data)["array"];
             foreach ($fields as $key => $value) {
                 if (is_string($validation)) {
@@ -51,8 +51,8 @@ class RulesValidator implements LayerInterface
             foreach ($this->validation["validation"]["exception"] as $exception) {
                 $field = $exception["field"];
                 $validation = $exception["validation"];
-                if (isset(UserValidationMap::MESSAGES[$field][$validation])) {
-                    $message["text"][] = UserValidationMap::MESSAGES[$field][$validation];
+                if (isset(ValidationMap::MESSAGES[$field][$validation])) {
+                    $message["text"][] = ValidationMap::MESSAGES[$field][$validation];
                     $message["field"][] = $field;
                 }
             }

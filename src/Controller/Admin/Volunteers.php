@@ -4,6 +4,8 @@ namespace App\Controller\Admin;
 
 
 use App\Document\Volunteer;
+use App\DTO\Layers\FormatVolunteersPhone;
+use App\DTO\MainBuilder;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,14 +21,20 @@ class Volunteers extends AbstractController
      * @var DocumentManager
      */
     private $documentManager;
+    /**
+     * @var MainBuilder
+     */
+    private $mainBuilder;
 
     /**
      * Volunteers constructor.
      * @param DocumentManager $documentManager
+     * @param MainBuilder $mainBuilder
      */
-    public function __construct(DocumentManager $documentManager)
+    public function __construct(DocumentManager $documentManager, MainBuilder $mainBuilder)
     {
         $this->documentManager = $documentManager;
+        $this->mainBuilder = $mainBuilder;
     }
 
     /**
@@ -37,6 +45,12 @@ class Volunteers extends AbstractController
         $volunteersRepository = $this->documentManager->getRepository(Volunteer::class);
         $volunteers = $volunteersRepository->findAll();
         $count = sizeof($volunteers);
-        return $this->render("admin/volunteers.html.twig", ["volunteers" => $volunteers, "count" => $count]);
+
+        $main = $this->mainBuilder->build($this->documentManager);
+        $main->addLayer(new FormatVolunteersPhone($volunteers));
+
+        $main->run();
+
+        return $this->render("admin/volunteers.html.twig", ["volunteers" => $main->getResults()[0]["volunteers"], "count" => $count]);
     }
 }

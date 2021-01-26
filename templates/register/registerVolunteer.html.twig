@@ -23,7 +23,7 @@
                     </div>
                 </div>
                 <div id="warning" class="alert alert-warning rounded mx-auto w-90" style="display: none" role="alert">
-                    preencha todos os campos
+                    preencha todos os campos obrigatários
                 </div>
                 <div id="danger" class="alert alert-danger rounded mx-auto w-90" style="display: none"
                      role="alert"></div>
@@ -177,8 +177,8 @@
                 },
                 error: function (data) {
                     topFunction();
+                    warning.style.display = "block"
                     submitButton.removeAttribute("disabled")
-
                 }
             })
         }));
