@@ -45,7 +45,9 @@
                 </tr>
                 </thead>
                 <tbody>
+                {% set i = 0 %}
                 {% for volunteer in volunteers %}
+                    {% set i = i + 1 %}
                     <tr>
                         <td class="p-2 border">
                             <p class="list-item-heading">{{ volunteer.name }}</p>
@@ -68,8 +70,8 @@
                         </td>
                         <td class="p-2 border text-center">
                             <div class="custom-switch custom-switch-primary">
-                                <input value="{{ volunteer.id }}" class="custom-switch-input contacted" id="switch4" {% if(volunteer.contacted) %}checked{% endif %} type="checkbox">
-                                <label class="custom-switch-btn" for="switch4"></label>
+                                <input value="{{ volunteer.id }}" class="custom-switch-input contacted" id="switch{{ i }}" {% if(volunteer.contacted) %}checked{% endif %} type="checkbox">
+                                <label class="custom-switch-btn" for="switch{{ i }}"></label>
                             </div>
                         </td>
                         <td class="p-2 border text-center">

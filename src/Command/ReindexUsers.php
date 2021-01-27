@@ -45,21 +45,24 @@ class ReindexUsers extends Command
         }
         $output->write("Aguarde ...");
 
-        sleep(5);
+//        sleep(5);
+//
+//        $qb = $this->documentManager->createQueryBuilder(User::class);
+//        $qb->insert(User::class)
 
-        foreach ($users as $user){
-            $newUser = new User();
-            $newUser->setName($user->getName())
-                ->setEmail($user->getEmail())
-                ->setPhotoPath($user->getPhotoPath())
-                ->setPassword($user->getPassword())
-                ->setEmailValidated($user->isEmailValidated())
-                ->setId($user->getId())
-                ->setRoles("ROLE_USER");
-
-            $this->documentManager->persist($newUser);
-            $this->documentManager->flush();
-        }
+//        foreach ($users as $user){
+//            $newUser = new User();
+//            $newUser->setName($user->getName())
+//                ->setEmail($user->getEmail())
+//                ->setPhotoPath($user->getPhotoPath())
+//                ->setPassword($user->getPassword())
+//                ->setEmailValidated($user->isEmailValidated())
+//                ->setId($user->getId())
+//                ->setRoles("ROLE_USER");
+//
+//            $this->documentManager->persist($newUser);
+//            $this->documentManager->flush();
+//        }
 
         $output->write("Sucesso!");
 
