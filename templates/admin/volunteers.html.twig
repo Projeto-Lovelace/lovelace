@@ -67,14 +67,16 @@
                             <p class="text-muted">{{ volunteer.extra }}</p>
                         </td>
                         <td class="p-2 border text-center">
-                            <input type="checkbox" value="{{ volunteer.id }}" class="text-muted contacted"
-                                   {% if(volunteer.contacted) %}checked{% endif %}>
+                            <div class="custom-switch custom-switch-primary">
+                                <input value="{{ volunteer.id }}" class="custom-switch-input contacted" id="switch4" {% if(volunteer.contacted) %}checked{% endif %} type="checkbox">
+                                <label class="custom-switch-btn" for="switch4"></label>
+                            </div>
                         </td>
                         <td class="p-2 border text-center">
-                            <input alt="{{ volunteer.id }}" value="{{ volunteer.talkDateTime }}" type="datetime-local" class="text-muted dateTime">
+                            <input alt="{{ volunteer.id }}" value="{{ volunteer.talkDateTime }}" type="datetime-local" class="form-control text-muted dateTime">
                         </td>
                         <td class="p-2 border text-center">
-                            <input alt="{{ volunteer.id }}" value="{{ volunteer.whoWillTalk }}" type="text" class="text-muted whoWillTalk">
+                            <input alt="{{ volunteer.id }}" value="{{ volunteer.whoWillTalk }}" type="text" class="form-control text-muted whoWillTalk">
                         </td>
                     </tr>
                 {% endfor %}
