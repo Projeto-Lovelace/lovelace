@@ -41,6 +41,7 @@
                     <th>Extra</th>
                     <th>Contactado</th>
                     <th>Data da conversa</th>
+                    <th>Com quem será a conversa</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -71,6 +72,9 @@
                         </td>
                         <td class="p-2 border text-center">
                             <input alt="{{ volunteer.id }}" value="{{ volunteer.talkDateTime }}" type="datetime-local" class="text-muted dateTime">
+                        </td>
+                        <td class="p-2 border text-center">
+                            <input alt="{{ volunteer.id }}" value="{{ volunteer.whoWillTalk }}" type="text" class="text-muted whoWillTalk">
                         </td>
                     </tr>
                 {% endfor %}
@@ -143,17 +147,34 @@
             }
         }
 
-        // contacted.addEventListener('checked', (function (e) {
-        //     e.preventDefault();
-        //     console.log(e.value)
-        //
-        //     result = {"contacted": {}};
+        var whoWillTalk = document.getElementsByClassName("whoWillTalk")
 
-            // for (var entry of objectForm.entries()) {
-            //     result["volunteer"][entry[0]] = entry[1];
-            // }
-            // result = JSON.stringify(result)
-            //
-        // }));
+        console.log(whoWillTalk)
+        for(var i = 0; i <= whoWillTalk.length; i++){
+            input = whoWillTalk[i]
+            console.log(input)
+            if(input) {
+                input.addEventListener("keyup", function (e) {
+                    id = e.target.alt;
+                    who = e.target.value;
+
+                    result = {"whoWillTalk": {"volunteer": id, "name": who}};
+
+                    result = JSON.stringify(result)
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/voluntario/whowilltalk",
+                        data: result,
+                        success: function (data) {
+                            console.log(data)
+                        },
+                        error: function (data) {
+                            console.log(data)
+                        }
+                    })
+                })
+            }
+        }
     </script>
 {% endblock %}

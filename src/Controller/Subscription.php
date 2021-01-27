@@ -109,4 +109,24 @@ class Subscription extends AbstractController
 
         return new Response("ok", Response::HTTP_OK);
     }
+
+    /**
+     * @Route("/voluntario/whowilltalk", name="volunteer_whowilltalk", methods={"POST"})
+     * @param Request $request
+     */
+    public function volunteerWhoWillTalk(Request $request)
+    {
+        $data = json_decode($request->getContent(), true);
+
+        $volunteerRepository = $this->documentManager->getRepository(Volunteer::class);
+        $id = $data["whoWillTalk"]["volunteer"];
+        /** @var Volunteer $volunteer */
+        $volunteer = $volunteerRepository->find($id);
+        $volunteer->setWhoWillTalk($data["whoWillTalk"]["name"]);
+
+        $this->documentManager->persist($volunteer);
+        $this->documentManager->flush();
+
+        return new Response("ok", Response::HTTP_OK);
+    }
 }
