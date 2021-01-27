@@ -10,7 +10,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class User implements UserInterface
 {
     /**
-     * @MongoDB\Id(strategy="NONE")
+     * @MongoDB\Id(type="string")
      */
     protected $id;
 
