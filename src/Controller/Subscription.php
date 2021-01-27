@@ -89,4 +89,24 @@ class Subscription extends AbstractController
 
         return new Response("ok", Response::HTTP_OK);
     }
+
+    /**
+     * @Route("/voluntario/datetime", name="volunteer_datetime", methods={"POST"})
+     * @param Request $request
+     */
+    public function volunteerDateTime(Request $request)
+    {
+        $data = json_decode($request->getContent(), true);
+
+        $volunteerRepository = $this->documentManager->getRepository(Volunteer::class);
+        $id = $data["date"]["volunteer"];
+        /** @var Volunteer $volunteer */
+        $volunteer = $volunteerRepository->find($id);
+        $volunteer->setTalkDateTime($data["date"]["datetime"]);
+
+        $this->documentManager->persist($volunteer);
+        $this->documentManager->flush();
+
+        return new Response("ok", Response::HTTP_OK);
+    }
 }

@@ -40,6 +40,7 @@
                     <th>Especialidade</th>
                     <th>Extra</th>
                     <th>Contactado</th>
+                    <th>Data da conversa</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -68,6 +69,9 @@
                             <input type="checkbox" value="{{ volunteer.id }}" class="text-muted contacted"
                                    {% if(volunteer.contacted) %}checked{% endif %}>
                         </td>
+                        <td class="p-2 border text-center">
+                            <input alt="{{ volunteer.id }}" value="{{ volunteer.talkDateTime }}" type="datetime-local" class="text-muted dateTime">
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -89,8 +93,6 @@
                     checked = e.target.checked;
                     id = e.target.value;
 
-                    console.log(id)
-
                     result = {"contacted": {"volunteer": id, "checked": checked}};
 
                     result = JSON.stringify(result)
@@ -107,6 +109,36 @@
                         }
                     })
 
+                })
+            }
+        }
+
+        var date = document.getElementsByClassName("dateTime")
+
+        console.log(date)
+        for(var i = 0; i <= date.length; i++){
+            input = date[i]
+            console.log(input)
+            if(input) {
+                input.addEventListener("change", function (e) {
+                    id = e.target.alt;
+                    dateTime = e.target.value;
+
+                    result = {"date": {"volunteer": id, "datetime": dateTime}};
+
+                    result = JSON.stringify(result)
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/voluntario/datetime",
+                        data: result,
+                        success: function (data) {
+                            console.log(data)
+                        },
+                        error: function (data) {
+                            console.log(data)
+                        }
+                    })
                 })
             }
         }

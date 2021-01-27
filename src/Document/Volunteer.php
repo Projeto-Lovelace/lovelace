@@ -49,6 +49,11 @@ class Volunteer implements \JsonSerializable
     private $contacted;
 
     /**
+     * @MongoDB\Field(type="string")
+     */
+    private $talkDateTime;
+
+    /**
      * @return mixed
      */
     public function getId()
@@ -176,6 +181,24 @@ class Volunteer implements \JsonSerializable
     public function setContacted($contacted): self
     {
         $this->contacted = $contacted;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTalkDateTime()
+    {
+        return $this->talkDateTime;
+    }
+
+    /**
+     * @param mixed $talkDateTime
+     * @return Volunteer
+     */
+    public function setTalkDateTime($talkDateTime)
+    {
+        $this->talkDateTime = $talkDateTime;
         return $this;
     }
 }
