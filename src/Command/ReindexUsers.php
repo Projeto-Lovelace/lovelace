@@ -62,5 +62,7 @@ class ReindexUsers extends Command
         }
 
         $output->write("Sucesso!");
+
+        return Command::SUCCESS;
     }
 }
