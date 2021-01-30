@@ -4,11 +4,6 @@
             <ul class="list-unstyled">
                 {% if not (app.user) %}
                     <li>
-                        <a href={{ path('register') }}>
-                            <i class="simple-icon-user-follow"></i> Registrar
-                        </a>
-                    </li>
-                    <li>
                         <a href={{ path('app_login') }}>
                             <i class="simple-icon-login"></i> Login
                         </a>
