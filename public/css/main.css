@@ -63,12 +63,12 @@ body.show-spinner::after {
 .social-header-image{
     max-height: 250px !important;
     height: 250px !important;
-    content:url("../img/lovelace-header.png");
+    content:url("../img/lovelace-header-ti.png");
 }
 @media (max-width: 767px) {
     .social-header-image {
         height: 250px !important;
-        content:url("../img/lovelace-header-mobile.png");
+        content:url("../img/lovelace-header-ti-mobile.png");
     }
 }
 .card{
