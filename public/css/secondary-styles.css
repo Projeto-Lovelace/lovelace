@@ -1,0 +1,11 @@
+.header-image {
+    max-height: 250px !important;
+    height: 250px !important;
+    content:url("../img/lovelace-header-ti.png");
+}
+@media (max-width: 767px) {
+    .header-image {
+        height: 250px !important;
+        content:url("../img/lovelace-header-ti-mobile.png");
+    }
+}
