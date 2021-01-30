@@ -61,8 +61,8 @@ body.show-spinner::after {
 }
 
 .social-header-image{
-    max-height: 450px !important;
-    height: 450px !important;
+    max-height: 250px !important;
+    height: 250px !important;
     content:url("../img/lovelace-header.png");
 }
 @media (max-width: 767px) {

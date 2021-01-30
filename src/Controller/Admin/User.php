@@ -5,13 +5,19 @@ namespace App\Controller\Admin;
 
 
 use App\Document\User as UserDocument;
+use App\DTO\Email as EmailObject;
 use App\DTO\Layers\FindInDatabase;
+use App\DTO\Layers\LoginLinkGenerator;
+use App\DTO\Layers\Mailer;
 use App\DTO\MainBuilder;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ODM\MongoDB\Mapping\Annotations\Document;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\LoginLink\LoginLinkHandlerInterface;
 
 /**
  * Class User
@@ -28,16 +34,21 @@ class User extends AbstractController
      * @var DocumentManager
      */
     private $manager;
+    /**
+     * @var LoginLinkHandlerInterface
+     */
+    private $loginLinkHandler;
 
     /**
      * User constructor.
      * @param MainBuilder $mainBuilder
      * @param DocumentManager $manager
      */
-    public function __construct(MainBuilder $mainBuilder, DocumentManager $manager)
+    public function __construct(MainBuilder $mainBuilder, DocumentManager $manager, LoginLinkHandlerInterface $loginLinkHandler)
     {
         $this->mainBuilder = $mainBuilder;
         $this->manager = $manager;
+        $this->loginLinkHandler = $loginLinkHandler;
     }
 
     /**
@@ -96,5 +107,32 @@ class User extends AbstractController
                 ], $exception->getCode() ?: 500
             );
         }
+    }
+
+    /**
+     * @Route("/send/confirmation/email", name="send_confirmation_email")
+     * @param Request $request
+     */
+    public function sendConfirmationEmail(Request $request)
+    {
+        $main = $this->mainBuilder->build($this->manager);
+        $userId = $request->query->get("user");
+
+        #TODO refactor
+
+        $user = $this->manager->find(UserDocument::class, $userId);
+        $user->setRegisterApproved(true);
+        $this->manager->persist($user);
+        $this->manager->flush();
+
+        $email = new EmailObject();
+        $email->setEmailAddress($user->getEmail())
+            ->setTitle("Registro Lovelace");
+        $main->setUser($user);
+        $main->addResults($email);
+        $main->addLayer(new LoginLinkGenerator($this->loginLinkHandler));
+        $main->addLayer(new Mailer($email));
+        $main->run();
+        return new JsonResponse("ok", Response::HTTP_OK);
     }
 }

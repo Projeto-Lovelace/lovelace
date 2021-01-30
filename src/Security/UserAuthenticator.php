@@ -78,8 +78,11 @@ class UserAuthenticator extends AbstractFormLoginAuthenticator
         // Check the user's password or other credentials and return true or false
         // If there are no credentials to check, you can just return true
         if($credentials["email"] == $user->getUsername() && md5($credentials["password"]) == $user->getPassword()){
+            if(!$user->isRegisterApproved()){
+                throw new CustomUserMessageAuthenticationException(ExceptionMessages::REGISTER_NOT_APPROVED);
+            }
             if(!$user->isEmailValidated()){
-                throw new CustomUserMessageAuthenticationException((new ExceptionMessages())->getEmailNotValidatedMessage());
+                throw new CustomUserMessageAuthenticationException(ExceptionMessages::EMAIL_NOT_VALIDATED);
             }
             return true;
         } else {

@@ -45,6 +45,11 @@ class User implements UserInterface
     protected $photoPath;
 
     /**
+     * @MongoDB\Field(type="boolean")
+     */
+    protected $registerApproved;
+
+    /**
      * @return mixed
      */
     public function getName()
@@ -106,11 +111,11 @@ class User implements UserInterface
     }
 
     /**
-     * @param $roles
+     * @param $role
      */
-    public function setRoles($roles): self
+    public function addRole($role): self
     {
-        $this->roles[] = $roles;
+        $this->roles[] = $role;
         return $this;
     }
 
@@ -175,6 +180,24 @@ class User implements UserInterface
     public function setPhotoPath($photoPath): self
     {
         $this->photoPath = $photoPath;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function isRegisterApproved()
+    {
+        return $this->registerApproved;
+    }
+
+    /**
+     * @param mixed $registerApproved
+     * @return User
+     */
+    public function setRegisterApproved($registerApproved)
+    {
+        $this->registerApproved = $registerApproved;
         return $this;
     }
 }

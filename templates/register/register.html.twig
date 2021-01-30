@@ -45,8 +45,8 @@
         <div class="container">
             <div id="success" class="alert alert-success rounded mx-auto w-90 pt-3 pb-3" style="display: none" role="alert">
                 <div class="d-flex flex-column">
-                    <span id="messageSuccess" class="mb-2 font-weight-bold h4">verifique o seu email para continuar o cadastro</span>
-                    <span class="h6"> se nao recebeu o email, <a onclick="resubmit()" style="cursor: pointer" class="font-weight-bold">clique aqui</a></span>
+                    <span id="messageSuccess" class="mb-2 font-weight-bold h4">Seu cadastro será verificado</span>
+                    <span class="h6"> enviaremos um email confirmando o seu cadastro assim que finalizarmos a verificação</span>
                 </div>
             </div>
             <div id="warning" class="alert alert-warning rounded mx-auto w-90" style="display: none" role="alert">
@@ -60,10 +60,10 @@
                             <div class="text-side">
                                 <p class="h2 font-side">BEM VINDO(A)</p>
                                 <p class="h2 font-side">AO PROJETO LOVELACE</p>
-                                <p class="font-side">Por favor preencha o registro.</p>
+                                <p class="font-side">Por favor preencha o registro de {{ typeTranslated }}.</p>
                                 </br>
                                 <p class="font-side">
-                                    Se ja for membro, faça&nbsp
+                                    Se ja for {{ typeTranslated }}, faça&nbsp
                                     <a style="color: #303d1f" href="{{ path('app_login') }}"> login</a>.
                                 </p>
                             </div>
@@ -88,6 +88,7 @@
                                            placeholder=""/>
                                     <span>Senha</span>
                                 </label>
+                                <input type="hidden" name="type" value="{{ type }}">
                                 <div class="d-flex justify-content-end align-items-center">
                                     <button id="submitButton" class="btn btn-primary btn-lg btn-shadow" type="submit">
                                         REGISTRAR

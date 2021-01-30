@@ -86,7 +86,8 @@
                             </button>
                             <button type="button" id="resendEmailButton" class="btn btn-primary">Enviar</button>
                         </div>
-                        <div id="modalDanger" class="alert alert-danger alert-dismissible fade rounded mb-0 position-absolute"
+                        <div id="modalDanger"
+                             class="alert alert-danger alert-dismissible fade rounded mb-0 position-absolute"
                              style="bottom: -10%; right: 0; left: 0" role="alert">
                             <strong id="modalDangerMessage"></strong>
                         </div>
@@ -103,8 +104,12 @@
 
                                 </br>
                                 <p class="font-side">
-                                    Se não possui cadastro ainda, registre-se&nbsp
-                                    <a style="color: #303d1f" href="{{ path('register') }}"> aqui</a>.
+                                    <a style="color: #303d1f" href="{{ path('register', {'type': 'volunteer'}) }}">
+                                        Clique aqui</a>&nbsppara se cadastrar como voluntario.
+                                </p>
+                                <p class="font-side">
+                                    <a style="color: #303d1f" href="{{ path('register', {'type': 'student'}) }}">Clique
+                                        aqui</a>&nbsppara se cadastrar como aluno.
                                 </p>
                             </div>
                         </div>

@@ -11,6 +11,7 @@ use App\DTO\Layers\RegisterAddress;
 use App\DTO\Layers\RulesValidator;
 use App\DTO\MainBuilder;
 use App\DTO\Layers\Register as RegisterLayer;
+use App\Services\Map\DataMap;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -62,11 +63,28 @@ class Register extends AbstractController
     }
 
     /**
-     * @Route("", name="register", methods={"GET"})
+     * @Route("/", name="register", methods={"GET"})
+     * @param Request $request
      */
-    public function register()
+    public function registerStudent(Request $request)
     {
-        return $this->render('register/register.html.twig');
+        try {
+            if ($request->query->has("type")) {
+                $type = $request->query->get("type");
+                if (key_exists($type, DataMap::REGISTER_TYPES)) {
+                    return $this->render('register/register.html.twig',
+                        [
+                            "type" => $type,
+                            "typeTranslated" => DataMap::REGISTER_TYPES[$type]
+                        ]
+                    );
+                }
+                throw new \Exception("Type invalid");
+            }
+            throw new \Exception("Missing type in parameters");
+        } catch (\Exception $exception) {
+            return new JsonResponse($exception->getMessage(), Response::HTTP_FORBIDDEN);
+        }
     }
 
     /**
@@ -92,16 +110,10 @@ class Register extends AbstractController
                 throw new \Exception("User field doesn't exist");
             }
 
-            $email = new EmailObject();
-            $email->setEmailAddress($registerData["user"]["email"])
-                ->setTitle("Registro Lovelace");
-
             $main = $this->mainBuilder->build($this->documentManager);
 
             $main->addLayer(new RulesValidator($registerData));
-            $main->addLayer(new RegisterLayer(new User(), $this->loginLinkHandler));
-            $main->addLayer(new LoginLinkGenerator($this->loginLinkHandler));
-            $main->addLayer(new Mailer($email));
+            $main->addLayer(new RegisterLayer(new User()));
 
             $main->run();
 

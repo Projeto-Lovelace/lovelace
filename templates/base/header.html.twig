@@ -38,6 +38,40 @@
 
     <div class="navbar-right">
         <div class="header-icons d-inline-block align-middle">
+
+            <div class="position-relative d-none d-sm-inline-block">
+                {% if (app.user) %}
+                    <div class="d-none d-md-inline-block align-text-bottom mr-3">
+                        <div class="mb-auto d-flex flex-row align-items-center">
+                            <span class="h6 mb-auto">{{ app.user.name }}</span>
+                        </div>
+                    </div>
+                    <button class="header-icon btn btn-empty" type="button" id="iconMenuButton" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                        <i class="simple-icon-grid"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right mt-3 w-auto h-auto position-absolute"
+                         id="iconMenuDropdown">
+                        <div class="d-flex justify-content-start">
+                            {% if (app.user) %}
+                                <a href="/logout"
+                                   class="icon-menu-item mb-auto mt-0 p-0 d-flex flex-column">
+                                    <i class="simple-icon-logout d-block"></i>
+                                    <span class="p-0">Logout</span>
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            {% if not (app.user) %}
+                <div class="d-none d-md-inline-block align-text-bottom mr-3">
+                    <a href="{{ path('app_login') }}" class="mb-auto d-flex flex-row align-items-center">
+                        <span class="h6 mb-auto">Acesso a plataforma</span>
+                        <i class="simple-icon-login d-block ml-2"></i>
+                    </a>
+                </div>
+            {% endif %}
             <div class="d-none d-md-inline-block align-text-bottom mr-3">
                 <div class="custom-switch custom-switch-primary-inverse custom-switch-small pl-1"
                      data-toggle="tooltip" data-placement="left" title="Modo escuro">
@@ -46,41 +80,6 @@
                 </div>
             </div>
 
-            <div class="position-relative d-none d-sm-inline-block">
-                <button class="header-icon btn btn-empty" type="button" id="iconMenuButton" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-                    <i class="simple-icon-grid"></i>
-                </button>
-                <div class="dropdown-menu dropdown-menu-right mt-3 w-auto h-auto position-absolute"
-                     id="iconMenuDropdown">
-                    <div class="d-flex justify-content-start">
-                        {% if (app.user) %}
-                            <a href="{{ path('register_address') }}"
-                               class="icon-menu-item mb-auto mt-0 p-0 d-flex flex-column">
-                                <i class="simple-icon-location-pin"></i>
-                                <span class="p-0">Cadastro de endereço</span>
-                            </a>
-                            <a href="/logout"
-                               class="icon-menu-item mb-auto mt-0 p-0 d-flex flex-column">
-                                <i class="simple-icon-logout d-block"></i>
-                                <span class="p-0">Logout</span>
-                            </a>
-                        {% endif %}
-
-                        {% if not (app.user) %}
-                            <a href="{{ path('app_login') }}" class="icon-menu-item icon-menu-item
-                            mb-auto mt-0 p-0 d-flex flex-column">
-                                <i class="simple-icon-login d-block"></i>
-                                <span>Login</span>
-                            </a>
-                            <a href="{{ path('register') }}" class="icon-menu-item mb-auto mt-0 p-0 d-flex flex-column">
-                                <i class="simple-icon-user-follow d-block"></i>
-                                <span>Registrar</span>
-                            </a>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
 
             <div class="position-relative d-inline-block">
                 {# <button class="header-icon btn btn-empty" type="button" id="notificationButton" #}
@@ -92,20 +91,20 @@
                     <div class="scroll">
                         <div class="d-flex flex-row mb-3 pb-3 border-bottom">
                             <a href="#">
-{#                                <img src="/img/profile-pic-l-2.jpg" alt="Notification Image"#}
-{#                                     class="img-thumbnail list-thumbnail xsmall border-0 rounded-circle"/>#}
-{#                            </a>#}
-                            <div class="pl-3">
-                                <a href="#">
-                                    <p class="font-weight-medium mb-1">Joisse Kaycee just sent a new comment!</p>
-                                    <p class="text-muted mb-0 text-small">09.04.2018 - 12:45</p>
-                                </a>
-                            </div>
+                                {# <img src="/img/profile-pic-l-2.jpg" alt="Notification Image" #}
+                                {# class="img-thumbnail list-thumbnail xsmall border-0 rounded-circle"/> #}
+                                {# </a> #}
+                                <div class="pl-3">
+                                    <a href="#">
+                                        <p class="font-weight-medium mb-1">Joisse Kaycee just sent a new comment!</p>
+                                        <p class="text-muted mb-0 text-small">09.04.2018 - 12:45</p>
+                                    </a>
+                                </div>
                         </div>
                         <div class="d-flex flex-row mb-3 pb-3 border-bottom">
                             <a href="#">
-{#                                <img src="/img/notification-thumb.jpg" alt="Notification Image"#}
-{#                                     class="img-thumbnail list-thumbnail xsmall border-0 rounded-circle"/>#}
+                                {# <img src="/img/notification-thumb.jpg" alt="Notification Image" #}
+                                {# class="img-thumbnail list-thumbnail xsmall border-0 rounded-circle"/> #}
                             </a>
                             <div class="pl-3">
                                 <a href="#">
@@ -116,8 +115,8 @@
                         </div>
                         <div class="d-flex flex-row mb-3 pb-3 border-bottom">
                             <a href="#">
-{#                                <img src="/img/notification-thumb-2.jpg" alt="Notification Image"#}
-{#                                     class="img-thumbnail list-thumbnail xsmall border-0 rounded-circle"/>#}
+                                {# <img src="/img/notification-thumb-2.jpg" alt="Notification Image" #}
+                                {# class="img-thumbnail list-thumbnail xsmall border-0 rounded-circle"/> #}
                             </a>
                             <div class="pl-3">
                                 <a href="#">
@@ -128,8 +127,8 @@
                         </div>
                         <div class="d-flex flex-row mb-3 pb-3 ">
                             <a href="#">
-{#                                <img src="/img/notification-thumb-3.jpg" alt="Notification Image"#}
-{#                                     class="img-thumbnail list-thumbnail xsmall border-0 rounded-circle"/>#}
+                                {# <img src="/img/notification-thumb-3.jpg" alt="Notification Image" #}
+                                {# class="img-thumbnail list-thumbnail xsmall border-0 rounded-circle"/> #}
                             </a>
                             <div class="pl-3">
                                 <a href="#">
