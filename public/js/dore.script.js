@@ -2821,60 +2821,72 @@ $.dore = function (element, options) {
     }
 
     /* 03.10. Calendar */
-    if ($().fullCalendar) {
-      var testEvent = new Date(new Date().setHours(new Date().getHours()));
-      var day = testEvent.getDate();
-      var month = testEvent.getMonth() + 1;
-      $(".calendar").fullCalendar({
-        themeSystem: "bootstrap4",
-        height: "auto",
-        isRTL: isRtl,
-        buttonText: {
-          today: "Today",
-          month: "Month",
-          week: "Week",
-          day: "Day",
-          list: "List"
-        },
-        bootstrapFontAwesome: {
-          prev: " simple-icon-arrow-left",
-          next: " simple-icon-arrow-right",
-          prevYear: " simple-icon-control-start",
-          nextYear: " simple-icon-control-end"
-        },
-        events: [
-          {
-            title: "Account",
-            start: "2018-05-18"
-          },
-          {
-            title: "Delivery",
-            start: "2019-07-22",
-            end: "2019-07-24"
-          },
-          {
-            title: "Conference",
-            start: "2019-06-07",
-            end: "2019-06-09"
-          },
-          {
-            title: "Delivery",
-            start: "2019-09-03",
-            end: "2019-09-06"
-          },
-          {
-            title: "Meeting",
-            start: "2019-06-17",
-            end: "2019-06-18"
-          },
-          {
-            title: "Taxes",
-            start: "2019-08-07",
-            end: "2019-08-09"
-          }
-        ]
-      });
-    }
+    // if ($().fullCalendar) {
+    //   var testEvent = new Date(new Date().setHours(new Date().getHours()));
+    //   var day = testEvent.getDate();
+    //   var month = testEvent.getMonth() + 1;
+    //   $(".calendar").fullCalendar({
+    //     localeData: 'pt-br',
+    //     eventClick: function (info){
+    //       alert(info.title)
+    //     },
+    //     views: {
+    //       timeGrid: {
+    //         dayMaxEventRows: 6 // adjust to 6 only for timeGridWeek/timeGridDay
+    //       }
+    //     },
+    //     dayMaxEventRows: true,
+    //     initialView: "dayGridMonth",
+    //     themeSystem: "bootstrap4",
+    //     height: "auto",
+    //     isRTL: isRtl,
+    //     buttonText: {
+    //       today: "Hoje",
+    //       month: "Mes",
+    //       week: "Semana",
+    //       day: "Dia",
+    //       list: "Lista"
+    //     },
+    //     bootstrapFontAwesome: {
+    //       prev: " simple-icon-arrow-left",
+    //       next: " simple-icon-arrow-right",
+    //       prevYear: " simple-icon-control-start",
+    //       nextYear: " simple-icon-control-end"
+    //     },
+    //     events: [
+    //       {
+    //         title: "Logica de programaçao",
+    //         start: "2021-01-30",
+    //         end: "2021-01-31"
+    //       },
+    //       {
+    //         title: "Delivery",
+    //         start: "2019-07-22",
+    //         end: "2019-07-24"
+    //       },
+    //       {
+    //         title: "Conference",
+    //         start: "2021-01-07",
+    //         end: "2019-06-09"
+    //       },
+    //       {
+    //         title: "Delivery",
+    //         start: "2020-09-03",
+    //         end: "2020-09-06"
+    //       },
+    //       {
+    //         title: "Meeting",
+    //         start: "2019-06-17",
+    //         end: "2019-06-18"
+    //       },
+    //       {
+    //         title: "Taxes",
+    //         start: "2019-08-07",
+    //         end: "2019-08-09"
+    //       }
+    //     ]
+    //   });
+    // }
 
     /* 03.11. Datatable */
     if ($().DataTable) {

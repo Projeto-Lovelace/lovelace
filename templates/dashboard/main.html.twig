@@ -2,15 +2,28 @@
 
 {% block title %}Portal Lovelace{% endblock %}
 
+{% block vendor_css %}
+    <link href='/node_modules/fullcalendar/main.css' rel='stylesheet'/>
+    <link rel="stylesheet" href="/css/vendor/fullcalendar.css" />
+{% endblock %}
+
 {% block content %}
     <h3>Olá {{ app.user.name }}</h3>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-xl-6 col-lg-12 mb-4">
+            <div class="col-xl-6 col-lg-8 mb-4">
                 <div class="card h-100">
                     <div class="card-body">
-                        <h5 class="card-title">Calendar</h5>
-                        <div class="calendar"></div>
+                        <h5 class="card-title">Calendário</h5>
+                        <div id="calendar" class="calendar"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6 col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Informações</h5>
+                        <p id="information"></p>
                     </div>
                 </div>
             </div>
@@ -19,5 +32,42 @@
 {% endblock %}
 {% block js %}
     <script src="/js/vendor/moment.min.js"></script>
-    <script src="/js/vendor/fullcalendar.min.js"></script>
+    <script src="/node_modules/fullcalendar/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+            var information = document.getElementById("information");
+            date = new Date()
+            information.innerText = date.toLocaleDateString('pt-br');
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                locale: 'pt-br',
+                themeSystem: "bootstrap",
+                eventClick: function (info) {
+                    alert(info.title)
+                },
+                dateClick: function(info) {
+                    date = new Date(info.dateStr)
+                    date.setDate(date.getDate() + 1)
+                    information.innerText = date.toLocaleDateString('pt-br');
+                },
+                buttonText: {
+                    today: "Hoje",
+                    month: "Mes",
+                    week: "Semana",
+                    day: "Dia",
+                    list: "Lista"
+                },
+                bootstrapFontAwesome: {
+                  prev: " simple-icon-arrow-left",
+                  next: " simple-icon-arrow-right",
+                  prevYear: " simple-icon-control-start",
+                  nextYear: " simple-icon-control-end"
+                },
+                height: "auto",
+            });
+            calendar.render();
+        });
+    </script>
 {% endblock %}
