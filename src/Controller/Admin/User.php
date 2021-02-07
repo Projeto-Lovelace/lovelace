@@ -6,9 +6,12 @@ namespace App\Controller\Admin;
 
 use App\Document\User as UserDocument;
 use App\DTO\Email as EmailObject;
+use App\DTO\Layers\ApproveUserRegister;
 use App\DTO\Layers\FindInDatabase;
+use App\DTO\Layers\FindUserAddress;
 use App\DTO\Layers\LoginLinkGenerator;
 use App\DTO\Layers\Mailer;
+use App\DTO\Layers\UpdateUserRole;
 use App\DTO\MainBuilder;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ODM\MongoDB\Mapping\Annotations\Document;
@@ -52,7 +55,7 @@ class User extends AbstractController
     }
 
     /**
-     * @Route("")
+     * @Route("", name="listUser")
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function listUsers()
@@ -88,15 +91,17 @@ class User extends AbstractController
             $main = $this->mainBuilder->build($this->manager);
 
             $main->addLayer(new FindInDatabase('user', 'findOneBy', '_id', $userId));
+            $main->addLayer(new FindUserAddress($userId));
 
             $main->run();
 
-            $user = $main->getResults()[0]["findDocument"];
+            $user = $main->getResults()[0]['findDocument'];
+            $address = $main->getResults()[1]['address'];
 
             if (!$user) {
                 $user = $this->getUser();
             }
-            return $this->render("admin/userData.html.twig", ["user" => $user]);
+            return $this->render('admin/userData.html.twig', ['userSelected' => $user, 'address' => $address]);
         } catch (\Exception $exception) {
             return new JsonResponse(
                 [
@@ -134,5 +139,37 @@ class User extends AbstractController
         $main->addLayer(new Mailer($email));
         $main->run();
         return new JsonResponse("ok", Response::HTTP_OK);
+    }
+
+    /**
+     * @Route("/role/update")
+     * @param Request $request
+     */
+    public function updateUserRole(Request $request): JsonResponse
+    {
+        try {
+            $main = $this->mainBuilder->build($this->manager);
+            $main->addLayer(new UpdateUserRole(json_decode($request->getContent(), true)));
+            $main->run();
+            return new JsonResponse("ok", Response::HTTP_OK);
+        } catch (\Exception $exception) {
+            return new JsonResponse($exception->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * @Route("/register/approve")
+     * @param Request $request
+     */
+    public function approveUserRegister(Request $request)
+    {
+        try {
+            $main = $this->mainBuilder->build($this->manager);
+            $main->addLayer(new ApproveUserRegister(json_decode($request->getContent(), true)));
+            $main->run();
+            return new JsonResponse("ok", Response::HTTP_OK);
+        } catch (\Exception $exception) {
+            return new JsonResponse($exception->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 }

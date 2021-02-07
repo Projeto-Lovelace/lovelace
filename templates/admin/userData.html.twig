@@ -2,16 +2,117 @@
 
 {% block title %}Lovelace{% endblock %}
 
+{% block vendor_css %}
+    <link rel="stylesheet" href="/css/vendor/component-custom-switch.min.css"/>
+{% endblock %}
+
 {% block content %}
 
     <div class="container-fluid disable-text-selection">
         <div class="row">
             <div class="col-12">
                 <div class="mb-3">
-                    <h1>{{ user.name }}</h1>
+                    <div class="card-body" id="card-body">
+                        <h1>{{ userSelected.name }}</h1>
+                        <nav class="breadcrumb-container d-none d-sm-block d-lg-inline-block" aria-label="breadcrumb">
+                            <ol class="breadcrumb pt-0">
+                                <li class="breadcrumb-item">
+                                    <a href="{{ path('index') }}">Inicio</a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="{{ path('listUser') }}">Lista</a>
+                                </li>
+                            </ol>
+                        </nav>
+                    </div>
                 </div>
                 <div class="separator mb-5"></div>
             </div>
         </div>
+        <div class="col-12 col-lg-5 col-xl-4 col-left">
+            <div class="card">
+                <div class="card-body" id="card-body">
+                    <div id="roles" class="column col-12">
+                        <div class="pt-2 pb-2">
+                            <p class="list-item-heading">Cargo</p>
+                        </div>
+                        <form id="form-roles">
+                            <div class="row pl-3 pb-2">
+                                <div class="custom-switch custom-switch-primary custom-switch-small">
+                                    <input name="admin" class="custom-switch-input role" id='switch-admin'
+                                           {% if('ROLE_ADMIN' in userSelected.roles) %}checked{% endif %}
+                                           type="checkbox">
+                                    <label class="custom-switch-btn" for='switch-admin'></label>
+                                </div>
+                                <label class="custom-switch-btn pl-2" for='switch-admin'>admin</label>
+                            </div>
+
+                            <div class="row pl-3 pb-2">
+                                <div class="custom-switch custom-switch-primary custom-switch-small">
+                                    <input name="volunteer" class="custom-switch-input role" id='switch-volunteer'
+                                           {% if('ROLE_VOLUNTEER' in userSelected.roles) %}checked{% endif %}
+                                           type="checkbox">
+                                    <label class="custom-switch-btn" for='switch-volunteer'></label>
+                                </div>
+                                <label class="custom-switch-btn pl-2" for='switch-volunteer'>voluntario(a)</label>
+                            </div>
+
+                            <div class="row pl-3">
+                                <div class="custom-switch custom-switch-primary custom-switch-small">
+                                    <input name="student" class="custom-switch-input role" id='switch-student'
+                                           {% if('ROLE_STUDENT' in userSelected.roles) %}checked{% endif %}
+                                           type="checkbox">
+                                    <label class="custom-switch-btn" for='switch-student'></label>
+                                </div>
+                                <label class="custom-switch-btn pl-2" for='switch-student'>aluno(a)</label>
+                            </div>
+                            <input type="hidden" id="userId" value="{{ userSelected.id }}">
+                        </form>
+                    </div>
+                    <div class="separator mb-3 mt-3"></div>
+                    <div id="roles" class="column col-12 pl-3">
+                        <div class="pt-2 pb-2">
+                            <p class="list-item-heading">Endereço</p>
+                        </div>
+                        <p>Logradouro : {{ address.street }} {{ address.number }} {{ address.complement }}</p>
+                        <p>Numero : {{ address.number }}</p>
+                        <p>Complemento : {{ address.complement ?: 'sem complemento' }}</p>
+                        <p>Cidade : {{ address.city }}</p>
+                        <p>Estado : {{ address.state }}</p>
+                        <p>CEP : {{ address.cep }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var role = Array.from(document.getElementsByClassName("role"))
+        var formRoles = document.getElementById("form-roles")
+        role.forEach(function (input) {
+            if (input) {
+                input.addEventListener("change", function (e) {
+                    e.preventDefault();
+                    let user = document.getElementById('userId').value;
+                    var result = {'user': user, 'role': input.id, 'active': input.checked}
+                    result = JSON.stringify(result)
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/admin/users/role/update",
+                        data: result,
+                        success: function (data) {
+                            // console.log(data)
+                        },
+                        error: function (data) {
+                            // console.log(data)
+                        }
+                    })
+
+                })
+            }
+        })
+    </script>
+
 
 {% endblock %}

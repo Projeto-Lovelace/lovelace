@@ -3004,7 +3004,9 @@ $.dore = function (element, options) {
           { data: "Foto" },
           { data: "Nome" },
           { data: "Email" },
-          { data: "Email verificado" }
+          { data: "Email verificado" },
+          { data: "Registro verificado" },
+          { data: "Cargo"}
         ],
         language: {
           paginate: {
@@ -3716,6 +3718,16 @@ $.dore = function (element, options) {
       var modal = $(this);
       modal.find(".modal-title").text("New message to " + recipient);
       modal.find(".modal-body input").val(recipient);
+    });
+
+    $("#aproveUserModal").on("show.bs.modal", function (event) {
+      var button = $(event.relatedTarget);
+      var name = button.data("name");
+      var user = button.data("user");
+      var modal = $(this);
+      $("#userIdToApprove").val(user)
+      modal.find(".modal-title").text("Aprovar registro");
+      modal.find(".modal-body").text("Confirma aprovação de " + name)
     });
 
     /* 03.24. Scrollbar */

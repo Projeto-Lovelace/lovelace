@@ -119,6 +119,13 @@ class User implements UserInterface
         return $this;
     }
 
+    public function removeRole($role): self
+    {
+        $index = array_search($role, $this->roles);
+        unset($this->roles[$index]);
+        return $this;
+    }
+
     public function getSalt()
     {
         // TODO: Implement getSalt() method.
