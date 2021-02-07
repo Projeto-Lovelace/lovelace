@@ -29,11 +29,13 @@
         "symfony/serializer-pack": "*",
         "symfony/string": "*",
         "symfony/translation": "*",
-        "symfony/twig-pack": "*",
+        "symfony/twig-bundle": "5.2.*",
         "symfony/validator": "*",
         "symfony/web-link": "*",
         "symfony/webpack-encore-bundle": "^1.8",
-        "symfony/yaml": "*"
+        "symfony/yaml": "*",
+        "twig/extra-bundle": "^2.12|^3.0",
+        "twig/twig": "^2.12|^3.0"
     },
     "require-dev": {
         "symfony/debug-pack": "*",
