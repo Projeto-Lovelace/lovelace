@@ -35,24 +35,9 @@
     </ul>
 </div>
 
-<div class="context" style="margin: 0 auto !important; top: 0; bottom: 0">
-    <main style="margin-right: 0; margin-left: 0">
-        <div class="container">
-            <div id="success" class="alert alert-success rounded mx-auto w-90 pt-3 pb-3" style="display: none"
-                 role="alert">
-                verifique o seu email para continuar o cadastro
-            </div>
-            <div id="warning" class="alert alert-warning rounded mx-auto w-90" style="display: none" role="alert">
-                preencha todos os campos
-            </div>
-            <div id="danger" class="alert alert-danger rounded mx-auto w-90" style="display: none" role="alert"></div>
-            {% for message in app.flashes('danger') %}
-                <div class="alert alert-danger rounded mx-auto w-90" id="dangerMessage">
-                    <div class="d-flex d-flex justify-content-center flex-column">
-                        {{ message|raw }}
-                    </div>
-                </div>
-            {% endfor %}
+<div class="context d-flex justify-content-center align-items-center" style="margin: 0 auto !important; top: 0; bottom: 0">
+    <main style="margin-right: 0; margin-left: 0" class="">
+        <div class="container h-100 w-100">
             <div class="row h-100">
                 <div class="col-12 col-md-10 mx-auto my-auto">
                     <div class="card auth-card">
