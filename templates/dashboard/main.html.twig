@@ -55,13 +55,14 @@
             var information = document.getElementById("information");
             var weekdayTag = document.getElementById("weekday");
             var title = document.getElementById("title");
-            date = new Date()
-            information.innerText = date.toLocaleDateString('pt-br');
-
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
                 locale: 'pt-br',
                 themeSystem: "bootstrap",
+                hour: 'numeric',
+                minute: '2-digit',
+                omitZeroMinute: false,
+                meridiem: false,
                 eventClick: function (info) {
                     function getDateInfo(date) {
                         var event = null
@@ -96,7 +97,7 @@
                     var dateInfo = getDateInfo(start);
                     title.innerText = info.event.title;
                     weekdayTag.innerText = weekdays[start.getDay()]
-                    information.innerText = start.toLocaleDateString('pt-br') + ' - ' + start.getHours() + ':' + start.getMinutes();
+                    information.innerText = start.toLocaleDateString('pt-br') + ' - ' + (start.getHours()<10?'0':'') + start.getHours() + ':' + (start.getMinutes()<10?'0':'') + start.getMinutes();
                     if (dateInfo && dateInfo.videoUrl) {
                         $('#video').attr('src', dateInfo.videoUrl)
                         $('#video-div').addClass('h-100')
@@ -142,7 +143,6 @@
                 height: "auto",
             });
             calendar.render();
-            console.log(calendar.getEvents())
         });
     </script>
 {% endblock %}

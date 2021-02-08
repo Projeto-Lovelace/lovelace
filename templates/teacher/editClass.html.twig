@@ -1,75 +1,236 @@
 {% extends 'base/template.html.twig' %}
 
-{% block title %}Editar aula{% endblock %}
+{% block title %}Portal Lovelace{% endblock %}
 
 {% block vendor_css %}
-    <link rel="stylesheet" href="/css/vendor/component-custom-switch.min.css"/>
+    <link href='/node_modules/fullcalendar/main.css' rel='stylesheet'/>
+    <link rel="stylesheet" href="/css/vendor/fullcalendar.css"/>
+    <link rel="stylesheet" href="/css/fullcalendar.css"/>
 {% endblock %}
 
 {% block content %}
-
-    <div class="container-fluid disable-text-selection">
+    <h3>Olá {{ app.user.name }}</h3>
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-12">
-                <div class="mb-3">
-                    <div class="card-body" id="card-body">
-                        <h1>{{ app.user.name }}</h1>
-                        <nav class="breadcrumb-container d-none d-sm-block d-lg-inline-block" aria-label="breadcrumb">
-                            <ol class="breadcrumb pt-0">
-                                <li class="breadcrumb-item">
-                                    <a href="{{ path('index') }}">Inicio</a>
-                                </li>
-                                <li class="breadcrumb-item">
-                                    <a href="{{ path('dashboardDefault') }}">Portal</a>
-                                </li>
-                            </ol>
-                        </nav>
+            <div class="col-xl-6 col-lg-8 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Calendário</h5>
+                        <div id="calendar" style="cursor: pointer" class="calendar"></div>
                     </div>
                 </div>
-                <div class="separator mb-5"></div>
             </div>
-        </div>
-        <div class="col-12 col-lg-5 col-xl-4 col-left">
-            <div class="card">
-                <div class="card-body" id="card-body">
-                    <div id="roles" class="column col-12">
-                        <div class="pt-2 pb-2">
-                            <p class="list-item-heading">Cargo</p>
+            <div class="col-xl-6 col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Informações</h5>
+                        <p class="h6" id="weekday"></p>
+                        <p id="information"></p>
+                        <div id="video-div">
+                            <div class="text-center">
+                                <span id="text-choose" class="h2">Escolha uma data</span>
+                            </div>
                         </div>
+                        <form id="form-classes" action="{{ path('teacher_save_class') }}" method="post" style="display: none">
+                            <div class="form-group mb-3">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <label class="input-group-text" for="inputGroupSelect01">Aula</label>
+                                    </div>
+                                    <select name="className" class="custom-select" id="selectClasses">
+                                        <option selected>Opções ...</option>
+                                        <option value="linguagem">Linguagem de programação</option>
+                                        <option value="logica">Logica de programação</option>
+                                        <option value="banco">Banco de dados</option>
+                                        <option value="front">Front end</option>
+                                        <option value="cultura">Cultura agil</option>
+                                        <option value="soft">Soft skills</option>
+                                    </select>
+                                </div>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <label class="input-group-text" for="inputGroupSelect01">Horário</label>
+                                    </div>
+                                    <select name="hours" class="custom-select" id="selectHours">
+                                        <option selected>Opções ...</option>
+                                        <option value="20">20:00 - 21:00</option>
+                                        <option value="21">21:15 - 22:00</option>
+                                    </select>
+                                </div>
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">Url do YouTube</span>
+                                    <input type="text" name="youtube" class="form-control" id="youtube" aria-label="Url do YouTube"
+                                           aria-describedby="inputGroup-sizing-default">
+                                </div>
+                                <div class="mt-3 w-100 d-flex justify-content-end">
+                                    <button class="btn-primary btn col-5" type="submit">Salvar</button>
+                                </div>
+                                <input type="hidden" name="date" id="dateInput">
+                            </div>
+                        </form>
                     </div>
-                    <div class="separator mb-3 mt-3"></div>
                 </div>
             </div>
         </div>
     </div>
-
+{% endblock %}
+{% block js %}
+    <script src="/js/vendor/moment.min.js"></script>
+    <script src="/node_modules/fullcalendar/main.js"></script>
     <script>
-        var role = Array.from(document.getElementsByClassName("role"))
-        var formRoles = document.getElementById("form-roles")
-        role.forEach(function (input) {
-            if (input) {
-                input.addEventListener("change", function (e) {
-                    e.preventDefault();
-                    let user = document.getElementById('userId').value;
-                    var result = {'user': user, 'role': input.id, 'active': input.checked}
-                    result = JSON.stringify(result)
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+            var information = document.getElementById("information");
+            var weekdayTag = document.getElementById("weekday");
+            var title = document.getElementById("title");
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                locale: 'pt-br',
+                themeSystem: "bootstrap",
+                hour: 'numeric',
+                minute: '2-digit',
+                omitZeroMinute: false,
+                meridiem: false,
+                dateClick: function (info) {
+                    $("#youtube").val('')
+                    $('#form-classes').removeAttr('style')
+                    var weekdays = [
+                        'Domingo',
+                        'Segunda-feira',
+                        'Terça-feira',
+                        'Quarta-feira',
+                        'Quinta-feira',
+                        'Sexta-feira',
+                        'Sábado',
+                    ]
+                    $('#text-choose').attr('style', 'display: none')
+                    var date = new Date(info.dateStr)
+                    datePlus = date.setDate(date.getDate() + 1)
+                    weekdayTag.innerText = weekdays[date.getDay()]
+                    information.innerText = date.toLocaleDateString('pt-br')
+                    let selectClasses = document.getElementById('selectClasses');
+                    if (selectClasses) {
+                        var selects = Array.from(selectClasses.children)
+                        selects.forEach(function (option) {
+                            if (option.hasAttribute('selected')) {
+                                option.removeAttribute('selected')
+                            }
+                        })
+                    }
 
-                    $.ajax({
-                        type: "POST",
-                        url: "/admin/users/role/update",
-                        data: result,
-                        success: function (data) {
-                            // console.log(data)
-                        },
-                        error: function (data) {
-                            // console.log(data)
+                    var selectHours = document.getElementById('selectHours')
+                    if (selectHours) {
+                        var selects = Array.from(selectHours.children)
+                        selects.forEach(function (option) {
+                            if (option.hasAttribute('selected')) {
+                                option.removeAttribute('selected')
+                            }
+                        })
+                    }
+                    date.setMonth(date.getMonth() + 1)
+                    dateInput = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate() + 'T' + date.getHours() + ':' + date.getMinutes() + ':' + '00' + '-03' + 'Z'
+                    console.log(dateInput)
+                    $("#dateInput").val(dateInput)
+                },
+                eventClick: function (info) {
+                    $('#form-classes').removeAttr('style')
+
+                    function getDateInfo(date) {
+                        var event = null
+                        date.setMonth(date.getMonth() + 1)
+                        date = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDay() + 'T' + date.getHours() + ':' + date.getMinutes() + ':' + '00' + '-03' + 'Z'
+                        $.ajax({
+                            'async': false,
+                            'type': "GET",
+                            'url': "/teacher/class",
+                            'data': {datetime: date},
+                            success: function (data) {
+                                event = data;
+                            },
+                            error: function (data) {
+                                event = null;
+                            }
+                        });
+                        return event;
+                    }
+
+                    var weekdays = [
+                        'Domingo',
+                        'Segunda-feira',
+                        'Terça-feira',
+                        'Quarta-feira',
+                        'Quinta-feira',
+                        'Sexta-feira',
+                        'Sábado'
+                    ]
+
+                    let start = info.event.start;
+                    var dateInfo = getDateInfo(start);
+                    weekdayTag.innerText = weekdays[start.getDay()]
+                    information.innerText = start.toLocaleDateString('pt-br') + ' - ' + (start.getHours() < 10 ? '0' : '') + start.getHours() + ':' + (start.getMinutes() < 10 ? '0' : '') + start.getMinutes();
+
+                    $('#text-choose').attr('style', 'display: none')
+
+                    var selectsClasses = Array.from(document.getElementById('selectClasses').children)
+                    selectsClasses.forEach(function (option) {
+                        if (option.innerHTML === info.event.title) {
+                            option.setAttribute('selected', true)
+                        } else {
+                            option.removeAttribute('selected')
                         }
                     })
 
-                })
-            }
-        })
+                    var selectHours = Array.from(document.getElementById('selectHours').children)
+                    selectHours.forEach(function (option) {
+                        if (option.value === start.getHours().toString()) {
+                            option.setAttribute('selected', true)
+                        } else {
+                            option.removeAttribute('selected')
+                        }
+                    })
+
+                    if (dateInfo && dateInfo.videoUrl) {
+                        $("#youtube").val(dateInfo.videoUrl)
+                    } else {
+                        $("#youtube").val('')
+                    }
+                    date = start.getFullYear() + '-' + start.getMonth() + '-' + start.getDay() + 'T' + start.getHours() + ':' + start.getMinutes() + ':' + '00' + '-03' + 'Z'
+                    $("#dateInput").val(date)
+                },
+                buttonText: {
+                    today: "Hoje",
+                    month: "Mes",
+                    week: "Semana",
+                    day: "Dia",
+                    list: "Lista"
+                },
+                events: function (fetchInfo, successCallback, failureCallback) {
+                    var events = function () {
+                        var event = null
+                        $.ajax({
+                            'async': false,
+                            'type': "GET",
+                            'url': "/teacher/classes",
+                            success: function (data) {
+                                event = data;
+                            },
+                            error: function (data) {
+                                event = [];
+                            }
+                        });
+                        return event;
+                    }()
+                    successCallback(events)
+                },
+                bootstrapFontAwesome: {
+                    prev: " simple-icon-arrow-left",
+                    next: " simple-icon-arrow-right",
+                    prevYear: " simple-icon-control-start",
+                    nextYear: " simple-icon-control-end"
+                },
+                height: "auto",
+            });
+            calendar.render();
+        });
     </script>
-
-
 {% endblock %}

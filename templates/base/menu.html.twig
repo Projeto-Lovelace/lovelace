@@ -51,6 +51,14 @@
                             <span>Portal</span>
                         </a>
                     </li>
+                    {% if ('ROLE_VOLUNTEER' in app.user.roles) %}
+                        <li>
+                            <a href="{{ path('teacher_edit_classes') }}">
+                                <i class="simple-icon-pencil icon-menu"></i>
+                                <span>Editar aulas</span>
+                            </a>
+                        </li>
+                    {% endif %}
                 {% endif %}
             </ul>
         </div>

@@ -65,4 +65,45 @@ class Classes extends AbstractController
             return new JsonResponse($exception->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    /**
+     * @Route("/save/class", name="teacher_save_class")
+     * @param Request $request
+     */
+    public function teacherSaveClass(Request $request)
+    {
+        $titlesMap = [
+            'linguagem' => 'Linguagem de programação',
+            'logica' => 'Logica de programação',
+            'banco' => 'Banco de dados',
+            'front' => 'Front end',
+            'cultura' => 'Cultura agil',
+            'soft' => 'Soft skills'
+        ];
+
+        $data = $request->request->all();
+
+        $class = new ClassesDocument();
+        if(isset($data["date"])) {
+            $dateFormatted = (new DateTime($data["date"]))->format("Y-m-d H:i");
+            $repository = $this->manager->getRepository(ClassesDocument::class);
+            $class = $repository->findOneBy(["startDate" => $dateFormatted]);
+
+            if (!$class) {
+                $class = new ClassesDocument();
+            }
+
+            $class->setStartDate($dateFormatted);
+            $class->setEndDate((new DateTime($data["date"]))->add(new \DateInterval("PT1H"))->format("Y-m-d H:i"));
+        }
+        if(isset($data['className'])) {
+            $class->setTitle($titlesMap[$data['className']]);
+        }
+        if(isset($data['youtube'])) {
+            $class->setVideoUrl($data['youtube']);
+        }
+        $this->manager->persist($class);
+        $this->manager->flush();
+        return $this->redirectToRoute('teacher_edit_classes');
+    }
 }

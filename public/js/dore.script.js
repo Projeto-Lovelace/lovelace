@@ -664,7 +664,7 @@ $.dore = function (element, options) {
           $(event.target).hasClass("sidebar")
         )
       ) {
-        // Prevent sub menu closing on collapse click 
+        // Prevent sub menu closing on collapse click
         if($(event.target).parents("a[data-toggle='collapse']").length > 0 || $(event.target).attr("data-toggle") == 'collapse') {
           return;
         }
@@ -3473,6 +3473,7 @@ $.dore = function (element, options) {
     if ($().datepicker) {
       $("input.datepicker").datepicker({
         autoclose: true,
+        language: "pt-BR",
         rtl: isRtl,
         templates: {
           leftArrow: '<i class="simple-icon-arrow-left"></i>',
@@ -3482,6 +3483,7 @@ $.dore = function (element, options) {
 
       $(".input-daterange").datepicker({
         autoclose: true,
+        language: "pt-BR",
         rtl: isRtl,
         templates: {
           leftArrow: '<i class="simple-icon-arrow-left"></i>',
@@ -3491,6 +3493,7 @@ $.dore = function (element, options) {
 
       $(".input-group.date").datepicker({
         autoclose: true,
+        language: "pt-BR",
         rtl: isRtl,
         templates: {
           leftArrow: '<i class="simple-icon-arrow-left"></i>',
@@ -3500,6 +3503,7 @@ $.dore = function (element, options) {
 
       $(".date-inline").datepicker({
         autoclose: true,
+        language: "pt-BR",
         rtl: isRtl,
         templates: {
           leftArrow: '<i class="simple-icon-arrow-left"></i>',
