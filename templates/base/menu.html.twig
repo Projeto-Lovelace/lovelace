@@ -26,6 +26,22 @@
                             <i class="simple-icon-event"></i> Portal
                         </a>
                     </li>
+                    {% if ('ROLE_VOLUNTEER' in app.user.roles) %}
+                        <li>
+                            <a href="{{ path('teacher_edit_classes') }}">
+                                <i class="simple-icon-pencil icon-menu"></i>
+                                <span>Editar aulas</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% if ('ROLE_ADMIN') in app.user.roles %}
+                        <li>
+                            <a href="{{ path('users') }}">
+                                <i class="simple-icon-people icon-menu"></i>
+                                <span>Editar usuários</span>
+                            </a>
+                        </li>
+                    {% endif %}
                 {% endif %}
             </ul>
         </div>
@@ -56,6 +72,14 @@
                             <a href="{{ path('teacher_edit_classes') }}">
                                 <i class="simple-icon-pencil icon-menu"></i>
                                 <span>Editar aulas</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% if ('ROLE_ADMIN') in app.user.roles %}
+                        <li>
+                            <a href="{{ path('users') }}">
+                                <i class="simple-icon-people icon-menu"></i>
+                                <span>Editar usuários</span>
                             </a>
                         </li>
                     {% endif %}

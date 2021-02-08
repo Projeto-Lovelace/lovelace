@@ -55,7 +55,7 @@ class User extends AbstractController
     }
 
     /**
-     * @Route("", name="listUser")
+     * @Route("", name="users")
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function listUsers()
