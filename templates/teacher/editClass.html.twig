@@ -51,10 +51,10 @@
                                     <div class="input-group-prepend">
                                         <label class="input-group-text" for="inputGroupSelect01">Horário</label>
                                     </div>
-                                    <select name="hours" class="custom-select" id="selectHours">
+                                    <select required name="hours" class="custom-select" id="selectHours">
                                         <option selected>Opções ...</option>
                                         <option value="20">20:00 - 21:00</option>
-                                        <option value="21">21:15 - 22:00</option>
+                                        <option value="21">21:15 - 22:15</option>
                                     </select>
                                 </div>
                                 <div class="input-group-prepend">
@@ -127,10 +127,16 @@
                             }
                         })
                     }
-                    date.setMonth(date.getMonth() + 1)
-                    dateInput = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate() + 'T' + date.getHours() + ':' + date.getMinutes() + ':' + '00' + '-03' + 'Z'
-                    console.log(dateInput)
-                    $("#dateInput").val(dateInput)
+                    selectHours.addEventListener('change', function (event){
+                        var minutes = '00';
+                        if(this.value.toString() === '21'){
+                            minutes = '15'
+                        }
+                        date.setMonth(date.getMonth() + 1)
+                        dateInput = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate() + 'T' + this.value + ':' + minutes + ':' + '00' + '-03' + 'Z'
+                        console.log(dateInput)
+                        $("#dateInput").val(dateInput)
+                    })
                 },
                 eventClick: function (info) {
                     $('#form-classes').removeAttr('style')
@@ -166,6 +172,9 @@
 
                     let start = info.event.start;
                     var dateInfo = getDateInfo(start);
+                    if(start.getHours() === 21) {
+                        start.setMinutes(15)
+                    }
                     weekdayTag.innerText = weekdays[start.getDay()]
                     information.innerText = start.toLocaleDateString('pt-br') + ' - ' + (start.getHours() < 10 ? '0' : '') + start.getHours() + ':' + (start.getMinutes() < 10 ? '0' : '') + start.getMinutes();
 
@@ -180,8 +189,10 @@
                         }
                     })
 
-                    var selectHours = Array.from(document.getElementById('selectHours').children)
-                    selectHours.forEach(function (option) {
+                    var selectHours = document.getElementById('selectHours')
+                    var selects = Array.from(selectHours.children)
+
+                    selects.forEach(function (option) {
                         if (option.value === start.getHours().toString()) {
                             option.setAttribute('selected', true)
                         } else {
@@ -189,13 +200,28 @@
                         }
                     })
 
+                    selectHours.addEventListener('change', function (event){
+                        var minutes = '00';
+                        if(this.value.toString() === '21'){
+                            minutes = '15'
+                        }
+                        start.setMonth(start.getMonth() + 1)
+                        dateInput = start.getFullYear() + '-' + start.getMonth() + '-' + start.getDate() + 'T' + this.value + ':' + minutes + ':' + '00' + '-03' + 'Z'
+                        $("#dateInput").val(dateInput)
+                        console.log(dateInput)
+                    })
+
+
                     if (dateInfo && dateInfo.videoUrl) {
                         $("#youtube").val(dateInfo.videoUrl)
                     } else {
                         $("#youtube").val('')
                     }
+                    start.setMonth(start.getMonth()-1)
                     date = start.getFullYear() + '-' + start.getMonth() + '-' + start.getDay() + 'T' + start.getHours() + ':' + start.getMinutes() + ':' + '00' + '-03' + 'Z'
                     $("#dateInput").val(date)
+                    console.log(date)
+
                 },
                 buttonText: {
                     today: "Hoje",
