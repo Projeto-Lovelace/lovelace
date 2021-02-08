@@ -45,4 +45,5 @@ security:
     access_control:
          - { path: ^/portal, roles: ROLE_USER }
          - { path: ^/admin, roles: ROLE_ADMIN }
+         - { path: ^/teacher, roles: [ROLE_ADMIN, ROLE_VOLUNTEER] }
         # - { path: ^/profile, roles: ROLE_USER }

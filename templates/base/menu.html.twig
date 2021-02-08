@@ -1,5 +1,5 @@
 <div class="menu">
-    <div class="main-menu">
+    <div class="main-menu d-block d-md-none">
         <div class="scroll">
             <ul class="list-unstyled">
                 {% if not (app.user) %}
@@ -21,6 +21,36 @@
                             <i class="simple-icon-location-pin"></i> Cadastro de endereço
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ path('dashboardDefault') }}">
+                            <i class="simple-icon-event"></i> Portal
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+        <div class="position-absolute w-100 mb-3 mx-4" style="bottom: 0">
+            <ul class="list-unstyled d-sm-none">
+                <li>
+                    <div class="custom-switch custom-switch-primary-inverse custom-switch-small">
+                        <input class="custom-switch-input" id="switchDark" type="checkbox" checked>
+                        <label class="custom-switch-btn" for="switchDark"></label>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="main-menu d-none d-md-block">
+        <div class="scroll">
+            <ul class="list-unstyled">
+                {% if (app.user) %}
+                    <li>
+                        <a href="{{ path('dashboardDefault') }}">
+                            <i class="simple-icon-event icon-menu"></i>
+                            <span>Portal</span>
+                        </a>
+                    </li>
                 {% endif %}
             </ul>
         </div>
@@ -36,3 +66,9 @@
         </div>
     </div>
 </div>
+
+<style>
+    .icon-menu {
+        font-size: 20px !important;
+    }
+</style>

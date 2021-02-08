@@ -4,7 +4,8 @@
 
 {% block vendor_css %}
     <link href='/node_modules/fullcalendar/main.css' rel='stylesheet'/>
-    <link rel="stylesheet" href="/css/vendor/fullcalendar.css" />
+    <link rel="stylesheet" href="/css/vendor/fullcalendar.css"/>
+    <link rel="stylesheet" href="/css/fullcalendar.css"/>
 {% endblock %}
 
 {% block content %}
@@ -23,8 +24,22 @@
                 <div class="card h-100">
                     <div class="card-body">
                         <h5 class="card-title">Informações</h5>
+                        <p class="h5" id="title"></p>
+                        <p class="h6" id="weekday"></p>
                         <p id="information"></p>
-                        <iframe class="w-100 h-100" src="http://www.notion.so/Guia-de-Percurso-3f1c6731f43749e595675efc0915d435" title="notion"></iframe>
+                        <div id="video-div">
+                            <iframe id="video" src="" frameborder="0"
+                                    showinfo="0"
+                                    modestbranding="1"
+                                    autohide="1"
+                                    allownetworking="internal"
+                                    allow=" autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowfullscreen>
+                            </iframe>
+                            <div class="text-center">
+                                <span id="text-choose" class="h2">Escolha uma aula</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -38,6 +53,8 @@
         document.addEventListener('DOMContentLoaded', function () {
             var calendarEl = document.getElementById('calendar');
             var information = document.getElementById("information");
+            var weekdayTag = document.getElementById("weekday");
+            var title = document.getElementById("title");
             date = new Date()
             information.innerText = date.toLocaleDateString('pt-br');
 
@@ -46,12 +63,50 @@
                 locale: 'pt-br',
                 themeSystem: "bootstrap",
                 eventClick: function (info) {
-                    alert(info.title)
-                },
-                dateClick: function(info) {
-                    date = new Date(info.dateStr)
-                    date.setDate(date.getDate() + 1)
-                    information.innerText = date.toLocaleDateString('pt-br');
+                    function getDateInfo(date) {
+                        var event = null
+                        date.setMonth(date.getMonth() + 1)
+                        date = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDay() + 'T' + date.getHours() + ':' + date.getMinutes() + ':' + '00' + '-03' + 'Z'
+                        $.ajax({
+                            'async': false,
+                            'type': "GET",
+                            'url': "/teacher/class",
+                            'data': {datetime: date},
+                            success: function (data) {
+                                event = data;
+                            },
+                            error: function (data) {
+                                event = null;
+                            }
+                        });
+                        return event;
+                    }
+
+                    var weekdays = [
+                        'Domingo',
+                        'Segunda-feira',
+                        'Terça-feira',
+                        'Quarta-feira',
+                        'Quinta-feira',
+                        'Sexta-feira',
+                        'Sábado'
+                    ]
+
+                    let start = info.event.start;
+                    var dateInfo = getDateInfo(start);
+                    title.innerText = info.event.title;
+                    weekdayTag.innerText = weekdays[start.getDay()]
+                    information.innerText = start.toLocaleDateString('pt-br') + ' - ' + start.getHours() + ':' + start.getMinutes();
+                    if (dateInfo && dateInfo.videoUrl) {
+                        $('#video').attr('src', dateInfo.videoUrl)
+                        $('#video-div').addClass('h-100')
+                        $('#text-choose').attr('style', 'display: none')
+                    } else {
+                        $('#text-choose').text('Sem video');
+                        $('#video').removeAttr('src')
+                        $('#video-div').removeClass('h-100')
+                        $('#text-choose').removeAttr('style')
+                    }
                 },
                 buttonText: {
                     today: "Hoje",
@@ -60,15 +115,34 @@
                     day: "Dia",
                     list: "Lista"
                 },
+                events: function (fetchInfo, successCallback, failureCallback) {
+                    var events = function () {
+                        var event = null
+                        $.ajax({
+                            'async': false,
+                            'type': "GET",
+                            'url': "/teacher/classes",
+                            success: function (data) {
+                                event = data;
+                            },
+                            error: function (data) {
+                                event = [];
+                            }
+                        });
+                        return event;
+                    }()
+                    successCallback(events)
+                },
                 bootstrapFontAwesome: {
-                  prev: " simple-icon-arrow-left",
-                  next: " simple-icon-arrow-right",
-                  prevYear: " simple-icon-control-start",
-                  nextYear: " simple-icon-control-end"
+                    prev: " simple-icon-arrow-left",
+                    next: " simple-icon-arrow-right",
+                    prevYear: " simple-icon-control-start",
+                    nextYear: " simple-icon-control-end"
                 },
                 height: "auto",
             });
             calendar.render();
+            console.log(calendar.getEvents())
         });
     </script>
 {% endblock %}

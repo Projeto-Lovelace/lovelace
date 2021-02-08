@@ -95,3 +95,14 @@ body.show-spinner::after {
         justify-content: center;
     }
 }
+
+#video {
+    width: 100%;
+    height: 75%;
+}
+
+@media (max-width: 992px) {
+    #video {
+        height: 50%
+    }
+}
