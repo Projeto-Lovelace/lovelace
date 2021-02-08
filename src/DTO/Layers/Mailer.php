@@ -10,14 +10,20 @@ class Mailer implements LayerInterface
      * @var Email $email
      */
     private $email;
+    /**
+     * @var string
+     */
+    private $title;
 
     /**
      * Mailer constructor.
+     * @param string $title
      * @param Email|null $email
      */
-    public function __construct(Email $email = null)
+    public function __construct(string $title, Email $email = null)
     {
         $this->email = $email;
+        $this->title = $title;
     }
 
     /**
@@ -26,7 +32,8 @@ class Mailer implements LayerInterface
      */
     public function exec(Main $main)
     {
-        $results = $main->getResults();
+        $results = $main->getResults() ?: [];
+        $user = $main->getUser();
 
         $emailFind = array_filter($results, function ($value){
            if(key($value) == "email"){
@@ -36,7 +43,7 @@ class Mailer implements LayerInterface
         $email = empty($emailFind) ? null : array_shift($emailFind)["email"];
 
         if(empty($this->email)){
-            $this->email = $email;
+            $this->email = new Email();
         }
 
         if(empty($email)) {
@@ -47,6 +54,8 @@ class Mailer implements LayerInterface
             <h4 style='color: darkgreen'>Equipe Lovelace</h4>";
 
             $this->email->setMessage($message);
+            $this->email->setEmailAddress($user->getEmail());
+            $this->email->setEmailAddress($user->getEmail());
         } else {
             $message = $email->getMessage();
         }
@@ -59,7 +68,7 @@ class Mailer implements LayerInterface
                                 \"email\": \"{$this->email->getEmailAddress()}\"
                             }
                         ],
-                        \"subject\": \"{$this->email->getTitle()}\"
+                        \"subject\": \"{$this->title}\"
                     }
                 ],
                 \"from\": {

@@ -30,6 +30,7 @@ class ApproveUserRegister implements LayerInterface
 
         $user = $userRepository->find($this->data['user']);
         $user->setRegisterApproved(true);
+        $main->setUser($user);
 
         $documentManager->persist($user);
         $documentManager->flush();

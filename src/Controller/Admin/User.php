@@ -166,6 +166,8 @@ class User extends AbstractController
         try {
             $main = $this->mainBuilder->build($this->manager);
             $main->addLayer(new ApproveUserRegister(json_decode($request->getContent(), true)));
+            $main->addLayer(new LoginLinkGenerator($this->loginLinkHandler));
+            $main->addLayer(new Mailer('Confirmação de email'));
             $main->run();
             return new JsonResponse("ok", Response::HTTP_OK);
         } catch (\Exception $exception) {

@@ -14,6 +14,7 @@ use App\DTO\Layers\Register as RegisterLayer;
 use App\Services\Map\DataMap;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpClient\Exception\JsonException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,6 +23,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\LoginLink\LoginLinkHandlerInterface;
 use Symfony\Component\Serializer\Encoder\JsonEncode;
 use function PHPUnit\Framework\stringContains;
+use function PHPUnit\Framework\throwException;
 
 /**
  * Class Register
@@ -68,23 +70,19 @@ class Register extends AbstractController
      */
     public function registerStudent(Request $request)
     {
-        try {
-            if ($request->query->has("type")) {
-                $type = $request->query->get("type");
-                if (key_exists($type, DataMap::REGISTER_TYPES)) {
-                    return $this->render('register/register.html.twig',
-                        [
-                            "type" => $type,
-                            "typeTranslated" => DataMap::REGISTER_TYPES[$type]
-                        ]
-                    );
-                }
-                throw new \Exception("Type invalid");
+        if ($request->query->has("type")) {
+            $type = $request->query->get("type");
+            if (key_exists($type, DataMap::REGISTER_TYPES)) {
+                return $this->render('register/register.html.twig',
+                    [
+                        "type" => $type,
+                        "typeTranslated" => DataMap::REGISTER_TYPES[$type]
+                    ]
+                );
             }
-            throw new \Exception("Missing type in parameters");
-        } catch (\Exception $exception) {
-            return new JsonResponse($exception->getMessage(), Response::HTTP_FORBIDDEN);
+            throw new \Exception("Type invalid", Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+        throw new \Exception("Missing type in parameters", Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     /**
@@ -141,7 +139,6 @@ class Register extends AbstractController
         $hash = $request->query->get('hash');
 
         $user = $this->documentManager->getRepository(User::class)->findOneBy(['email' => $username]);
-
 
         // and render a template with the button
         return $this->render('security/processLogin.html.twig', [
