@@ -20,7 +20,7 @@
                                     <a href="{{ path('index') }}">Inicio</a>
                                 </li>
                                 <li class="breadcrumb-item">
-                                    <a href="{{ path('listUser') }}">Lista</a>
+                                    <a href="{{ path('users') }}">Lista</a>
                                 </li>
                             </ol>
                         </nav>
@@ -74,12 +74,16 @@
                         <div class="pt-2 pb-2">
                             <p class="list-item-heading">Endereço</p>
                         </div>
-                        <p>Logradouro : {{ address.street }} {{ address.number }} {{ address.complement }}</p>
-                        <p>Numero : {{ address.number }}</p>
-                        <p>Complemento : {{ address.complement ?: 'sem complemento' }}</p>
-                        <p>Cidade : {{ address.city }}</p>
-                        <p>Estado : {{ address.state }}</p>
-                        <p>CEP : {{ address.cep }}</p>
+                        {% if address %}
+                            <p>Logradouro : {{ address.street }} {{ address.number }} {{ address.complement }}</p>
+                            <p>Numero : {{ address.number }}</p>
+                            <p>Complemento : {{ address.complement ?: 'sem complemento' }}</p>
+                            <p>Cidade : {{ address.city }}</p>
+                            <p>Estado : {{ address.state }}</p>
+                            <p>CEP : {{ address.cep }}</p>
+                        {% else %}
+                            <p>Sem endereço</p>
+                        {% endif %}
                     </div>
                 </div>
             </div>
