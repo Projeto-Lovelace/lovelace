@@ -106,4 +106,25 @@ class Classes extends AbstractController
         $this->manager->flush();
         return $this->redirectToRoute('teacher_edit_classes');
     }
+
+    /**
+     * @Route("/class/delete")
+     * @param Request $request
+     */
+    public function deleteClass(Request $request)
+    {
+        try {
+            $data = json_decode($request->getContent(), true);
+            $dateFormatted = (new DateTime($data["datetime"]))->format("Y-m-d H:i");
+            $repository = $this->manager->getRepository(ClassesDocument::class);
+            $class = $repository->findOneBy(["startDate" => $dateFormatted]);
+
+            $this->manager->remove($class);
+            $this->manager->flush();
+
+            return new JsonResponse("ok", Response::HTTP_OK);
+        } catch (\Exception $exception) {
+            return new JsonResponse($exception->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 }
