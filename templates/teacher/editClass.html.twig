@@ -98,6 +98,24 @@
                 minute: '2-digit',
                 omitZeroMinute: false,
                 meridiem: false,
+                events: function (fetchInfo, successCallback, failureCallback) {
+                    var events = function () {
+                        var event = null
+                        $.ajax({
+                            'async': false,
+                            'type': "GET",
+                            'url': "/teacher/classes",
+                            success: function (data) {
+                                event = data;
+                            },
+                            error: function (data) {
+                                event = [];
+                            }
+                        });
+                        return event;
+                    }()
+                    successCallback(events)
+                },
                 dateClick: function (info) {
                     $("#youtube").val('')
                     $('#form-classes').removeAttr('style')
@@ -152,7 +170,7 @@
                     function getDateInfo(date) {
                         var event = null
                         date.setMonth(date.getMonth() + 1)
-                        date = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDay() + 'T' + date.getHours() + ':' + date.getMinutes() + ':' + '00' + '-03' + 'Z'
+                        date = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate() + 'T' + date.getHours() + ':' + date.getMinutes() + ':' + '00' + '-03' + 'Z'
                         $.ajax({
                             'async': false,
                             'type': "GET",
@@ -225,7 +243,7 @@
                     } else {
                         $("#youtube").val('')
                     }
-                    date = start.getFullYear() + '-' + start.getMonth() + '-' + start.getDay() + 'T' + start.getHours() + ':' + start.getMinutes() + ':' + '00' + '-03' + 'Z'
+                    date = start.getFullYear() + '-' + start.getMonth() + '-' + start.getDate() + 'T' + start.getHours() + ':' + start.getMinutes() + ':' + '00' + '-03' + 'Z'
                     $("#dateInput").val(date)
                     if(dateInfo) {
                         $("#delete-div").removeAttr('style');
@@ -255,24 +273,6 @@
                     week: "Semana",
                     day: "Dia",
                     list: "Lista"
-                },
-                events: function (fetchInfo, successCallback, failureCallback) {
-                    var events = function () {
-                        var event = null
-                        $.ajax({
-                            'async': false,
-                            'type': "GET",
-                            'url': "/teacher/classes",
-                            success: function (data) {
-                                event = data;
-                            },
-                            error: function (data) {
-                                event = [];
-                            }
-                        });
-                        return event;
-                    }()
-                    successCallback(events)
                 },
                 bootstrapFontAwesome: {
                     prev: " simple-icon-arrow-left",

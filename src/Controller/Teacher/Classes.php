@@ -60,7 +60,10 @@ class Classes extends AbstractController
             $dateFormatted = $date->format('Y-m-d H:i');
             $repository = $this->manager->getRepository(ClassesDocument::class);
             $class = $repository->findOneBy(["startDate" => $dateFormatted]);
-            return new JsonResponse(['title' => $class->getTitle(), 'videoUrl' => $class->getVideoUrl()]);
+            if($class) {
+                return new JsonResponse(['title' => $class->getTitle(), 'videoUrl' => $class->getVideoUrl()]);
+            }
+            return new JsonResponse();
         } catch (\Exception $exception) {
             return new JsonResponse($exception->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
