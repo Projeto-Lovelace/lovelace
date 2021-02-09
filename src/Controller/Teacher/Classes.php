@@ -5,6 +5,7 @@ namespace App\Controller\Teacher;
 use App\Document\Classes as ClassesDocument;
 use DateTime;
 use Doctrine\ODM\MongoDB\DocumentManager;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,14 +31,6 @@ class Classes extends AbstractController
     public function __construct(DocumentManager $manager)
     {
         $this->manager = $manager;
-    }
-
-    /**
-     * @Route("/edit", name="teacher_edit_classes")
-     */
-    public function editClasses()
-    {
-        return $this->render('teacher/editClass.html.twig');
     }
 
     /**
@@ -71,7 +64,17 @@ class Classes extends AbstractController
     }
 
     /**
+     * @Route("/edit", name="teacher_edit_classes")
+     * @Security("is_granted('ROLE_VOLUNTEER')")
+     */
+    public function editClasses()
+    {
+        return $this->render('teacher/editClass.html.twig');
+    }
+
+    /**
      * @Route("/save/class", name="teacher_save_class")
+     * @Security("is_granted('ROLE_VOLUNTEER')")
      * @param Request $request
      */
     public function teacherSaveClass(Request $request)
@@ -123,6 +126,7 @@ class Classes extends AbstractController
 
     /**
      * @Route("/class/delete")
+     * @Security("is_granted('ROLE_VOLUNTEER')")
      * @param Request $request
      */
     public function deleteClass(Request $request)
