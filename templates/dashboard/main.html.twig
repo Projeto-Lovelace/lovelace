@@ -67,7 +67,7 @@
                     function getDateInfo(date) {
                         var event = null
                         date.setMonth(date.getMonth() + 1)
-                        date = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDay() + 'T' + date.getHours() + ':' + date.getMinutes() + ':' + '00' + '-03' + 'Z'
+                        date = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate() + 'T' + date.getHours() + ':' + date.getMinutes() + ':' + '00' + '-03' + 'Z'
                         $.ajax({
                             'async': false,
                             'type': "GET",

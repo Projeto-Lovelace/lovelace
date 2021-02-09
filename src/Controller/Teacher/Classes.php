@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller\Teacher;
 
 use App\Document\Classes as ClassesDocument;
@@ -60,7 +61,7 @@ class Classes extends AbstractController
             $dateFormatted = $date->format('Y-m-d H:i');
             $repository = $this->manager->getRepository(ClassesDocument::class);
             $class = $repository->findOneBy(["startDate" => $dateFormatted]);
-            if($class) {
+            if ($class) {
                 return new JsonResponse(['title' => $class->getTitle(), 'videoUrl' => $class->getVideoUrl()]);
             }
             return new JsonResponse();
@@ -87,7 +88,7 @@ class Classes extends AbstractController
         $data = $request->request->all();
 
         $class = new ClassesDocument();
-        if(isset($data["date"])) {
+        if (isset($data["date"])) {
             $dateFormatted = (new DateTime($data["date"]))->format("Y-m-d H:i");
             $repository = $this->manager->getRepository(ClassesDocument::class);
             $class = $repository->findOneBy(["startDate" => $dateFormatted]);
@@ -99,11 +100,21 @@ class Classes extends AbstractController
             $class->setStartDate($dateFormatted);
             $class->setEndDate((new DateTime($data["date"]))->add(new \DateInterval("PT1H"))->format("Y-m-d H:i"));
         }
-        if(isset($data['className'])) {
+        if (isset($data['className'])) {
             $class->setTitle($titlesMap[$data['className']]);
         }
-        if(isset($data['youtube'])) {
-            $class->setVideoUrl($data['youtube']);
+        if (isset($data['youtube'])) {
+            $parts = parse_url($data['youtube']);
+            $code = '';
+            if (isset($parts['query'])) {
+                parse_str($parts['query'], $query);
+                $code = $query['v'];
+            }
+            else if(isset($parts['path'])){
+                $code = substr($parts['path'], 1);
+            }
+            $urlBase = "https://www.youtube-nocookie.com/embed/{$code}";
+            $class->setVideoUrl($urlBase);
         }
         $this->manager->persist($class);
         $this->manager->flush();
