@@ -7,7 +7,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * Class User
  * @MongoDB\Document
  */
-class User implements UserInterface
+class User implements UserInterface, \JsonSerializable
 {
     /**
      * @MongoDB\Id(type="string")
@@ -206,5 +206,10 @@ class User implements UserInterface
     {
         $this->registerApproved = $registerApproved;
         return $this;
+    }
+
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

@@ -34,36 +34,6 @@ class Classes extends AbstractController
     }
 
     /**
-     * @Route("/classes", name="get_classes")
-     */
-    public function getClasses()
-    {
-        $repository = $this->manager->getRepository(ClassesDocument::class);
-        $dates = $repository->findAll();
-        return new JsonResponse($dates);
-    }
-
-    /**
-     * @Route("/class", name="get_class")
-     * @param Request $request
-     */
-    public function getClass(Request $request)
-    {
-        try {
-            $date = new DateTime($request->query->get("datetime"));
-            $dateFormatted = $date->format('Y-m-d H:i');
-            $repository = $this->manager->getRepository(ClassesDocument::class);
-            $class = $repository->findOneBy(["startDate" => $dateFormatted]);
-            if ($class) {
-                return new JsonResponse(['title' => $class->getTitle(), 'videoUrl' => $class->getVideoUrl()]);
-            }
-            return new JsonResponse();
-        } catch (\Exception $exception) {
-            return new JsonResponse($exception->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    /**
      * @Route("/edit", name="teacher_edit_classes")
      * @Security("is_granted('ROLE_VOLUNTEER')")
      */

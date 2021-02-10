@@ -104,7 +104,7 @@
                         $.ajax({
                             'async': false,
                             'type': "GET",
-                            'url': "/teacher/classes",
+                            'url': "/student/classes",
                             success: function (data) {
                                 event = data;
                             },
@@ -174,7 +174,7 @@
                         $.ajax({
                             'async': false,
                             'type': "GET",
-                            'url': "/teacher/class",
+                            'url': "/student/class",
                             'data': {datetime: date},
                             success: function (data) {
                                 event = data;
