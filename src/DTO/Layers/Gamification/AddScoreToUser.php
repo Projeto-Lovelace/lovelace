@@ -1,8 +1,5 @@
 <?php
-
-
 namespace App\DTO\Layers\Gamification;
-
 
 use App\Document\User;
 use App\Document\UserHasScore;
@@ -28,22 +25,24 @@ class AddScoreToUser implements LayerInterface
     public function exec(Main $main)
     {
         $userRepository = $main->getDocumentManager()->getRepository(User::class);
-
         $user = $userRepository->find($this->data["student"]);
-        if($user) {
-            $datetime = (new \DateTime($this->data['datetime']))->getTimestamp();
 
-            $description = isset($this->data['description']) ? $this->data['description'] : '';
-            $score = new UserHasScore();
-            $score->setUser($user->getId())
-                ->setScore($this->data['score'])
-                ->setDate($datetime)
-                ->setDescription($description);
-
-            $main->getDocumentManager()->persist($score);
-            $main->getDocumentManager()->flush();
-
-            $main->addResults(['score' => json_decode(json_encode($score), true)]);
+        if (!$user) {
+            return;
         }
+
+        $datetime = (new \DateTime($this->data['datetime']))->getTimestamp();
+        $description = isset($this->data['description']) ? $this->data['description'] : '';
+
+        $score = new UserHasScore();
+        $score->setUser($user->getId())
+            ->setScore($this->data['score'])
+            ->setDate($datetime)
+            ->setDescription($description);
+
+        $main->getDocumentManager()->persist($score);
+        $main->getDocumentManager()->flush();
+
+        $main->addResults(['score' => json_decode(json_encode($score), true)]);
     }
 }
