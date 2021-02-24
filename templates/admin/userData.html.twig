@@ -85,12 +85,49 @@
                             <p>Sem endereço</p>
                         {% endif %}
                     </div>
+                    <div class="separator mb-3 mt-3"></div>
+                    <h3></h3>
+                    <div id="game" class="">
+                        <div class="pt-2 pb-2">
+                            <p class="list-item-heading">Game</p>
+                        </div>
+
+                        <div class="d-flex flex-column mb-2">
+                            <div class="d-flex align-items-center justify-content-between w-100 text-center">
+                                <div class="d-flex flex-column">
+                                    <img src="/img/gamification/diamond.png" style="width: 25px"/>
+                                    <span id="selectedScore">0</span>
+
+                                </div>
+
+                                <div class="d-flex flex-column">
+                                    <img src="/img/gamification/trofey.png" style="width: 25px"/>
+                                    <span id="selectedTrophy">0</span>
+                                </div>
+                            </div>
+                            <progress style="width: 100%" class="" id="progressSelectedScore" value="" max="1000"></progress>
+                        </div>
+
+                        <label for="score">Adicionar pontuaçao</label>
+                        <div class="d-flex flex-column justify-content-between">
+                            <input id="scoreInput" placeholder="pontos" class="form-control w-100 mb-2" type="number">
+                            <textarea id="descriptionScoreInput" placeholder="descriçao" class="form-control w-100" type="text"></textarea>
+                            <button class="btn btn-primary btn-lg btn-shadow w-40 add-points-btn mb-1 mt-2" onclick="addScore('{{ userSelected.id }}')" data-from="top"
+                                    data-align="right" data-message="Pontos adicionados">adicionar</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <script src="/js/gamification/adminScore.js"></script>
+    <script src="/js/gamification/score.js"></script>
     <script>
+        let gameResultSelected = getTotalScore('{{ userSelected.id }}')
+        document.getElementById('selectedScore').innerHTML = gameResultSelected.score;
+        document.getElementById('selectedTrophy').innerHTML = gameResultSelected.trophy;
+        document.getElementById('progressSelectedScore').value = getProgressScore(gameResultSelected)
         var role = Array.from(document.getElementsByClassName("role"))
         var formRoles = document.getElementById("form-roles")
         role.forEach(function (input) {
@@ -119,4 +156,8 @@
     </script>
 
 
+{% endblock %}
+
+{% block js %}
+    <script src="/js/vendor/bootstrap-notify.min.js"></script>
 {% endblock %}

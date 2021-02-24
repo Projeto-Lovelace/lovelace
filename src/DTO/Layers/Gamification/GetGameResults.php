@@ -5,7 +5,7 @@ use App\Document\UserHasScore;
 use App\DTO\Layers\LayerInterface;
 use App\DTO\Main;
 
-class GetTotalScore implements LayerInterface
+class GetGameResults implements LayerInterface
 {
     /**
      * @var string
@@ -30,6 +30,13 @@ class GetTotalScore implements LayerInterface
             return $score->getScore();
         }, $score);
 
-        return array_sum($scores);
+        $score = array_sum($scores);
+        $trophy = (int)($score/1000);
+        $result = [
+            'score' => $score,
+            'trophy' => $trophy
+        ];
+
+        return $result;
     }
 }

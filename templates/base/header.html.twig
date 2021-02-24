@@ -22,21 +22,29 @@
         </a>
 
         {% if app.user %}
-        <a href="#" class="menu-button-mobile d-xs-none d-none d-sm-block">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 17">
-                <rect x="0.5" y="0.5" width="25" height="1"/>
-                <rect x="0.5" y="7.5" width="25" height="1"/>
-                <rect x="0.5" y="15.5" width="25" height="1"/>
-            </svg>
-        </a>
-        {% endif %}
-        {# <div class="search" data-search-path="Pages.Search.html?q="> #}
-        {# <input placeholder="Search..."> #}
-        {# <span class="search-icon"> #}
-        {# <i class="simple-icon-magnifier"></i> #}
-        {# </span> #}
-        {# </div> #}
+            <a href="#" class="menu-button-mobile d-xs-none d-none d-sm-block">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 17">
+                    <rect x="0.5" y="0.5" width="25" height="1"/>
+                    <rect x="0.5" y="7.5" width="25" height="1"/>
+                    <rect x="0.5" y="15.5" width="25" height="1"/>
+                </svg>
+            </a>
+            <div class="d-flex flex-column ml-2 ml-sm-5 mb-2">
+                <div class="d-flex align-items-center justify-content-between w-100 text-center">
+                    <div class="d-flex flex-column">
+                        <img src="/img/gamification/diamond.png" style="width: 25px"/>
+                        <span id="score">0</span>
 
+                    </div>
+
+                    <div class="d-flex flex-column">
+                        <img src="/img/gamification/trofey.png" style="width: 25px"/>
+                        <span id="trophy">0</span>
+                    </div>
+                </div>
+                <progress style="width: 100px" class="" id="progressScore" value="" max="1000"></progress>
+            </div>
+        {% endif %}
     </div>
 
 
@@ -115,3 +123,12 @@
         {# </div> #}
     </div>
 </nav>
+{% if app.user %}
+<script src="/js/gamification/score.js"></script>
+<script>
+    let gameResult = getTotalScore("{{ app.user.id }}");
+    document.getElementById('score').innerHTML = gameResult.score;
+    document.getElementById('trophy').innerHTML = gameResult.trophy;
+    document.getElementById('progressScore').value = getProgressScore(gameResult)
+</script>
+{% endif %}

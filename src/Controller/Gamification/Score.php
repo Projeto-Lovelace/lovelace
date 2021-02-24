@@ -3,7 +3,7 @@
 namespace App\Controller\Gamification;
 
 use App\DTO\Layers\Gamification\AddScoreToUser;
-use App\DTO\Layers\Gamification\GetTotalScore;
+use App\DTO\Layers\Gamification\GetGameResults;
 use App\DTO\MainBuilder;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
  * Class Score
@@ -44,6 +45,7 @@ class Score extends AbstractController
      * @param Request $request
      * @return JsonResponse
      * @throws \Exception
+     * @Security("is_granted('ROLE_VOLUNTEER')")
      */
     public function addScore(Request $request): JsonResponse
     {
@@ -67,13 +69,14 @@ class Score extends AbstractController
      * @param string $userId
      * @return JsonResponse
      * @throws \Exception
+     * @Security("is_granted('ROLE_USER')")
      */
     public function getTotalScore(string $userId): JsonResponse
     {
         try {
             $main = $this->mainBuilder->build($this->manager);
 
-            $main->addLayer(new GetTotalScore($userId));
+            $main->addLayer(new GetGameResults($userId));
 
             $main->run();
 
