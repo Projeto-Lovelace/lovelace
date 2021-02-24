@@ -2,6 +2,8 @@
 
 namespace App\Controller\Gamification;
 
+use App\Document\User;
+use App\Document\UserHasScore;
 use App\DTO\Layers\Gamification\AddScoreToUser;
 use App\DTO\Layers\Gamification\GetGameResults;
 use App\DTO\MainBuilder;
@@ -84,5 +86,41 @@ class Score extends AbstractController
         } catch (\Exception $exception) {
             throw $exception;
         }
+    }
+
+    /**
+     * @Route("/ranking", name="ranking")
+     * @Security("is_granted('ROLE_USER')")
+     */
+    public function getRanking()
+    {
+        $users = $this->manager->createQueryBuilder(User::class)
+            ->field('roles')->all(['ROLE_STUDENT'])
+            ->getQuery()
+            ->toArray();
+
+        $scoreRepository = $this->manager->getRepository(UserHasScore::class);
+
+        $userHasScore = [];
+
+        foreach ($users as $user) {
+            $userScore = $scoreRepository->findBy(['user' => $user->getId()]);
+            if(!$userScore) {
+                continue;
+            }
+            $userHasScore[$user->getId()]['user'] = $user;
+
+            $scores = array_map(function ($score) {
+                return $score->getScore();
+            }, $userScore);
+
+            $userHasScore[$user->getId()]['score'] = array_sum($scores);
+            $userHasScore[$user->getId()]['trophy'] = (int) ($userHasScore[$user->getId()]['score']/1000);
+        }
+
+        usort($userHasScore, function($a, $b) {
+            return $b['score'] <=> $a['score'];
+        });
+        return $this->render('gamification/ranking.html.twig', ['usersScores' => $userHasScore]);
     }
 }

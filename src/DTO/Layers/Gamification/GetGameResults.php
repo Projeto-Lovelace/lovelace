@@ -33,6 +33,7 @@ class GetGameResults implements LayerInterface
         $score = array_sum($scores);
         $trophy = (int)($score/1000);
         $result = [
+            'user' => $this->userId,
             'score' => $score,
             'trophy' => $trophy
         ];

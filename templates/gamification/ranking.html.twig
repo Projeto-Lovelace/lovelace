@@ -1,0 +1,69 @@
+{% extends 'base/template.html.twig' %}
+
+{% block title %}Lovelace{% endblock %}
+
+{% block vendor_css %}
+    <link rel="stylesheet" href="/font/iconsmind-s/css/iconsminds.css"/>
+    <link rel="stylesheet" href="/font/simple-line-icons/css/simple-line-icons.css"/>
+    <link rel="stylesheet" href="/css/vendor/dataTables.bootstrap4.min.css"/>
+    <link rel="stylesheet" href="/css/vendor/datatables.responsive.bootstrap4.min.css"/>
+    <link rel="stylesheet" href="/css/vendor/perfect-scrollbar.css"/>
+    <link rel="stylesheet" href="/css/vendor/component-custom-switch.min.css"/>
+    <link rel="stylesheet" href="/css/main.css"/>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <h1>Ranking</h1>
+                <div class="separator mb-5"></div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <table class="data-table data-table-scrollable responsive nowrap text-center">
+                            <thead>
+                            <tr>
+                                <th>Posição</th>
+                                <th>Nome</th>
+                                <th>Diamantes</th>
+                                <th>Troféus</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% set position = 1 %}
+                            {% for userScore in usersScores %}
+                            <tr>
+                                <td>
+                                    <p {{ (position == 1) ? 'style="font-weight: bold; font-size: 20px; color: #a5fd01!important"' : '' }} class="list-item-heading">{{ position }}</p>
+                                </td>
+                                <td>
+                                    <p {{ (position == 1) ? 'style="font-weight: bold; font-size: 20px; color: #a5fd01!important"' : '' }} class="text-muted">{{ userScore['user'].name }}</p>
+                                </td>
+                                <td>
+                                    <img src="/img/gamification/diamond.png" {{ (position == 1) ? 'style="width: 45px; margin-bottom: 15px"' : 'style="width: 25px"' }}/>
+                                    <p {{ (position == 1) ? 'style="font-weight: bold; font-size: 20px; color: #a5fd01!important"' : '' }} class="text-muted">{{ userScore['score'] }}</p>
+                                </td>
+                                <td>
+                                    <img src="/img/gamification/trofey.png" {{ (position == 1) ? 'style="width: 45px; margin-bottom: 15px"' : 'style="width: 25px"' }}"/>
+                                    <p {{ (position == 1) ? 'style="font-weight: bold; font-size: 20px; color: #a5fd01!important"' : '' }} class="text-muted">{{ userScore['trophy'] }}</p>
+                                </td>
+                            </tr>
+                                {% set position = position + 1 %}
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="/js/vendor/datatables.min.js"></script>
+{% endblock %}

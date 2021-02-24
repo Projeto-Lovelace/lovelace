@@ -17,13 +17,14 @@
                         </a>
                     </li>
                     <li>
-                        <a style="text-align: center !important;" href={{ path('register_address') }}>
-                            <i class="simple-icon-location-pin"></i> Cadastro de endereço
+                        <a href="{{ path('dashboardDefault') }}">
+                            <i class="simple-icon-event"></i> Portal
                         </a>
                     </li>
                     <li>
-                        <a href="{{ path('dashboardDefault') }}">
-                            <i class="simple-icon-event"></i> Portal
+                        <a href="{{ path('ranking') }}">
+                            <i class="simple-icon-trophy icon-menu"></i>
+                            <span>Ranking</span>
                         </a>
                     </li>
                     {% if ('ROLE_VOLUNTEER' in app.user.roles) %}
@@ -38,7 +39,7 @@
                         <li>
                             <a href="{{ path('users') }}">
                                 <i class="simple-icon-people icon-menu"></i>
-                                <span>Editar usuários</span>
+                                <span>Usuários</span>
                             </a>
                         </li>
                     {% endif %}
@@ -67,6 +68,12 @@
                             <span>Portal</span>
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ path('ranking') }}">
+                            <i class="simple-icon-trophy icon-menu"></i>
+                            <span>Ranking</span>
+                        </a>
+                    </li>
                     {% if ('ROLE_VOLUNTEER' in app.user.roles) %}
                         <li>
                             <a href="{{ path('teacher_edit_classes') }}">
@@ -79,7 +86,7 @@
                         <li>
                             <a href="{{ path('users') }}">
                                 <i class="simple-icon-people icon-menu"></i>
-                                <span>Editar usuários</span>
+                                <span>Usuários</span>
                             </a>
                         </li>
                     {% endif %}
