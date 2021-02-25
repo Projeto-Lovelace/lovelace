@@ -35,6 +35,11 @@ class Classes implements \JsonSerializable
     private $videoUrl;
 
     /**
+     * @MongoDB\Field
+     */
+    private $videoCode;
+
+    /**
      * @return mixed
      */
     public function getId()
@@ -122,5 +127,23 @@ class Classes implements \JsonSerializable
             'end' => $this->getEndDate(),
             'allDay' => false
         ];
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getVideoCode()
+    {
+        return $this->videoCode;
+    }
+
+    /**
+     * @param mixed $videoCode
+     * @return Classes
+     */
+    public function setVideoCode($videoCode)
+    {
+        $this->videoCode = $videoCode;
+        return $this;
     }
 }

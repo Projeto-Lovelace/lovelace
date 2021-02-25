@@ -27,15 +27,15 @@
                         <p class="h5" id="title"></p>
                         <p class="h6" id="weekday"></p>
                         <p id="information"></p>
-                        <div id="video-div">
-                            <iframe id="video" src="" frameborder="0"
-                                    showinfo="0"
-                                    modestbranding="1"
-                                    autohide="1"
-                                    allownetworking="internal"
-                                    allow=" autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowfullscreen>
-                            </iframe>
+                        <div class="d-flex flex-column h-100" id="video-div">
+                            <div id="player" class="w-100"></div>
+                            <div id="timerBar" class="d-flex flex-row justify-content-between align-items-center pl-2 pr-2 pt-2" style="color: #b9ed1b">
+                                <span class="h3 d-none d-sm-block" id="time"></span>
+                                <span class="h3 d-none d-sm-block" id="percentageWatched"></span>
+
+                                <span class="h6 d-block d-sm-none" id="timeMobile"></span>
+                                <span class="h6 d-block d-sm-none" id="percentageWatchedMobile"></span>
+                            </div>
                             <div class="text-center">
                                 <span id="text-choose" class="h2">Escolha uma aula</span>
                             </div>
@@ -49,7 +49,11 @@
 {% block js %}
     <script src="/js/vendor/moment.min.js"></script>
     <script src="/node_modules/fullcalendar/main.js"></script>
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="/js/portal/video.js"></script>
     <script>
+        var userId = "{{ app.user.id }}";
+        var classId;
         document.addEventListener('DOMContentLoaded', function () {
             var calendarEl = document.getElementById('calendar');
             var information = document.getElementById("information");
@@ -97,12 +101,18 @@
                     var dateInfo = getDateInfo(start);
                     title.innerText = info.event.title;
                     weekdayTag.innerText = weekdays[start.getDay()]
-                    information.innerText = start.toLocaleDateString('pt-br') + ' - ' + (start.getHours()<10?'0':'') + start.getHours() + ':' + (start.getMinutes()<10?'0':'') + start.getMinutes();
-                    if (dateInfo && dateInfo.videoUrl) {
-                        $('#video').attr('src', dateInfo.videoUrl)
+                    information.innerText = start.toLocaleDateString('pt-br') + ' - ' + (start.getHours() < 10 ? '0' : '') + start.getHours() + ':' + (start.getMinutes() < 10 ? '0' : '') + start.getMinutes();
+
+                    if (dateInfo) {
+                        classId = dateInfo.id;
+                        destroyPlayer()
+                        updateIframe(dateInfo.videoCode)
+                        setInterval(ajaxCall, 5000)
+
                         $('#video-div').addClass('h-100')
                         $('#text-choose').attr('style', 'display: none')
                     } else {
+                        $('#timerBar').css('background-color', "")
                         $('#text-choose').text('Sem video');
                         $('#video').removeAttr('src')
                         $('#video-div').removeClass('h-100')

@@ -84,10 +84,12 @@ class Classes extends AbstractController
                 $code = $query['v'];
             }
             else if(isset($parts['path'])){
-                $code = substr($parts['path'], 1);
+                $path = explode('/', $parts['path']);
+                $code = end($path);
             }
             $urlBase = "https://www.youtube-nocookie.com/embed/{$code}";
             $class->setVideoUrl($urlBase);
+            $class->setVideoCode($code);
         }
         $this->manager->persist($class);
         $this->manager->flush();

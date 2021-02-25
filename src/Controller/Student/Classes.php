@@ -2,6 +2,7 @@
 
 namespace App\Controller\Student;
 
+use App\Document\StudentWatchedVideoClass;
 use DateTime;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Component\HttpFoundation\Request;
@@ -59,11 +60,37 @@ class Classes
             $repository = $this->manager->getRepository(ClassesDocument::class);
             $class = $repository->findOneBy(["startDate" => $dateFormatted]);
             if ($class) {
-                return new JsonResponse(['title' => $class->getTitle(), 'videoUrl' => $class->getVideoUrl()]);
+                return new JsonResponse(['id' => $class->getId(), 'title' => $class->getTitle(), 'videoUrl' => $class->getVideoUrl(), 'videoCode' => $class->getVideoCode()]);
             }
             return new JsonResponse();
         } catch (\Exception $exception) {
             throw new \HttpException($exception->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    /**
+     * @Route("/video/watched", methods={"POST"}, name="video_watched")
+     * @param Request $request
+     */
+    public function studentWatchedVideo(Request $request)
+    {
+        $result = json_decode($request->getContent(), true);
+
+        $videoClassRepository = $this->manager->getRepository(StudentWatchedVideoClass::class);
+        $videoClass = $videoClassRepository->findOneBy(['student' => $result['student'], 'class' => $result['class']]);
+
+        if(!$videoClass) {
+            $videoClass = new StudentWatchedVideoClass();
+            $videoClass->setClass($result['class'])
+                ->setStudent($result['student']);
+
+        }
+
+        $videoClass->setPercentage($result['percentage'])
+            ->setTimeWatched($result['timeWatched']);
+
+        $this->manager->persist($videoClass);
+        $this->manager->flush();
+        return new JsonResponse("ok", Response::HTTP_OK);
     }
 }
