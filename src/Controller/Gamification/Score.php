@@ -6,6 +6,7 @@ use App\Document\User;
 use App\Document\UserHasScore;
 use App\DTO\Layers\Gamification\AddScoreToUser;
 use App\DTO\Layers\Gamification\GetGameResults;
+use App\DTO\Layers\Gamification\GetStudentsAndScores;
 use App\DTO\MainBuilder;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Component\HttpFoundation\Request;
@@ -94,33 +95,30 @@ class Score extends AbstractController
      */
     public function getRanking()
     {
-        $users = $this->manager->createQueryBuilder(User::class)
-            ->field('roles')->all(['ROLE_STUDENT'])
-            ->getQuery()
-            ->toArray();
+        $main = $this->mainBuilder->build($this->manager);
 
-        $scoreRepository = $this->manager->getRepository(UserHasScore::class);
+        $main->addLayer(new GetStudentsAndScores());
 
-        $userHasScore = [];
+        $main->run();
 
-        foreach ($users as $user) {
-            $userScore = $scoreRepository->findBy(['user' => $user->getId()]);
-            if(!$userScore) {
-                continue;
-            }
-            $userHasScore[$user->getId()]['user'] = $user;
+        $userHasScore = $main->getResults()[0];
 
-            $scores = array_map(function ($score) {
-                return $score->getScore();
-            }, $userScore);
-
-            $userHasScore[$user->getId()]['score'] = array_sum($scores);
-            $userHasScore[$user->getId()]['trophy'] = (int) ($userHasScore[$user->getId()]['score']/1000);
-        }
-
-        usort($userHasScore, function($a, $b) {
-            return $b['score'] <=> $a['score'];
-        });
         return $this->render('gamification/ranking.html.twig', ['usersScores' => $userHasScore]);
+    }
+
+    /**
+     * @Route("/list", name="list_students_points")
+     */
+    public function listStudentsPoint()
+    {
+        $main = $this->mainBuilder->build($this->manager);
+
+        $main->addLayer(new GetStudentsAndScores());
+
+        $main->run();
+
+        $userHasScore = $main->getResults()[0];
+
+        return $this->render('gamification/studentsPointsList.html.twig', ['usersScores' => $userHasScore]);
     }
 }

@@ -22,16 +22,16 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ path('ranking') }}">
+                        <a href="#game">
                             <i class="simple-icon-trophy icon-menu"></i>
-                            <span>Ranking</span>
+                            <span>Game</span>
                         </a>
                     </li>
                     {% if ('ROLE_VOLUNTEER' in app.user.roles) %}
                         <li>
-                            <a href="{{ path('teacher_edit_classes') }}">
+                            <a href="#classes">
                                 <i class="simple-icon-pencil icon-menu"></i>
-                                <span>Editar aulas</span>
+                                <span>Aulas</span>
                             </a>
                         </li>
                     {% endif %}
@@ -58,10 +58,10 @@
         </div>
     </div>
 
+    {% if (app.user) %}
     <div class="main-menu d-none d-md-block">
         <div class="scroll">
             <ul class="list-unstyled">
-                {% if (app.user) %}
                     <li>
                         <a href="{{ path('dashboardDefault') }}">
                             <i class="simple-icon-event icon-menu"></i>
@@ -69,16 +69,16 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ path('ranking') }}">
+                        <a href="#game">
                             <i class="simple-icon-trophy icon-menu"></i>
-                            <span>Ranking</span>
+                            <span>Game</span>
                         </a>
                     </li>
                     {% if ('ROLE_VOLUNTEER' in app.user.roles) %}
                         <li>
-                            <a href="{{ path('teacher_edit_classes') }}">
+                            <a href="#classes">
                                 <i class="simple-icon-pencil icon-menu"></i>
-                                <span>Editar aulas</span>
+                                <span>Aulas</span>
                             </a>
                         </li>
                     {% endif %}
@@ -90,7 +90,6 @@
                             </a>
                         </li>
                     {% endif %}
-                {% endif %}
             </ul>
         </div>
         <div class="position-absolute w-100 mb-3 mx-4" style="bottom: 0">
@@ -104,6 +103,61 @@
             </ul>
         </div>
     </div>
+
+    <div class="sub-menu">
+        <div class="scroll">
+            <ul class="list-unstyled" data-link="game">
+                <li>
+                    <a href="#" data-toggle="collapse" data-target="#collapseVisual" aria-expanded="true"
+                       aria-controls="collapseVisual" class="rotate-arrow-icon opacity-50">
+                        <i class="simple-icon-arrow-down"></i> <span class="d-inline-block">Visualização</span>
+                    </a>
+                    <div id="collapseVisual" class="collapse show">
+                        <ul class="list-unstyled inner-level-menu">
+                            <li>
+                                <a href="{{ path('ranking') }}">
+                                    <i class="simple-icon-list"></i> <span class="d-inline-block">Ranking</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    {% if ('ROLE_VOLUNTEER') in app.user.roles %}
+                        <a href="#" data-toggle="collapse" data-target="#collapseTeacherRank" aria-expanded="true"
+                           aria-controls="collapseTeacherRank" class="rotate-arrow-icon opacity-50">
+                            <i class="simple-icon-arrow-down"></i> <span class="d-inline-block">Professor(a)</span>
+                        </a>
+                        <div id="collapseTeacherRank" class="collapse show">
+                            <ul class="list-unstyled inner-level-menu">
+                                <li>
+                                    <a href="{{ path('list_students_points') }}">
+                                        <i class="simple-icon-badge"></i> <span class="d-inline-block">Editar pontuação</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    {% endif %}
+                </li>
+            </ul>
+            <ul class="list-unstyled" data-link="classes">
+                <li>
+                    <a href="#" data-toggle="collapse" data-target="#collapseContents" aria-expanded="true"
+                       aria-controls="collapseContents" class="rotate-arrow-icon opacity-50">
+                        <i class="simple-icon-arrow-down"></i> <span class="d-inline-block">Conteúdo</span>
+                    </a>
+                    <div id="collapseContents" class="collapse show">
+                        <ul class="list-unstyled inner-level-menu">
+                            <li>
+                                <a href="{{ path('teacher_edit_classes') }}">
+                                    <i class="simple-icon-calendar"></i> <span class="d-inline-block">Editar aulas</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    {% endif %}
 </div>
 
 <style>

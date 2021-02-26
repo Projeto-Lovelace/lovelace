@@ -1,0 +1,160 @@
+{% extends 'base/template.html.twig' %}
+
+{% block title %}Lovelace{% endblock %}
+
+{% block vendor_css %}
+    <link rel="stylesheet" href="/font/iconsmind-s/css/iconsminds.css"/>
+    <link rel="stylesheet" href="/font/simple-line-icons/css/simple-line-icons.css"/>
+    <link rel="stylesheet" href="/css/vendor/dataTables.bootstrap4.min.css"/>
+    <link rel="stylesheet" href="/css/vendor/datatables.responsive.bootstrap4.min.css"/>
+    <link rel="stylesheet" href="/css/vendor/perfect-scrollbar.css"/>
+    <link rel="stylesheet" href="/css/vendor/component-custom-switch.min.css"/>
+    <link rel="stylesheet" href="/css/main.css"/>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="mb-3">
+                <h1>Pontuações</h1>
+            </div>
+            <div class="mb-2">
+                <a class="btn pt-0 pl-0 d-inline-block d-md-none" data-toggle="collapse" href="#displayOptions"
+                   role="button" aria-expanded="true" aria-controls="displayOptions">
+                    Opções de visualização
+                    <i class="simple-icon-arrow-down align-middle"></i>
+                </a>
+                <div class="collapse dont-collapse-sm" id="displayOptions">
+                    <div class="float-md-right dropdown-as-select mt-3 mb-3" id="pageCountDatatableScores">
+                        <span class="text-muted text-small"></span>
+                        <button class="btn btn-outline-dark btn-xs dropdown-toggle" type="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            10
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="#">5</a>
+                            <a class="dropdown-item active" href="#">10</a>
+                            <a class="dropdown-item" href="#">20</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="separator mb-5"></div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="d-block">
+                <div class="search-sm float-md-left mr-1 mb-1 align-top w-30">
+                    <input class="form-control" placeholder="Buscar" id="searchDatatableScores">
+                </div>
+            </div>
+            <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer data-tables-hide-filter">
+                <table id="dataTableScores" class="data-table responsive nowrap"
+                       data-order="[[ 1, &quot;desc&quot; ]]">
+                    <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Pontos</th>
+                        <th>Troféus</th>
+                        <th>Opções</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for user in usersScores %}
+                        <tr>
+                            <td class="p-3">
+                                <p class="list-item-heading">{{ user['user'].name }}</p>
+                            </td>
+                            <td class="p-3">
+                                <p class="text-muted">{{ user['score'] }}</p>
+                            </td>
+                            <td class="p-3">
+                                <p class="text-muted">{{ user['trophy'] }}</p>
+                            </td>
+                            <td class="w-10">
+                                <p style="cursor: pointer" id="modalButton"
+                                   type="button"
+                                   class="badge badge-pill badge-success col-12" data-toggle="modal"
+                                   data-target="#editPointsModal" data-name="{{ user['user'].name }}"
+                                   data-user="{{ user['user'].id }}">editar pontos
+                                </p>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <div class="modal fade" id="editPointsModal" tabindex="-1" role="dialog"
+                     aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalContentLabel"></h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div id="game" class="">
+                                    <div class="pt-2 pb-2">
+                                        <p class="list-item-heading">Game</p>
+                                    </div>
+
+                                    <div class="d-flex flex-column mb-2">
+                                        <div class="d-flex align-items-center justify-content-between w-100 text-center">
+                                            <div class="d-flex flex-column">
+                                                <img src="/img/gamification/diamond.png" style="width: 25px"/>
+                                                <span id="selectedScore">0</span>
+
+                                            </div>
+
+                                            <div class="d-flex flex-column">
+                                                <img src="/img/gamification/trofey.png" style="width: 25px"/>
+                                                <span id="selectedTrophy">0</span>
+                                            </div>
+                                        </div>
+                                        <progress style="width: 100%" class="" id="progressSelectedScore" value="" max="1000"></progress>
+                                    </div>
+
+                                    <label for="score">Editar pontuação</label>
+                                    <div class="d-flex flex-column justify-content-between">
+                                        <input id="scoreInput" placeholder="pontos" class="form-control w-100 mb-2" type="number">
+                                        <textarea id="descriptionScoreInput" placeholder="descriçao" class="form-control w-100" type="text"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="hidden" id="userIdToEditPoints">
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary"
+                                        data-dismiss="modal">Fechar
+                                </button>
+                                <button type="button" onclick="teacherAddScore()" class="btn btn-primary">enviar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="/js/vendor/datatables.min.js"></script>
+
+    <script src="/js/gamification/score.js"></script>
+
+    <script>
+        let userId;
+        $("#editPointsModal").on('show.bs.modal', function () {
+            setTimeout(function (){
+                userId = $("#userIdToEditPoints").val();
+                console.log(userId)
+                let gameResultSelected = getTotalScore(userId)
+                document.getElementById('selectedScore').innerHTML = gameResultSelected.score;
+                document.getElementById('selectedTrophy').innerHTML = gameResultSelected.trophy;
+                document.getElementById('progressSelectedScore').value = getProgressScore(gameResultSelected)
+                console.log(gameResultSelected);
+            }, 300)
+        })
+    </script>
+{% endblock %}

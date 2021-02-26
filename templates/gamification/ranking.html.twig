@@ -30,7 +30,7 @@
                             <tr>
                                 <th>Posição</th>
                                 <th>Nome</th>
-                                <th>Diamantes</th>
+                                <th>Pontos</th>
                                 <th>Troféus</th>
                             </tr>
                             </thead>
@@ -39,18 +39,44 @@
                             {% for userScore in usersScores %}
                             <tr>
                                 <td>
-                                    <p {{ (position == 1) ? 'style="font-weight: bold; font-size: 20px; color: #a5fd01!important"' : '' }} class="list-item-heading">{{ position }}</p>
+                                    <p
+                                            {{ (position == 1) ? 'style="font-weight: bold; font-size: 20px; color: #fff200!important"' : '' }}
+                                            {{ (position == 2) ? 'style="font-weight: bold; font-size: 18px; color: #a5fd01!important"' : '' }}
+                                            {{ (position == 3) ? 'style="font-weight: bold; font-size: 16px; color: #09a0f0!important"' : '' }}
+                                            class="list-item-heading">{{ position }}</p>
                                 </td>
                                 <td>
-                                    <p {{ (position == 1) ? 'style="font-weight: bold; font-size: 20px; color: #a5fd01!important"' : '' }} class="text-muted">{{ userScore['user'].name }}</p>
+                                    <p
+                                            {{ (position == 1) ? 'style="font-weight: bold; font-size: 20px; color: #fff200!important"' : '' }}
+                                            {{ (position == 2) ? 'style="font-weight: bold; font-size: 18px; color: #a5fd01!important"' : '' }}
+                                            {{ (position == 3) ? 'style="font-weight: bold; font-size: 16px; color: #09a0f0!important"' : '' }}
+                                            class="text-muted">{{ userScore['user'].name }}</p>
                                 </td>
                                 <td>
-                                    <img src="/img/gamification/diamond.png" {{ (position == 1) ? 'style="width: 45px; margin-bottom: 15px"' : 'style="width: 25px"' }}/>
-                                    <p {{ (position == 1) ? 'style="font-weight: bold; font-size: 20px; color: #a5fd01!important"' : '' }} class="text-muted">{{ userScore['score'] }}</p>
+                                    <img src="/img/gamification/diamond.png"
+                                            {{ (position == 1) ? 'style="width: 45px; margin-bottom: 15px"' : '' }}
+                                            {{ (position == 2) ? 'style="width: 35px; margin-bottom: 15px"' : '' }}
+                                            {{ (position == 3) ? 'style="width: 30px; margin-bottom: 15px"' : '' }}
+                                         style="width: 25px"
+                                    />
+                                    <p
+                                            {{ (position == 1) ? 'style="font-weight: bold; font-size: 20px; color: #fff200!important"' : '' }}
+                                            {{ (position == 2) ? 'style="font-weight: bold; font-size: 18px; color: #a5fd01!important"' : '' }}
+                                            {{ (position == 3) ? 'style="font-weight: bold; font-size: 16px; color: #09a0f0!important"' : '' }}
+                                            class="text-muted">{{ userScore['score'] }}</p>
                                 </td>
                                 <td>
-                                    <img src="/img/gamification/trofey.png" {{ (position == 1) ? 'style="width: 45px; margin-bottom: 15px"' : 'style="width: 25px"' }}"/>
-                                    <p {{ (position == 1) ? 'style="font-weight: bold; font-size: 20px; color: #a5fd01!important"' : '' }} class="text-muted">{{ userScore['trophy'] }}</p>
+                                    <img src="/img/gamification/trofey.png"
+                                            {{ (position == 1) ? 'style="width: 45px; margin-bottom: 15px"' : '' }}
+                                            {{ (position == 2) ? 'style="width: 35px; margin-bottom: 15px"' : '' }}
+                                            {{ (position == 2) ? 'style="width: 30px; margin-bottom: 15px"' : '' }}
+                                         style="width: 25px"
+                                    />
+                                    <p
+                                            {{ (position == 1) ? 'style="font-weight: bold; font-size: 20px; color: #fff200!important"' : '' }}
+                                            {{ (position == 2) ? 'style="font-weight: bold; font-size: 18px; color: #a5fd01!important"' : '' }}
+                                            {{ (position == 3) ? 'style="font-weight: bold; font-size: 16px; color: #09a0f0!important"' : '' }}
+                                            class="text-muted">{{ userScore['trophy'] }}</p>
                                 </td>
                             </tr>
                                 {% set position = position + 1 %}
