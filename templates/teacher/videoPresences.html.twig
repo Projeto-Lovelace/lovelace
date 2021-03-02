@@ -1,0 +1,183 @@
+{% extends 'base/template.html.twig' %}
+
+{% block title %}Portal Lovelace{% endblock %}
+
+{% block vendor_css %}
+    <link href='/node_modules/fullcalendar/main.css' rel='stylesheet'/>
+    <link rel="stylesheet" href="/css/vendor/fullcalendar.css"/>
+    <link rel="stylesheet" href="/css/fullcalendar.css"/>
+{% endblock %}
+
+{% block content %}
+    <h3>Olá {{ app.user.name }}</h3>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-6 col-lg-8 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Calendário</h5>
+                        <div id="calendar" style="cursor: pointer" class="calendar"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6 col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Informações</h5>
+                        <p class="h6" id="weekday"></p>
+                        <p id="information"></p>
+                        <div id="table-div">
+                            <table id="table" class="w-100">
+
+                            </table>
+                            <div class="text-center">
+                                <span id="text-choose" class="h2">Escolha uma data</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    <script src="/js/vendor/moment.min.js"></script>
+    <script src="/node_modules/fullcalendar/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+            var information = document.getElementById("information");
+            var weekdayTag = document.getElementById("weekday");
+            var title = document.getElementById("title");
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                locale: 'pt-br',
+                themeSystem: "bootstrap",
+                hour: 'numeric',
+                minute: '2-digit',
+                omitZeroMinute: false,
+                meridiem: false,
+                events: function (fetchInfo, successCallback, failureCallback) {
+                    var events = function () {
+                        var event = null
+                        $.ajax({
+                            'async': false,
+                            'type': "GET",
+                            'url': "/student/classes",
+                            success: function (data) {
+                                event = data;
+                            },
+                            error: function (data) {
+                                event = [];
+                            }
+                        });
+                        return event;
+                    }()
+                    successCallback(events)
+                },
+                eventClick: function (info) {
+                    let table = document.getElementById("table");
+                    table.innerHTML = ""
+
+                    $('#form-classes').removeAttr('style')
+
+                    function getStudentsWhoWatchedClass(classId) {
+                        var event = null
+                        $.ajax({
+                            'async': false,
+                            'type': "GET",
+                            'url': "/teacher/presence/video/" + classId,
+                            success: function (data) {
+                                event = data;
+                            },
+                            error: function () {
+                                event = null;
+                            }
+                        });
+                        return event;
+                    }
+
+                    function generateTableHead(table, data) {
+                        data.shift();
+                        let mapper = {
+                            'class': 'data da aula',
+                            'student': 'nome',
+                            'percentage': 'percentagem assistido',
+                            'timeWatched': 'tempo assistido'
+                        }
+                        let thead = table.createTHead();
+                        let row = thead.insertRow();
+                        for (let key of data) {
+                            let th = document.createElement("th");
+                            th.style.textAlign = "center"
+                            let text = document.createTextNode(mapper[key]);
+                            th.appendChild(text);
+                            row.appendChild(th);
+                        }
+                    }
+
+                    function generateTable(table, data) {
+                        for (let element of data) {
+                            let row = table.insertRow();
+                            delete element.id;
+
+                            for (let key in element) {
+                                let cell = row.insertCell();
+                                let text = document.createTextNode(element[key]);
+                                if(key === "class") {
+                                    text = document.createTextNode(element[key]["start"]);
+                                }
+                                else if(key === "student") {
+                                    text = document.createTextNode(element[key]["name"]);
+                                }
+                                cell.appendChild(text);
+                                cell.style.textAlign = "center";
+                            }
+                        }
+                    }
+
+                    let start = info.event.start;
+                    var studentsWhoWatchedClass = getStudentsWhoWatchedClass(info.event.id);
+
+                    if(studentsWhoWatchedClass && studentsWhoWatchedClass.length > 0) {
+                        let data = Object.keys(studentsWhoWatchedClass[0]);
+                        generateTableHead(table, data);
+                        generateTable(table, studentsWhoWatchedClass);
+                    }
+                    var weekdays = [
+                        'Domingo',
+                        'Segunda-feira',
+                        'Terça-feira',
+                        'Quarta-feira',
+                        'Quinta-feira',
+                        'Sexta-feira',
+                        'Sábado'
+                    ]
+
+                    if (start.getHours() === 21) {
+                        start.setMinutes(15)
+                    }
+                    weekdayTag.innerText = weekdays[start.getDay()]
+                    information.innerText = start.toLocaleDateString('pt-br') + ' - ' + (start.getHours() < 10 ? '0' : '') + start.getHours() + ':' + (start.getMinutes() < 10 ? '0' : '') + start.getMinutes();
+
+                    $('#text-choose').attr('style', 'display: none')
+                },
+                buttonText: {
+                    today: "Hoje",
+                    month: "Mes",
+                    week: "Semana",
+                    day: "Dia",
+                    list: "Lista"
+                },
+                bootstrapFontAwesome: {
+                    prev: " simple-icon-arrow-left",
+                    next: " simple-icon-arrow-right",
+                    prevYear: " simple-icon-control-start",
+                    nextYear: " simple-icon-control-end"
+                },
+                height: "auto",
+            });
+            calendar.render();
+        });
+    </script>
+{% endblock %}

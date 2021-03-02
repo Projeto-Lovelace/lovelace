@@ -122,6 +122,7 @@ class Classes implements \JsonSerializable
     public function jsonSerialize()
     {
         return [
+            'id' => $this->getId(),
             'title' => $this->getTitle(),
             'start' => $this->getStartDate(),
             'end' => $this->getEndDate(),
