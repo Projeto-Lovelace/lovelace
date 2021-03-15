@@ -16,8 +16,11 @@ function fancyTimeFormat(duration) {
     return ret;
 }
 
+var pointAdded = false;
+
 function onPlayerReady(event) {
     event.target.stopVideo();
+    pointAdded = false
 }
 
 var player;
@@ -48,6 +51,10 @@ function onPlayerStateChange(event) {
 
             percentageWatchedTag.innerText = percentageWatched + "% assistido"
             percentageWatchedTagMobile.innerText = percentageWatched + "% assistido"
+
+            if(percentageWatched >= 99 && pointAdded === false){
+                addPoints()
+            }
         }
     }, 500)
 }
@@ -76,6 +83,26 @@ function ajaxCall() {
             },
         })
     }
+}
+
+function addPoints() {
+    pointAdded = true;
+
+    result = {"student": userId, "score": 50, "datetime": new Date().toISOString(), "description": "Assistir video aula de " + classTitle + " na plataforma"};
+
+    result = JSON.stringify(result)
+
+    $.ajax({
+        type: "POST",
+        url: "/score/add",
+        data: result,
+        success: function (data) {
+            console.log(data)
+        },
+        error: function (data) {
+            console.error(data)
+        }
+    })
 }
 
 function updateIframe(code) {

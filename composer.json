@@ -10,6 +10,7 @@
         "ext-iconv": "*",
         "doctrine/mongodb-odm": "^2.1",
         "doctrine/mongodb-odm-bundle": "^4.2",
+        "guzzlehttp/guzzle": "^7.0",
         "sensio/framework-extra-bundle": "^5.1",
         "symfony/asset": "5.2.*",
         "symfony/console": "*",

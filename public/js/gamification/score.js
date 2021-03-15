@@ -13,14 +13,15 @@ function getTotalScore(userId) {
     return response.responseJSON
 }
 
-function teacherAddScore() {
+function teacherAddScore(button) {
+    button.disabled = true;
+    button.innerText = 'aguarde'
+
     let userId = $('#userIdToEditPoints').val()
     let score = document.getElementById('scoreInput').value;
     let description = document.getElementById('descriptionScoreInput').value
 
     result = {"student": userId, "score": score, "datetime": new Date().toISOString(), "description": description};
-
-    console.log(result)
 
     result = JSON.stringify(result)
 

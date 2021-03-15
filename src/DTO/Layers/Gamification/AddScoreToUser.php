@@ -43,6 +43,8 @@ class AddScoreToUser implements LayerInterface
         $main->getDocumentManager()->persist($score);
         $main->getDocumentManager()->flush();
 
+        $main->setUser($user);
+
         $main->addResults(['score' => json_decode(json_encode($score), true)]);
     }
 }

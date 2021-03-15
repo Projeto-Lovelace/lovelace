@@ -4,6 +4,7 @@ namespace App\Controller\Gamification;
 
 use App\Document\User;
 use App\Document\UserHasScore;
+use App\DTO\Layers\Discord\DiscordNotify;
 use App\DTO\Layers\Gamification\AddScoreToUser;
 use App\DTO\Layers\Gamification\GetGameResults;
 use App\DTO\Layers\Gamification\GetStudentsAndScores;
@@ -48,7 +49,7 @@ class Score extends AbstractController
      * @param Request $request
      * @return JsonResponse
      * @throws \Exception
-     * @Security("is_granted('ROLE_VOLUNTEER')")
+     * @Security("is_granted('ROLE_USER')")
      */
     public function addScore(Request $request): JsonResponse
     {
@@ -58,6 +59,8 @@ class Score extends AbstractController
             $main = $this->mainBuilder->build($this->manager);
 
             $main->addLayer(new AddScoreToUser($data));
+            $main->addLayer(new GetGameResults($data['student']));
+            $main->addLayer(new DiscordNotify($data));
 
             $main->run();
 

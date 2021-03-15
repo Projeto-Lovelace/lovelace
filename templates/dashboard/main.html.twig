@@ -54,6 +54,7 @@
     <script>
         var userId = "{{ app.user.id }}";
         var classId;
+        var classTitle;
         document.addEventListener('DOMContentLoaded', function () {
             var calendarEl = document.getElementById('calendar');
             var information = document.getElementById("information");
@@ -105,6 +106,7 @@
 
                     if (dateInfo) {
                         classId = dateInfo.id;
+                        classTitle = dateInfo.title;
                         destroyPlayer()
                         updateIframe(dateInfo.videoCode)
                         setInterval(ajaxCall, 5000)

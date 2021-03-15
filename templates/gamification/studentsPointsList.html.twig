@@ -128,7 +128,7 @@
                                 <button type="button" class="btn btn-secondary"
                                         data-dismiss="modal">Fechar
                                 </button>
-                                <button type="button" onclick="teacherAddScore()" class="btn btn-primary">enviar</button>
+                                <button id='saveButton' type="button" onclick="teacherAddScore(this)" disabled='true' class="btn btn-primary">enviar</button>
                             </div>
                         </div>
                     </div>
@@ -144,16 +144,21 @@
     <script src="/js/gamification/score.js"></script>
 
     <script>
+        let scoreInput = document.getElementById('scoreInput');
+        let buttonSave = document.getElementById('saveButton')
+
+        scoreInput.addEventListener('keyup', function (){
+            console.log(this)
+            buttonSave.disabled = this.value === '';
+        });
         let userId;
         $("#editPointsModal").on('show.bs.modal', function () {
             setTimeout(function (){
                 userId = $("#userIdToEditPoints").val();
-                console.log(userId)
                 let gameResultSelected = getTotalScore(userId)
                 document.getElementById('selectedScore').innerHTML = gameResultSelected.score;
                 document.getElementById('selectedTrophy').innerHTML = gameResultSelected.trophy;
                 document.getElementById('progressSelectedScore').value = getProgressScore(gameResultSelected)
-                console.log(gameResultSelected);
             }, 300)
         })
     </script>
