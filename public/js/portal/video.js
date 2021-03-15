@@ -52,7 +52,7 @@ function onPlayerStateChange(event) {
             percentageWatchedTag.innerText = percentageWatched + "% assistido"
             percentageWatchedTagMobile.innerText = percentageWatched + "% assistido"
 
-            if(percentageWatched >= 99 && pointAdded === false){
+            if(percentageWatched >= 97 && pointAdded === false){
                 addPoints()
             }
         }
