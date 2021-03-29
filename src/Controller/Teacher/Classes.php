@@ -66,6 +66,8 @@ class Classes extends AbstractController
             $repository = $this->manager->getRepository(ClassesDocument::class);
             $class = $repository->findOneBy(["startDate" => $dateFormatted]);
 
+            dd($dateFormatted);
+
             if (!$class) {
                 $class = new ClassesDocument();
             }

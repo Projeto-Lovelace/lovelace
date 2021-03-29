@@ -130,7 +130,8 @@
                     ]
                     $('#text-choose').attr('style', 'display: none')
                     var date = new Date(info.dateStr)
-                    datePlus = date.setDate(date.getDate() + 1)
+                    date.setDate(date.getDate() + 1)
+
                     weekdayTag.innerText = weekdays[date.getDay()]
                     information.innerText = date.toLocaleDateString('pt-br')
                     let selectClasses = document.getElementById('selectClasses');
@@ -157,8 +158,7 @@
                         if (this.value.toString() === '21') {
                             minutes = '15'
                         }
-                        date.setMonth(date.getMonth() + 1)
-                        dateInput = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate() + 'T' + this.value + ':' + minutes + ':' + '00' + '-03' + 'Z'
+                        dateInput = date.getFullYear() + '-' + date.getUTCMonth() + '-' + date.getDate() + 'T' + this.value + ':' + minutes + ':' + '00' + '-03' + 'Z'
                         console.log(dateInput)
                         $("#dateInput").val(dateInput)
                     })
@@ -234,7 +234,6 @@
                         start.setMonth(start.getMonth() + 1)
                         dateInput = start.getFullYear() + '-' + start.getMonth() + '-' + start.getDate() + 'T' + this.value + ':' + minutes + ':' + '00' + '-03' + 'Z'
                         $("#dateInput").val(dateInput)
-                        console.log(dateInput)
                     })
 
 
@@ -248,7 +247,6 @@
                     if(dateInfo) {
                         $("#delete-div").removeAttr('style');
                         $("#delete-button").click(function () {
-                            console.log(date)
                             $.ajax({
                                 'async': false,
                                 'type': "POST",
