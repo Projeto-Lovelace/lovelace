@@ -65,9 +65,7 @@ class Classes extends AbstractController
             $dateFormatted = (new DateTime($data["date"]))->format("Y-m-d H:i");
             $repository = $this->manager->getRepository(ClassesDocument::class);
             $class = $repository->findOneBy(["startDate" => $dateFormatted]);
-
-            dd($dateFormatted);
-
+            
             if (!$class) {
                 $class = new ClassesDocument();
             }
