@@ -119,6 +119,7 @@
                 dateClick: function (info) {
                     $("#youtube").val('')
                     $('#form-classes').removeAttr('style')
+                    $("#dateInput").val('')
                     var weekdays = [
                         'Domingo',
                         'Segunda-feira',
@@ -131,7 +132,6 @@
                     $('#text-choose').attr('style', 'display: none')
                     var date = new Date(info.dateStr)
                     date.setDate(date.getDate() + 1)
-
                     weekdayTag.innerText = weekdays[date.getDay()]
                     information.innerText = date.toLocaleDateString('pt-br')
                     let selectClasses = document.getElementById('selectClasses');
@@ -158,8 +158,8 @@
                         if (this.value.toString() === '21') {
                             minutes = '15'
                         }
-                        dateInput = date.getFullYear() + '-' + date.getUTCMonth() + '-' + date.getDate() + 'T' + this.value + ':' + minutes + ':' + '00' + '-03' + 'Z'
-                        console.log(dateInput)
+                        dateInput = info.dateStr + ' ' + this.value + ':' + minutes
+
                         $("#dateInput").val(dateInput)
                     })
                     $("#delete-div").attr('style', 'display: none');

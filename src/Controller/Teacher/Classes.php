@@ -3,6 +3,7 @@
 namespace App\Controller\Teacher;
 
 use App\Document\Classes as ClassesDocument;
+use DateInterval;
 use DateTime;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -63,8 +64,11 @@ class Classes extends AbstractController
         $class = new ClassesDocument();
         if (isset($data["date"])) {
             $dateFormatted = (new DateTime($data["date"]))->format("Y-m-d H:i");
+
             $repository = $this->manager->getRepository(ClassesDocument::class);
             $class = $repository->findOneBy(["startDate" => $dateFormatted]);
+
+
 
             if (!$class) {
                 $class = new ClassesDocument();
