@@ -196,6 +196,7 @@
                     ]
 
                     let start = info.event.start;
+                    let actualMonth = start.getMonth() + 1
                     var dateInfo = getDateInfo(start);
                     if (start.getHours() === 21) {
                         start.setMinutes(15)
@@ -230,8 +231,7 @@
                         if (this.value.toString() === '21') {
                             minutes = '15'
                         }
-                        start.setMonth(start.getMonth() + 1)
-                        dateInput = start.getFullYear() + '-' + start.getMonth() + '-' + start.getDate() + 'T' + this.value + ':' + minutes + ':' + '00' + '-03' + 'Z'
+                        dateInput = start.getFullYear() + '-' + actualMonth + '-' + start.getDate() + 'T' + this.value + ':' + minutes + ':' + '00' + '-03' + 'Z'
                         $("#dateInput").val(dateInput)
                     })
 
@@ -241,7 +241,8 @@
                     } else {
                         $("#youtube").val('')
                     }
-                    date = start.getFullYear() + '-' + start.getMonth() + '-' + start.getDate() + 'T' + start.getHours() + ':' + start.getMinutes() + ':' + '00' + '-03' + 'Z'
+                    date = start.getFullYear() + '-' + actualMonth + '-' + start.getDate() + 'T' + start.getHours() + ':' + start.getMinutes() + ':' + '00' + '-03' + 'Z'
+                    console.log(date)
                     $("#dateInput").val(date)
                     if(dateInfo) {
                         $("#delete-div").removeAttr('style');
