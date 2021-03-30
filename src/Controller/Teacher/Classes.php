@@ -52,7 +52,7 @@ class Classes extends AbstractController
     {
         $titlesMap = [
             'linguagem' => 'Linguagem de programação',
-            'logica' => 'Logica de programação com Javascript',
+            'logica' => 'Lógica de programação com Javascript',
             'banco' => 'Banco de dados',
             'front' => 'Front end',
             'cultura' => 'Cultura agil',
