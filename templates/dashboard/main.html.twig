@@ -69,9 +69,12 @@
                 omitZeroMinute: false,
                 meridiem: false,
                 eventClick: function (info) {
+                    let start = info.event.start;
+                    let actualMonth = start.getMonth() + 1
+
                     function getDateInfo(date) {
                         var event = null
-                        date = date.getFullYear() + '-' + date.getUTCMonth() + '-' + date.getDate() + 'T' + date.getHours() + ':' + date.getMinutes() + ':' + '00' + '-03' + 'Z'
+                        date = date.getFullYear() + '-' + actualMonth + '-' + date.getDate() + 'T' + date.getHours() + ':' + date.getMinutes() + ':' + '00' + '-03' + 'Z'
                         $.ajax({
                             'async': false,
                             'type': "GET",
@@ -97,7 +100,6 @@
                         'Sábado'
                     ]
 
-                    let start = info.event.start;
                     var dateInfo = getDateInfo(start);
                     title.innerText = info.event.title;
                     weekdayTag.innerText = weekdays[start.getDay()]

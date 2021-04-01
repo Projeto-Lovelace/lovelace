@@ -165,11 +165,14 @@
                     $("#delete-div").attr('style', 'display: none');
                 },
                 eventClick: function (info) {
+                    let start = info.event.start;
+                    let actualMonth = start.getMonth() + 1
+
                     $('#form-classes').removeAttr('style')
 
                     function getDateInfo(date) {
                         var event = null
-                        date = date.getFullYear() + '-' + date.getUTCMonth() + '-' + date.getDate() + 'T' + date.getHours() + ':' + date.getMinutes() + ':' + '00' + '-03' + 'Z'
+                        date = date.getFullYear() + '-' + actualMonth + '-' + date.getDate() + 'T' + date.getHours() + ':' + date.getMinutes() + ':' + '00' + '-03' + 'Z'
                         $.ajax({
                             'async': false,
                             'type': "GET",
@@ -195,8 +198,6 @@
                         'Sábado'
                     ]
 
-                    let start = info.event.start;
-                    let actualMonth = start.getMonth() + 1
                     var dateInfo = getDateInfo(start);
                     if (start.getHours() === 21) {
                         start.setMinutes(15)
